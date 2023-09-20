@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1046616966294",
+    "project_id": "fitgap-planner-weather-project",
+    "storage_bucket": "fitgap-planner-weather-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1046616966294:android:d9de19f95f82f243502eb7",
+        "android_client_info": {
+          "package_name": "com.FITGAP.fitgap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQECiw-jIOeK5lEkBgkoflMplOR_pbIo0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
