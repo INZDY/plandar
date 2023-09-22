@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fitgap/pages/settings.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -22,9 +23,7 @@ class _BottomNavBarState extends State<Home> {
     Text(
       'Index 3: Planner',
     ),
-    Text(
-      'Index 4: Settings',
-    ),
+    Settings(),
   ];
 
   void _onItemTapped(int index) {
