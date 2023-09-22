@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAQECiw-jIOeK5lEkBgkoflMplOR_pbIo0',
-    appId: '1:1046616966294:android:d9de19f95f82f243502eb7',
+    appId: '1:1046616966294:android:b7f1efe1d3f3b86b502eb7',
     messagingSenderId: '1046616966294',
     projectId: 'fitgap-planner-weather-project',
     storageBucket: 'fitgap-planner-weather-project.appspot.com',
