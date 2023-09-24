@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitgap/components/auth_button.dart';
 import 'package:fitgap/components/my_text_field.dart';
-import 'package:fitgap/components/square_tile.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fitgap/services/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -88,12 +89,10 @@ class LoginPage extends StatelessWidget {
 
             //login button
             Flexible(
-              child: ElevatedButton.icon(
-                onPressed: signIn,
-                icon: const Icon(Icons.lock_open),
-                label: const Text('Login')
-              )
-            ),
+                child: ElevatedButton.icon(
+                    onPressed: signIn,
+                    icon: const Icon(Icons.lock_open),
+                    label: const Text('Login'))),
 
             const SizedBox(
               height: 25,
@@ -135,11 +134,15 @@ class LoginPage extends StatelessWidget {
             ),
 
             //google + facebook login buttons
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SquareTile(imagePath: 'assets/icons/GoogleIcon.png'),
-                SquareTile(imagePath: 'assets/icons/FacebookIcon.png'),
+                AuthButton(
+                  icon: FontAwesomeIcons.google,
+                  logMethod: AuthService().googleLogin,
+                )
+                // SquareButton(imagePath: 'assets/icons/GoogleIcon.png'),
+                // SquareButton(imagePath: 'assets/icons/FacebookIcon.png'),
               ],
             )
             //don't have account? create now

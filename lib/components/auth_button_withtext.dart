@@ -1,31 +1,35 @@
 import 'package:flutter/material.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 //Non Email,Password /logout
 //Google, Facebook, Apple
 class AuthButton extends StatelessWidget {
-  // final Color color;
+  final Color color;
   final IconData icon;
-  // final String text;
+  final String text;
   final Function logMethod;
 
   const AuthButton({
     super.key,
-    // required this.color,
+    required this.color,
     required this.icon,
-    // required this.text,
+    required this.text,
     required this.logMethod,
   });
 
   @override
   Widget build(BuildContext context) {
-    return IconButton.outlined(
+    return ElevatedButton.icon(
       icon: Icon(
         icon,
         color: Colors.white,
         size: 20,
       ),
-      onPressed: () => logMethod,
+      style: TextButton.styleFrom(
+        padding: const EdgeInsets.all(24),
+        backgroundColor: color,
+      ),
+      label: Text(text),
+      onPressed: () => logMethod(),
     );
   }
 }
