@@ -1,6 +1,7 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitgap/components/auth_button.dart';
-import 'package:fitgap/components/my_text_field.dart';
+import 'package:fitgap/components/email_password_field.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fitgap/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -55,20 +56,26 @@ class _LoginPageState extends State<LoginPage> {
               ),
 
               //email textfield
-              MyTextField(
-                  controller: emailController,
-                  hintText: 'Email Address',
-                  obscureText: false),
+              CredentialText(
+                controller: emailController,
+                hintText: 'Email Address',
+                obscureText: false,
+                isEmail: true,
+                warningText: 'Enter valid email',
+              ),
 
               const SizedBox(
                 height: 20,
               ),
 
               //password textfield
-              MyTextField(
-                  controller: passwordController,
-                  hintText: 'Password',
-                  obscureText: true),
+              CredentialText(
+                controller: passwordController,
+                hintText: 'Password',
+                obscureText: true,
+                isEmail: false,
+                warningText: 'Password must be more than 8 characters',
+              ),
 
               const SizedBox(
                 height: 10,
@@ -206,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
         password: passwordController.text.trim(),
       );
       //pop loading
-      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {}
+    Navigator.pop(context);
   }
 }
