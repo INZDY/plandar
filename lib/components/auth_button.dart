@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-//Non Email,Password /logout
+//Non Email,Password / logout
 //Google, Facebook, Apple
 class AuthButton extends StatelessWidget {
   // final Color color;
@@ -25,7 +24,7 @@ class AuthButton extends StatelessWidget {
         color: Colors.white,
         size: 20,
       ),
-      onPressed: () => logMethod,
+      onPressed: () => logMethod(),
     );
   }
 }

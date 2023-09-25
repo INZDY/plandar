@@ -140,7 +140,7 @@ class LoginPage extends StatelessWidget {
                 AuthButton(
                   icon: FontAwesomeIcons.google,
                   logMethod: AuthService().googleLogin,
-                )
+                ),
                 // SquareButton(imagePath: 'assets/icons/GoogleIcon.png'),
                 // SquareButton(imagePath: 'assets/icons/FacebookIcon.png'),
               ],
