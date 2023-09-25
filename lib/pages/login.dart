@@ -98,8 +98,6 @@ class LoginPage extends StatelessWidget {
                   ),
                   onPressed: signIn,
                   child: const Text('Login'),
-                  // icon: const Icon(Icons.lock_open),
-                  // label: const Text('Login')
                 )
               ),
         
