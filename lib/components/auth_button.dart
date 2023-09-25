@@ -18,13 +18,16 @@ class AuthButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton.outlined(
-      icon: Icon(
-        icon,
-        color: Colors.white,
-        size: 20,
+    return CircleAvatar(
+      backgroundColor: Colors.white,
+      child: IconButton.outlined(
+        icon: Icon(
+          icon,
+          color: Colors.black,
+          size: 20,
+        ),
+        onPressed: () => logMethod(),
       ),
-      onPressed: () => logMethod(),
     );
   }
 }
