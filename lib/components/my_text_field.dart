@@ -1,3 +1,4 @@
+// import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
 class MyTextField extends StatelessWidget {
@@ -19,20 +20,23 @@ class MyTextField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: SizedBox(
         height: 50,
-        child: TextField(
+        child: TextFormField(
           controller: controller,
           obscureText: obscureText,
           decoration: InputDecoration(
             hintText: hintText,
-            enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-            focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-                borderRadius: BorderRadius.all(Radius.circular(10))),
+            border: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+              borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
             fillColor: Colors.grey,
             filled: true,
           ),
+          //validate input
+          // autovalidateMode: AutovalidateMode.onUserInteraction,
+          // validator: (email) => email != null && !EmailValidator.validate(email)
+          //     ? 'Enter a valid email'
+          //     : null,
         ),
       ),
     );
