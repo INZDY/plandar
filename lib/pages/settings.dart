@@ -12,7 +12,6 @@ class Settings extends StatelessWidget {
       child: ListView(
         children: [
           //Signout button
-
           AuthButton(
               color: Colors.black,
               icon: Icons.logout,

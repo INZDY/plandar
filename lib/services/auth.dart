@@ -7,7 +7,7 @@ class AuthService {
   final user = FirebaseAuth.instance.currentUser;
 
   //Email login is in login_page
-  
+
   //Logout
   Future signOut() async {
     await FirebaseAuth.instance.signOut();

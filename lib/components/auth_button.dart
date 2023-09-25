@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 
-//Non Email,Password / logout
-//Google, Facebook, Apple
+//Google, Facebook, Apple login/signup
+//logout
 class AuthButton extends StatelessWidget {
   // final Color color;
   final IconData icon;
-  // final String text;
   final Function logMethod;
 
   const AuthButton({
     super.key,
     // required this.color,
     required this.icon,
-    // required this.text,
     required this.logMethod,
   });
 
@@ -20,7 +18,7 @@ class AuthButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       backgroundColor: Colors.white,
-      child: IconButton.outlined(
+      child: IconButton(
         icon: Icon(
           icon,
           color: Colors.black,

@@ -8,8 +8,11 @@ class Home extends StatefulWidget {
   State<Home> createState() => _BottomNavBarState();
 }
 
+//widget switching
 class _BottomNavBarState extends State<Home> {
   int _selectedIndex = 0;
+
+  //widget list
   static const List<Widget> _widgetOptions = <Widget>[
     Text(
       'Index 0: Contact',
@@ -35,9 +38,12 @@ class _BottomNavBarState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //widget show
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
+
+      //Navbar
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

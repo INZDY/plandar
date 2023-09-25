@@ -23,8 +23,8 @@ class LoginPage extends StatelessWidget {
               const SizedBox(
                 height: 50,
               ),
-        
-              // //logo
+
+              //logo
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.asset(
@@ -33,41 +33,41 @@ class LoginPage extends StatelessWidget {
                   width: 150,
                 ),
               ),
-        
+
               const SizedBox(
                 height: 50,
               ),
-        
+
               //login text
               const Text(
                 'Login',
                 style: TextStyle(fontSize: 40, color: Colors.white),
               ),
-        
+
               const SizedBox(
                 height: 50,
               ),
-        
+
               //email textfield
               MyTextField(
                   controller: emailController,
                   hintText: 'Email Address',
                   obscureText: false),
-        
+
               const SizedBox(
                 height: 20,
               ),
-        
+
               //password textfield
               MyTextField(
                   controller: passwordController,
                   hintText: 'Password',
                   obscureText: true),
-        
+
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
-        
+
               //remember password checkbox
               //forget password
               const Padding(
@@ -84,27 +84,25 @@ class LoginPage extends StatelessWidget {
                   ],
                 ),
               ),
-        
+
               const SizedBox(
                 height: 25,
               ),
-        
+
               //login button
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(40)
-                  ),
-                  onPressed: signIn,
-                  child: const Text('Login'),
-                )
-              ),
-        
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(40)),
+                    onPressed: signIn,
+                    child: const Text('Login'),
+                  )),
+
               const SizedBox(
                 height: 25,
               ),
-        
+
               //or login with
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 25),
@@ -116,7 +114,7 @@ class LoginPage extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-        
+
                   //Text
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
@@ -125,7 +123,7 @@ class LoginPage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-        
+
                   //Right divider
                   Expanded(
                     child: Divider(
@@ -135,11 +133,11 @@ class LoginPage extends StatelessWidget {
                   ),
                 ]),
               ),
-        
+
               const SizedBox(
                 height: 25,
               ),
-        
+
               //google + facebook login buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -163,18 +161,16 @@ class LoginPage extends StatelessWidget {
                 children: [
                   const Text(
                     'Not a member?',
-                    style: TextStyle(
-                      color: Colors.white
-                    ),
+                    style: TextStyle(color: Colors.white),
                   ),
-                  const SizedBox(width: 5,),
+                  const SizedBox(
+                    width: 5,
+                  ),
                   GestureDetector(
                     // onTap: ,
                     child: const Text(
                       'Register now',
-                      style: TextStyle(
-                        color: Colors.blue
-                      ),
+                      style: TextStyle(color: Colors.blue),
                     ),
                   )
                 ],
