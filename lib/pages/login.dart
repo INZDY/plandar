@@ -151,9 +151,34 @@ class LoginPage extends StatelessWidget {
                   // SquareButton(imagePath: 'assets/icons/GoogleIcon.png'),
                   // SquareButton(imagePath: 'assets/icons/FacebookIcon.png'),
                 ],
-              )
+              ),
+
+              const SizedBox(
+                height: 50,
+              ),
 
               //don't have account? create now
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Not a member?',
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
+                  ),
+                  const SizedBox(width: 5,),
+                  GestureDetector(
+                    // onTap: ,
+                    child: const Text(
+                      'Register now',
+                      style: TextStyle(
+                        color: Colors.blue
+                      ),
+                    ),
+                  )
+                ],
+              )
             ],
           ),
         ),
