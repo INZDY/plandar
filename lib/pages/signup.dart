@@ -1,7 +1,9 @@
 // import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitgap/components/utilities.dart';
 import 'package:fitgap/components/auth_button.dart';
 import 'package:fitgap/components/email_password_field.dart';
+import 'package:fitgap/main.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fitgap/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +66,7 @@ class _LoginPageState extends State<SignupPage> {
                   controller: emailController,
                   hintText: 'Email Address',
                   obscureText: false,
-                  isEmail: true,
+                  fieldType: 0,
                   warningText: 'Enter valid email',
                 ),
 
@@ -77,7 +79,7 @@ class _LoginPageState extends State<SignupPage> {
                   controller: passwordController,
                   hintText: 'Password',
                   obscureText: true,
-                  isEmail: false,
+                  fieldType: 1,
                   warningText: 'Password must be more than 8 characters',
                 ),
 
@@ -85,12 +87,12 @@ class _LoginPageState extends State<SignupPage> {
                   height: 25,
                 ),
 
-                //login button
+                //signup button
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(40)),
+                          minimumSize: const Size.fromHeight(50)),
                       onPressed: signUp,
                       child: const Text('Signup'),
                     )),
@@ -115,7 +117,7 @@ class _LoginPageState extends State<SignupPage> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
-                        'Or login with',
+                        'Or signup with',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -200,7 +202,11 @@ class _LoginPageState extends State<SignupPage> {
         password: passwordController.text.trim(),
       );
       //pop loading
-    } on FirebaseAuthException catch (e) {}
-    Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      Utils.showSnackBar(e.message);
+    }
+
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    // Navigator.pop(context);
   }
 }

@@ -5,8 +5,11 @@ class CredentialText extends StatelessWidget {
   //text controller
   final dynamic controller;
 
-  //check if is email field
-  final bool isEmail;
+  //check:
+  //-1 : no criteria
+  //0 : email
+  //1 : password
+  final int fieldType;
 
   final String hintText;
   final bool obscureText;
@@ -17,7 +20,7 @@ class CredentialText extends StatelessWidget {
       required this.controller,
       required this.hintText,
       required this.obscureText,
-      required this.isEmail,
+      required this.fieldType,
       required this.warningText});
 
   @override
@@ -42,8 +45,20 @@ class CredentialText extends StatelessWidget {
 
           //validate input
           autovalidateMode: AutovalidateMode.onUserInteraction,
+          // validator: (input) {
+          //   if (input != null && fieldType != -1) {
+          //     if (fieldType == 0
+          //         ? !EmailValidator.validate(input)
+          //         : input.length < 8) {
+          //       return warningText;
+          //     } else {
+          //       return null;
+          //     }
+          //   }
+          // },
           validator: (input) => input != null &&
-                  ((isEmail == true)
+                  fieldType != -1 &&
+                  ((fieldType == 0)
                       ? !EmailValidator.validate(input)
                       : input.length < 8)
               ? warningText
