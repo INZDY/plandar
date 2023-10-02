@@ -7,7 +7,9 @@ import 'package:fitgap/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final Function()? onTap;
+
+  const LoginPage({super.key, required this.onTap});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -180,10 +182,10 @@ class _LoginPageState extends State<LoginPage> {
                     width: 5,
                   ),
                   GestureDetector(
-                    // onTap: ,
+                    onTap: widget.onTap,
                     child: const Text(
                       'Register now',
-                      style: TextStyle(color: Colors.blue),
+                      style: TextStyle(color: Color(0xFFAD76D8)),
                     ),
                   )
                 ],
