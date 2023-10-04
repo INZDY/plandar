@@ -14,10 +14,10 @@ class SignupPage extends StatefulWidget {
   const SignupPage({super.key, required this.onTap});
 
   @override
-  State<SignupPage> createState() => _LoginPageState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
-class _LoginPageState extends State<SignupPage> {
+class _SignupPageState extends State<SignupPage> {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -207,6 +207,5 @@ class _LoginPageState extends State<SignupPage> {
     }
 
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
-    // Navigator.pop(context);
   }
 }

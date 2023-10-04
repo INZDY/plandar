@@ -4,6 +4,7 @@ import 'package:fitgap/components/utilities.dart';
 import 'package:fitgap/components/auth_button.dart';
 import 'package:fitgap/components/email_password_field.dart';
 import 'package:fitgap/main.dart';
+import 'package:fitgap/pages/forgot_password.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fitgap/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -89,23 +90,23 @@ class _LoginPageState extends State<LoginPage> {
 
                 //remember password checkbox
                 //forget password
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Text('Forgot passsword',
-                          style: TextStyle(color: Colors.white))
-                    ],
-                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Align(
+                      alignment: Alignment.centerRight,
+                      child: GestureDetector(
+                        onTap: () =>
+                            Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const ForgotPassword(),
+                        )),
+                        child: const Text('Forgot passsword',
+                            textAlign: TextAlign.right,
+                            style: TextStyle(color: Colors.white)),
+                      )),
                 ),
 
                 const SizedBox(
-                  height: 25,
+                  height: 10,
                 ),
 
                 //login button
@@ -223,6 +224,5 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
-    // Navigator.pop(context);
   }
 }
