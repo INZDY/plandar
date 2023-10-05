@@ -9,6 +9,7 @@ class CredentialText extends StatelessWidget {
   //-1 : no criteria
   //0 : email
   //1 : password
+  //2 : confirm password
   final int fieldType;
 
   final String hintText;
@@ -38,8 +39,8 @@ class CredentialText extends StatelessWidget {
                 borderSide: BorderSide(color: Colors.white),
                 borderRadius: BorderRadius.all(Radius.circular(15))),
             contentPadding:
-                const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-            fillColor: Colors.grey,
+                const EdgeInsets.symmetric(vertical: 18, horizontal: 15),
+            fillColor: const Color(0xFFD9D9D9),
             filled: true,
           ),
 
@@ -54,6 +55,8 @@ class CredentialText extends StatelessWidget {
           //     } else {
           //       return null;
           //     }
+          //   } else {
+          //     return null;
           //   }
           // },
           validator: (input) => input != null &&

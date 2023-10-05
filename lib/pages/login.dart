@@ -39,22 +39,18 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(
-                    height: 50,
-                  ),
-
                   //logo
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.asset(
-                      'assets/icons/plandarlogo.png',
-                      height: 110,
-                      width: 500,
-                    ),
+                  Container(
+                    height: 50,
+                    width: 200,
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/icons/plandarlogo.png'),
+                            fit: BoxFit.fitWidth)),
                   ),
 
                   const SizedBox(
-                    height: 50,
+                    height: 30,
                   ),
 
                   //login text
@@ -77,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   const SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
 
                   //password textfield
@@ -90,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   const SizedBox(
-                    height: 10,
+                    height: 30,
                   ),
 
                   //remember password checkbox
@@ -111,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   const SizedBox(
-                    height: 10,
+                    height: 50,
                   ),
 
                   //login button
@@ -125,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                       )),
 
                   const SizedBox(
-                    height: 25,
+                    height: 30,
                   ),
 
                   //or login with
@@ -136,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                       Expanded(
                         child: Divider(
                           thickness: 0.5,
-                          color: Colors.white,
+                          color: Color(0xFFA6A6A6),
                         ),
                       ),
 
@@ -145,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
                           'Or login with',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Color(0xFFA6A6A6)),
                         ),
                       ),
 
@@ -153,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                       Expanded(
                         child: Divider(
                           thickness: 0.5,
-                          color: Colors.white,
+                          color: Color(0xFFA6A6A6),
                         ),
                       ),
                     ]),
@@ -184,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       const Text(
                         'Not a member?',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Color(0xFFA6A6A6)),
                       ),
                       const SizedBox(
                         width: 5,
