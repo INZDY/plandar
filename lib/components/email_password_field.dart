@@ -9,7 +9,6 @@ class CredentialText extends StatelessWidget {
   //-1 : no criteria
   //0 : email
   //1 : password
-  //2 : confirm password
   final int fieldType;
 
   final String hintText;
@@ -46,19 +45,6 @@ class CredentialText extends StatelessWidget {
 
           //validate input
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          // validator: (input) {
-          //   if (input != null && fieldType != -1) {
-          //     if (fieldType == 0
-          //         ? !EmailValidator.validate(input)
-          //         : input.length < 8) {
-          //       return warningText;
-          //     } else {
-          //       return null;
-          //     }
-          //   } else {
-          //     return null;
-          //   }
-          // },
           validator: (input) => input != null &&
                   fieldType != -1 &&
                   ((fieldType == 0)

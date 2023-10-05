@@ -202,10 +202,13 @@ class _SignupPageState extends State<SignupPage> {
 
     //authentication
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+      if (passwordController.text.trim() ==
+          passwordConfirmController.text.trim()) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+      }
       //pop loading
     } on FirebaseAuthException catch (e) {
       Utils.showSnackBar(e.message);
