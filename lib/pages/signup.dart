@@ -98,7 +98,7 @@ class _SignupPageState extends State<SignupPage> {
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size.fromHeight(50)),
                         onPressed: signUp,
-                        child: const Text('Signup'),
+                        child: Text('Signup', style: Theme.of(context).textTheme.labelMedium,),
                       )),
 
                   const SizedBox(

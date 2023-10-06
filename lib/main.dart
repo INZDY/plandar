@@ -1,5 +1,6 @@
 import 'package:fitgap/components/utilities.dart';
 import 'package:fitgap/pages/auth_page.dart';
+import 'package:fitgap/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitgap/firebase_options.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         scaffoldMessengerKey: Utils.messengerKey,
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
+        theme: appTheme,
         home: const AuthPage());
   }
 }

@@ -39,6 +39,10 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const SizedBox(
+                    height: 50,
+                  ),
+
                   //logo
                   Container(
                     height: 50,
@@ -56,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                   //login text
                   const Text(
                     'Login',
-                    style: TextStyle(fontSize: 40, color: Colors.white),
+                    style: TextStyle(fontSize: 30, color: Colors.white),
                   ),
 
                   const SizedBox(
@@ -117,7 +121,10 @@ class _LoginPageState extends State<LoginPage> {
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size.fromHeight(50)),
                         onPressed: signIn,
-                        child: const Text('Login'),
+                        child: Text(
+                          'Login',
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
                       )),
 
                   const SizedBox(
@@ -141,7 +148,8 @@ class _LoginPageState extends State<LoginPage> {
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
                           'Or login with',
-                          style: TextStyle(color: Color(0xFFA6A6A6)),
+                          style:
+                              TextStyle(fontSize: 14, color: Color(0xFFA6A6A6)),
                         ),
                       ),
 
@@ -171,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   const SizedBox(
-                    height: 50,
+                    height: 100,
                   ),
 
                   //don't have account? create now
@@ -180,7 +188,8 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       const Text(
                         'Not a member?',
-                        style: TextStyle(color: Color(0xFFA6A6A6)),
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFFA6A6A6)),
                       ),
                       const SizedBox(
                         width: 5,
@@ -188,8 +197,9 @@ class _LoginPageState extends State<LoginPage> {
                       GestureDetector(
                         onTap: widget.onTap,
                         child: const Text(
-                          'Register now',
-                          style: TextStyle(color: Color(0xFFAD76D8)),
+                          'Signup now',
+                          style:
+                              TextStyle(fontSize: 14, color: Color(0xFFAD76D8)),
                         ),
                       )
                     ],

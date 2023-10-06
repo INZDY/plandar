@@ -32,13 +32,14 @@ class CredentialText extends StatelessWidget {
         child: TextFormField(
           controller: controller,
           obscureText: obscureText,
+          style: const TextStyle(fontSize: 18),
           decoration: InputDecoration(
             hintText: hintText,
             border: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
                 borderRadius: BorderRadius.all(Radius.circular(15))),
             contentPadding:
-                const EdgeInsets.symmetric(vertical: 18, horizontal: 15),
+                const EdgeInsets.symmetric(vertical: 14, horizontal: 15),
             fillColor: const Color(0xFFD9D9D9),
             filled: true,
           ),

@@ -17,38 +17,61 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reset Password'),
+    return Container(
+      constraints: const BoxConstraints.expand(),
+      decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/images/bg.png'), fit: BoxFit.cover)),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: const Text(
+            'Reset Password',
+          ),
+          backgroundColor: Colors.transparent,
+        ),
+        body: Center(
+            child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: Text(
+                  'Enter an email to reset your password',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20, color: Color(0xFFA6A6A6)),
+                ),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              CredentialText(
+                controller: emailController,
+                hintText: 'Email Address',
+                obscureText: false,
+                fieldType: 0,
+                warningText: 'Enter valid email',
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(50)),
+                    onPressed: forgotPassword,
+                    child: Text(
+                      'Send Password Reset',
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                  )),
+            ],
+          ),
+        )),
       ),
-      body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25),
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                const Text('Enter an email to reset your password'),
-                const SizedBox(
-                  height: 25,
-                ),
-                CredentialText(
-                  controller: emailController,
-                  hintText: 'Email Address',
-                  obscureText: false,
-                  fieldType: 0,
-                  warningText: 'Enter valid email',
-                ),
-                Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(50)),
-                      onPressed: forgotPassword,
-                      child: const Text('Login'),
-                    )),
-              ],
-            ),
-          )),
     );
   }
 
