@@ -94,11 +94,26 @@ class _SignupPageState extends State<SignupPage> {
                   //signup button
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            minimumSize: const Size.fromHeight(50)),
-                        onPressed: signUp,
-                        child: Text('Signup', style: Theme.of(context).textTheme.labelMedium,),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Color(0xFFFFFFFF),
+                                  Color(0xFF5B8AEB),
+                                ]),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              minimumSize: const Size.fromHeight(50)),
+                          onPressed: signUp,
+                          child: Text(
+                            'Signup',
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                        ),
                       )),
 
                   const SizedBox(
@@ -122,7 +137,8 @@ class _SignupPageState extends State<SignupPage> {
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
                           'Or signup with',
-                          style: TextStyle(color: Color(0xFFA6A6A6)),
+                          style:
+                              TextStyle(fontSize: 14, color: Color(0xFFA6A6A6)),
                         ),
                       ),
 

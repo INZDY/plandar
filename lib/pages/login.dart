@@ -117,13 +117,25 @@ class _LoginPageState extends State<LoginPage> {
                   //login button
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            minimumSize: const Size.fromHeight(50)),
-                        onPressed: signIn,
-                        child: Text(
-                          'Login',
-                          style: Theme.of(context).textTheme.labelMedium,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Color(0xFFFFFFFF),
+                                  Color(0xFF5B8AEB),
+                                ]),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              minimumSize: const Size.fromHeight(50)),
+                          onPressed: signIn,
+                          child: Text(
+                            'Login',
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
                         ),
                       )),
 

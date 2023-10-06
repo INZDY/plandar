@@ -37,7 +37,7 @@ class CredentialText extends StatelessWidget {
             hintText: hintText,
             border: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.all(Radius.circular(15))),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 14, horizontal: 15),
             fillColor: const Color(0xFFD9D9D9),
