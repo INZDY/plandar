@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fitgap/pages/AddNewEvent.dart';
+import 'package:fitgap/pages/settings.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -8,8 +9,11 @@ class Home extends StatefulWidget {
   State<Home> createState() => _BottomNavBarState();
 }
 
+//widget switching
 class _BottomNavBarState extends State<Home> {
   int _selectedIndex = 0;
+
+  //widget list
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(), //choice 1 (most left button) 'HomePage'
     Text(
@@ -21,9 +25,7 @@ class _BottomNavBarState extends State<Home> {
     Text(
       'Index 3: Planner',
     ),
-    Text(
-      'Index 4: Settings',
-    ),
+    Settings(),
   ];
 
   void _onItemTapped(int index) {
@@ -40,6 +42,8 @@ class _BottomNavBarState extends State<Home> {
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
       ),
+
+      //Navbar
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

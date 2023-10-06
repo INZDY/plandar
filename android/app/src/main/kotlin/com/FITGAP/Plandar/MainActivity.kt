@@ -1,4 +1,4 @@
-package com.FITGAP.fitgap
+package com.FITGAP.Plandar
 
 import io.flutter.embedding.android.FlutterActivity
 
