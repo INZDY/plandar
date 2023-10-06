@@ -8,6 +8,7 @@ import 'package:fitgap/pages/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //Paint.enableDithering = true;
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -21,7 +22,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-        debugShowCheckedModeBanner: false, home: MainPage());
+        // login page
+        debugShowCheckedModeBanner: false,
+        home: Home());
   }
 }
 
