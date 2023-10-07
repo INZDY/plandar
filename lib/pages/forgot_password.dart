@@ -13,7 +13,8 @@ class ForgotPassword extends StatefulWidget {
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
+
+  final _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 height: 25,
               ),
               CredentialText(
-                controller: emailController,
+                controller: _emailController,
                 hintText: 'Email Address',
                 obscureText: false,
                 fieldType: 0,
@@ -101,7 +102,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     //authentication
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(
-        email: emailController.text.trim(),
+        email: _emailController.text.trim(),
       );
       //pop loading
     } on FirebaseAuthException catch (e) {

@@ -19,9 +19,11 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final passwordConfirmController = TextEditingController();
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _passwordConfirmController = TextEditingController();
+  final _usernameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +57,7 @@ class _SignupPageState extends State<SignupPage> {
 
                   //email textfield
                   CredentialText(
-                    controller: emailController,
+                    controller: _emailController,
                     hintText: 'Email Address',
                     obscureText: false,
                     fieldType: 0,
@@ -68,7 +70,7 @@ class _SignupPageState extends State<SignupPage> {
 
                   //password textfield
                   CredentialText(
-                    controller: passwordController,
+                    controller: _passwordController,
                     hintText: 'Password',
                     obscureText: true,
                     fieldType: 1,
@@ -80,7 +82,7 @@ class _SignupPageState extends State<SignupPage> {
                   ),
 
                   CredentialText(
-                    controller: passwordConfirmController,
+                    controller: _passwordConfirmController,
                     hintText: 'Password',
                     obscureText: true,
                     fieldType: 1,
@@ -218,11 +220,11 @@ class _SignupPageState extends State<SignupPage> {
 
     //authentication
     try {
-      if (passwordController.text.trim() ==
-          passwordConfirmController.text.trim()) {
+      if (_passwordController.text.trim() ==
+          _passwordConfirmController.text.trim()) {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim(),
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
         );
       }
       //pop loading

@@ -20,8 +20,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   //email textfield
                   CredentialText(
-                    controller: emailController,
+                    controller: _emailController,
                     hintText: 'Email Address',
                     obscureText: false,
                     fieldType: -1,
@@ -82,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   //password textfield
                   CredentialText(
-                    controller: passwordController,
+                    controller: _passwordController,
                     hintText: 'Password',
                     obscureText: true,
                     fieldType: -1,
@@ -239,8 +240,8 @@ class _LoginPageState extends State<LoginPage> {
     //authentication
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
       );
       //pop loading
     } on FirebaseAuthException catch (e) {
