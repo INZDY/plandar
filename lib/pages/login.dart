@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                     hintText: 'Email Address',
                     obscureText: false,
                     fieldType: -1,
-                    warningText: 'Enter valid email',
+                    warningText: '',
                   ),
 
                   const SizedBox(
@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                     hintText: 'Password',
                     obscureText: true,
                     fieldType: -1,
-                    warningText: 'Password must be more than 8 characters',
+                    warningText: '',
                   ),
 
                   const SizedBox(
