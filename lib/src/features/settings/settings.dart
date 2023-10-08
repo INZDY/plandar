@@ -1,4 +1,4 @@
-import 'package:fitgap/components/auth_button_withtext.dart';
+import 'package:fitgap/src/features/authentication/models/auth_button_withtext.dart';
 import 'package:fitgap/src/utils/auth/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +12,7 @@ class Settings extends StatelessWidget {
       child: ListView(
         children: [
           //Signout button
-          AuthButton(
+          AuthButtonIconText(
               color: Colors.black,
               icon: Icons.logout,
               text: 'Logout',

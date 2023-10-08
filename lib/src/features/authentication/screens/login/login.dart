@@ -184,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      AuthButton(
+                      AuthButtonIcon(
                         icon: FontAwesomeIcons.google,
                         logMethod: AuthService().googleLogin,
                       ),

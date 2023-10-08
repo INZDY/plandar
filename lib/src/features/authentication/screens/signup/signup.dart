@@ -177,7 +177,7 @@ class _SignupPageState extends State<SignupPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      AuthButton(
+                      AuthButtonIcon(
                         icon: FontAwesomeIcons.google,
                         logMethod: AuthService().googleLogin,
                       ),
