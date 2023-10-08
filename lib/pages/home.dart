@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fitgap/pages/AddNewEvent.dart';
 import 'package:fitgap/pages/settings.dart';
 
 class Home extends StatefulWidget {
@@ -14,15 +15,13 @@ class _BottomNavBarState extends State<Home> {
 
   //widget list
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Contact',
-    ),
+    HomePage(), //choice 1 (most left button) 'HomePage'
     Text(
       'Index 1: Dashboard',
     ),
-    Text(
-      'Index 2: Add Event',
-    ),
+
+    AddNewEvent(), //choice 3 (middle button) 'addNewEvent'
+
     Text(
       'Index 3: Planner',
     ),
@@ -38,17 +37,18 @@ class _BottomNavBarState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //widget show
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      body: SafeArea(
+        child: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
       ),
 
       //Navbar
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.contacts),
-              label: 'Contacts',
+              icon: Icon(Icons.home),
+              label: 'Home',
               backgroundColor: Colors.red),
           BottomNavigationBarItem(
               icon: Icon(Icons.dashboard),
@@ -70,6 +70,85 @@ class _BottomNavBarState extends State<Home> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.white,
         onTap: _onItemTapped,
+      ),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.black, Color.fromRGBO(7, 2, 58, 1)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: screenHeight * 0.0833,
+              width: screenWidth * 1,
+              color: Colors.deepPurple[600],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Container(
+                height: screenHeight * 0.0625,
+                width: screenWidth * 1,
+                color: Colors.deepPurple[500],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Container(
+                  height: screenHeight * 0.0525,
+                  width: screenWidth * 1,
+                  color: Colors.deepPurple[400],
+                  padding: const EdgeInsets.only(left: 30),
+                  alignment: Alignment.centerLeft,
+                  child: const Text('Here is your schedule today:')),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Container(
+                height: screenHeight * 0.25,
+                width: screenWidth * 1,
+                color: Colors.deepPurple[300],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Container(
+                height: screenHeight * 0.0525,
+                width: screenWidth * 1,
+                color: Colors.deepPurple[200],
+                padding: const EdgeInsets.only(left: 30),
+                alignment: Alignment.centerLeft,
+                child: const Text('Here is your schedule tomorrow:'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Container(
+                height: screenHeight * 0.25,
+                width: screenWidth * 1,
+                color: Colors.deepPurple[100],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
