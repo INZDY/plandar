@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fitgap/pages/AddNewEvent.dart';
 import 'package:fitgap/pages/settings.dart';
 
 class Home extends StatefulWidget {
@@ -20,7 +19,7 @@ class _BottomNavBarState extends State<Home> {
       'Index 1: Dashboard',
     ),
 
-    AddNewEvent(), //choice 3 (middle button) 'addNewEvent'
+    //choice 3 (middle button) 'addNewEvent'
 
     Text(
       'Index 3: Planner',
