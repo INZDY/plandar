@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fitgap/components/Utilities.dart';
-import 'package:fitgap/components/email_password_field.dart';
+import 'package:fitgap/src/common_widgets/snackbar.dart';
+import 'package:fitgap/src/common_widgets/text_field_validate_controller.dart';
 import 'package:fitgap/main.dart';
 import 'package:flutter/material.dart';
 
@@ -106,7 +106,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       );
       //pop loading
     } on FirebaseAuthException catch (e) {
-      Utils.showSnackBar(e.message);
+      SnackbarUtil.showSnackBar(e.message);
     }
 
     navigatorKey.currentState!.popUntil((route) => route.isFirst);

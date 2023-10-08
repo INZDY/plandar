@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 //Google, Facebook, Apple login/signup
 //logout
-class AuthButton extends StatelessWidget {
+class AuthButtonIcon extends StatelessWidget {
   // final Color color;
   final IconData icon;
   final Function logMethod;
 
-  const AuthButton({
+  const AuthButtonIcon({
     super.key,
     // required this.color,
     required this.icon,

@@ -1,5 +1,5 @@
-import 'package:fitgap/pages/login.dart';
-import 'package:fitgap/pages/signup.dart';
+import 'package:fitgap/src/features/authentication/screens/login/login.dart';
+import 'package:fitgap/src/features/authentication/screens/signup/signup.dart';
 import 'package:flutter/material.dart';
 
 class LoginOrSignupPage extends StatefulWidget {

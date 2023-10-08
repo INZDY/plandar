@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fitgap/pages/settings.dart';
+import 'package:fitgap/src/features/settings/settings.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,12 +14,15 @@ class _BottomNavBarState extends State<Home> {
 
   //widget list
   static const List<Widget> _widgetOptions = <Widget>[
-    HomePage(), //choice 1 (most left button) 'HomePage'
+    HomePage(), //choice 0 (most left button) 'HomePage'
+
     Text(
       'Index 1: Dashboard',
     ),
 
-    //choice 3 (middle button) 'addNewEvent'
+    Text(
+      'Index 2: Dashboard',
+    ), //choice 2 (middle button) 'addNewEvent'
 
     Text(
       'Index 3: Planner',

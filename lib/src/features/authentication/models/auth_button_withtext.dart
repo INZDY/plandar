@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 //Non Email,Password /logout
 //Google, Facebook, Apple
-class AuthButton extends StatelessWidget {
+class AuthButtonIconText extends StatelessWidget {
   final Color color;
   final IconData icon;
   final String text;
   final Function logMethod;
 
-  const AuthButton({
+  const AuthButtonIconText({
     super.key,
     required this.color,
     required this.icon,

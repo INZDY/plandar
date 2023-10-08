@@ -1,5 +1,5 @@
-import 'package:fitgap/components/utilities.dart';
-import 'package:fitgap/pages/auth_page.dart';
+import 'package:fitgap/src/common_widgets/snackbar.dart';
+import 'package:fitgap/src/features/authentication/applications/auth_page.dart';
 import 'package:fitgap/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        scaffoldMessengerKey: Utils.messengerKey,
+        scaffoldMessengerKey: SnackbarUtil.messengerKey,
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         theme: appTheme,

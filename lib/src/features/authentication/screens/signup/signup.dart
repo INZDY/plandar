@@ -1,12 +1,12 @@
 // import 'package:email_validator/email_validator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fitgap/components/utilities.dart';
-import 'package:fitgap/components/auth_button.dart';
-import 'package:fitgap/components/email_password_field.dart';
+import 'package:fitgap/src/common_widgets/snackbar.dart';
+import 'package:fitgap/src/common_widgets/text_field_validate_controller.dart';
 import 'package:fitgap/main.dart';
+import 'package:fitgap/src/features/authentication/models/auth_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fitgap/services/auth.dart';
+import 'package:fitgap/src/utils/auth/auth.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatefulWidget {
@@ -177,7 +177,7 @@ class _SignupPageState extends State<SignupPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      AuthButton(
+                      AuthButtonIcon(
                         icon: FontAwesomeIcons.google,
                         logMethod: AuthService().googleLogin,
                       ),
@@ -249,7 +249,7 @@ class _SignupPageState extends State<SignupPage> {
       }
       //pop loading
     } on FirebaseAuthException catch (e) {
-      Utils.showSnackBar(e.message);
+      SnackbarUtil.showSnackBar(e.message);
     }
 
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
