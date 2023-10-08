@@ -244,7 +244,8 @@ class _SignupPageState extends State<SignupPage> {
         );
 
         //add user details
-        addUserDetails(_usernameController.text.trim());
+        addUserDetails(
+            _usernameController.text.trim(), _emailController.text.trim());
       }
       //pop loading
     } on FirebaseAuthException catch (e) {
@@ -254,10 +255,10 @@ class _SignupPageState extends State<SignupPage> {
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 
-  Future addUserDetails(String username) async {
+  Future addUserDetails(String username, String email) async {
     await FirebaseFirestore.instance
         .collection('users')
-        .add({'username': username});
+        .add({'username': username, 'email': email});
   }
 
   bool passwordConfirmed() {
