@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fitgap/pages/settings.dart';
+import 'package:fitgap/src/features/settings/settings.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});

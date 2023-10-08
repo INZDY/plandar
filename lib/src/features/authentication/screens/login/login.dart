@@ -1,12 +1,12 @@
 // import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fitgap/components/utilities.dart';
-import 'package:fitgap/components/auth_button.dart';
-import 'package:fitgap/components/email_password_field.dart';
+import 'package:fitgap/src/common_widgets/snackbar.dart';
+import 'package:fitgap/src/common_widgets/text_field_validate_controller.dart';
 import 'package:fitgap/main.dart';
-import 'package:fitgap/pages/forgot_password.dart';
+import 'package:fitgap/src/features/authentication/models/auth_button.dart';
+import 'package:fitgap/src/features/authentication/screens/forgot_password/forgot_password.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fitgap/services/auth.dart';
+import 'package:fitgap/src/utils/auth/auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -245,7 +245,7 @@ class _LoginPageState extends State<LoginPage> {
       );
       //pop loading
     } on FirebaseAuthException catch (e) {
-      Utils.showSnackBar(e.message);
+      SnackbarUtil.showSnackBar(e.message);
     }
 
     navigatorKey.currentState!.popUntil((route) => route.isFirst);

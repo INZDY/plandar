@@ -1,5 +1,5 @@
 import 'package:fitgap/components/auth_button_withtext.dart';
-import 'package:fitgap/services/auth.dart';
+import 'package:fitgap/src/utils/auth/auth.dart';
 import 'package:flutter/material.dart';
 
 class Settings extends StatelessWidget {
