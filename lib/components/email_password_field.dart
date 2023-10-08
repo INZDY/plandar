@@ -32,30 +32,20 @@ class CredentialText extends StatelessWidget {
         child: TextFormField(
           controller: controller,
           obscureText: obscureText,
+          style: const TextStyle(fontSize: 18),
           decoration: InputDecoration(
             hintText: hintText,
             border: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.all(Radius.circular(15))),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
             contentPadding:
-                const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-            fillColor: Colors.grey,
+                const EdgeInsets.symmetric(vertical: 14, horizontal: 15),
+            fillColor: const Color(0xFFD9D9D9),
             filled: true,
           ),
 
           //validate input
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          // validator: (input) {
-          //   if (input != null && fieldType != -1) {
-          //     if (fieldType == 0
-          //         ? !EmailValidator.validate(input)
-          //         : input.length < 8) {
-          //       return warningText;
-          //     } else {
-          //       return null;
-          //     }
-          //   }
-          // },
           validator: (input) => input != null &&
                   fieldType != -1 &&
                   ((fieldType == 0)

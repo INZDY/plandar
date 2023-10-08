@@ -20,8 +20,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,23 +45,23 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   //logo
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.asset(
-                      'assets/icons/plandarlogo.png',
-                      height: 110,
-                      width: 500,
-                    ),
+                  Container(
+                    height: 50,
+                    width: 200,
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/icons/plandarlogo.png'),
+                            fit: BoxFit.fitWidth)),
                   ),
 
                   const SizedBox(
-                    height: 50,
+                    height: 30,
                   ),
 
                   //login text
                   const Text(
                     'Login',
-                    style: TextStyle(fontSize: 40, color: Colors.white),
+                    style: TextStyle(fontSize: 30, color: Colors.white),
                   ),
 
                   const SizedBox(
@@ -69,28 +70,28 @@ class _LoginPageState extends State<LoginPage> {
 
                   //email textfield
                   CredentialText(
-                    controller: emailController,
+                    controller: _emailController,
                     hintText: 'Email Address',
                     obscureText: false,
                     fieldType: -1,
-                    warningText: 'Enter valid email',
+                    warningText: '',
                   ),
 
                   const SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
 
                   //password textfield
                   CredentialText(
-                    controller: passwordController,
+                    controller: _passwordController,
                     hintText: 'Password',
                     obscureText: true,
                     fieldType: -1,
-                    warningText: 'Password must be more than 8 characters',
+                    warningText: '',
                   ),
 
                   const SizedBox(
-                    height: 10,
+                    height: 30,
                   ),
 
                   //remember password checkbox
@@ -111,21 +112,36 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   const SizedBox(
-                    height: 10,
+                    height: 50,
                   ),
 
                   //login button
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            minimumSize: const Size.fromHeight(50)),
-                        onPressed: signIn,
-                        child: const Text('Login'),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Color(0xFFFFFFFF),
+                                  Color(0xFF5B8AEB),
+                                ]),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              minimumSize: const Size.fromHeight(50)),
+                          onPressed: signIn,
+                          child: Text(
+                            'Login',
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                        ),
                       )),
 
                   const SizedBox(
-                    height: 25,
+                    height: 30,
                   ),
 
                   //or login with
@@ -136,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                       Expanded(
                         child: Divider(
                           thickness: 0.5,
-                          color: Colors.white,
+                          color: Color(0xFFA6A6A6),
                         ),
                       ),
 
@@ -145,7 +161,8 @@ class _LoginPageState extends State<LoginPage> {
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
                           'Or login with',
-                          style: TextStyle(color: Colors.white),
+                          style:
+                              TextStyle(fontSize: 14, color: Color(0xFFA6A6A6)),
                         ),
                       ),
 
@@ -153,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                       Expanded(
                         child: Divider(
                           thickness: 0.5,
-                          color: Colors.white,
+                          color: Color(0xFFA6A6A6),
                         ),
                       ),
                     ]),
@@ -175,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   const SizedBox(
-                    height: 50,
+                    height: 100,
                   ),
 
                   //don't have account? create now
@@ -184,7 +201,8 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       const Text(
                         'Not a member?',
-                        style: TextStyle(color: Colors.white),
+                        style:
+                            TextStyle(fontSize: 14, color: Color(0xFFA6A6A6)),
                       ),
                       const SizedBox(
                         width: 5,
@@ -192,8 +210,9 @@ class _LoginPageState extends State<LoginPage> {
                       GestureDetector(
                         onTap: widget.onTap,
                         child: const Text(
-                          'Register now',
-                          style: TextStyle(color: Color(0xFFAD76D8)),
+                          'Signup now',
+                          style:
+                              TextStyle(fontSize: 14, color: Color(0xFFAD76D8)),
                         ),
                       )
                     ],
@@ -221,8 +240,8 @@ class _LoginPageState extends State<LoginPage> {
     //authentication
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
       );
       //pop loading
     } on FirebaseAuthException catch (e) {

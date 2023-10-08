@@ -13,42 +13,78 @@ class ForgotPassword extends StatefulWidget {
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
+
+  final _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reset Password'),
-      ),
-      body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25),
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                const Text('Enter an email to reset your password'),
-                const SizedBox(
-                  height: 25,
+    return Container(
+      constraints: const BoxConstraints.expand(),
+      decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/images/bg.png'), fit: BoxFit.cover)),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: const Text(
+            'Reset Password',
+          ),
+          backgroundColor: Colors.transparent,
+        ),
+        body: Center(
+            child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: Text(
+                  'Enter an email to reset your password',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20, color: Color(0xFFA6A6A6)),
                 ),
-                CredentialText(
-                  controller: emailController,
-                  hintText: 'Email Address',
-                  obscureText: false,
-                  fieldType: 0,
-                  warningText: 'Enter valid email',
-                ),
-                Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              CredentialText(
+                controller: _emailController,
+                hintText: 'Email Address',
+                obscureText: false,
+                fieldType: 0,
+                warningText: 'Enter valid email',
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Color(0xFFFFFFFF),
+                              Color(0xFF5B8AEB),
+                            ]),
+                        borderRadius: BorderRadius.circular(5)),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
                           minimumSize: const Size.fromHeight(50)),
                       onPressed: forgotPassword,
-                      child: const Text('Login'),
-                    )),
-              ],
-            ),
-          )),
+                      child: Text(
+                        'Send Password Reset',
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                    ),
+                  )),
+            ],
+          ),
+        )),
+      ),
     );
   }
 
@@ -66,7 +102,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     //authentication
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(
-        email: emailController.text.trim(),
+        email: _emailController.text.trim(),
       );
       //pop loading
     } on FirebaseAuthException catch (e) {
