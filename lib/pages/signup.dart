@@ -1,4 +1,5 @@
 // import 'package:email_validator/email_validator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitgap/components/utilities.dart';
 import 'package:fitgap/components/auth_button.dart';
@@ -36,6 +37,7 @@ class _SignupPageState extends State<SignupPage> {
         backgroundColor: const Color(0x00060239),
         body: Center(
           child: SingleChildScrollView(
+            //validate before submitting
             child: Form(
               key: formKey,
               child: Column(
@@ -53,6 +55,19 @@ class _SignupPageState extends State<SignupPage> {
 
                   const SizedBox(
                     height: 50,
+                  ),
+
+                  //username textfield
+                  CredentialText(
+                    controller: _usernameController,
+                    hintText: 'Username',
+                    obscureText: false,
+                    fieldType: -1,
+                    warningText: '',
+                  ),
+
+                  const SizedBox(
+                    height: 30,
                   ),
 
                   //email textfield
@@ -204,7 +219,8 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-  Future<void> signUp() async {
+  Future signUp() async {
+    //form validate
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
 
@@ -220,12 +236,15 @@ class _SignupPageState extends State<SignupPage> {
 
     //authentication
     try {
-      if (_passwordController.text.trim() ==
-          _passwordConfirmController.text.trim()) {
+      if (passwordConfirmed()) {
+        //create user
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
+
+        //add user details
+        addUserDetails(_usernameController.text.trim());
       }
       //pop loading
     } on FirebaseAuthException catch (e) {
@@ -233,5 +252,20 @@ class _SignupPageState extends State<SignupPage> {
     }
 
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
+  }
+
+  Future addUserDetails(String username) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .add({'username': username});
+  }
+
+  bool passwordConfirmed() {
+    if (_passwordController.text.trim() ==
+        _passwordConfirmController.text.trim()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
