@@ -1,4 +1,5 @@
 import 'package:fitgap/src/features/authentication/models/auth_button_withtext.dart';
+import 'package:fitgap/src/features/profile/screens/profile.dart';
 import 'package:fitgap/src/utils/auth/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,14 @@ class Settings extends StatelessWidget {
       padding: const EdgeInsets.only(top: 50),
       child: ListView(
         children: [
+          //profile
+          ListTile(
+            leading: const Text('Profile'),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const Profile(),
+            )),
+          ),
+
           //Signout button
           AuthButtonIconText(
               color: Colors.black,
