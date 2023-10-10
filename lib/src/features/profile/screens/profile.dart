@@ -1,4 +1,6 @@
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
+
 import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +13,8 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final _firestoreService = FirestoreService();
+
+  bool isLoading = true;
 
   Map<String, dynamic>? _userData;
 
@@ -26,6 +30,11 @@ class _ProfileState extends State<Profile> {
   void initState() {
     super.initState();
     loadUserData();
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        isLoading = false;
+      });
+    });
   }
 
   @override
@@ -41,22 +50,24 @@ class _ProfileState extends State<Profile> {
         centerTitle: true,
       ),
       body: SafeArea(
-          child: ListView(
-        children: [
-          ListTile(
-            title: const Text('Username'),
-            subtitle: Text('${_userData?['username']}'),
-          ),
-        ],
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : ListView(
+                  children: [
+                    ListTile(
+                      title: const Text('Username'),
+                      subtitle: Text('${_userData?['username']}'),
+                    ),
+                  ],
 
-        //map all to listtiles
-        // children: (_userData?.entries ?? []).map((entry) {
-        //   return ListTile(
-        //     title: Text(entry.key),
-        //     subtitle: Text(entry.value.toString()),
-        //   );
-        // }).toList(),
-      )),
+                  //map all to listtiles
+                  // children: (_userData?.entries ?? []).map((entry) {
+                  //   return ListTile(
+                  //     title: Text(entry.key),
+                  //     subtitle: Text(entry.value.toString()),
+                  //   );
+                  // }).toList(),
+                )),
     );
   }
 }
