@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/features/settings/settings.dart';
+import 'package:fitgap/src/features/addevent/addevent.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -20,9 +21,7 @@ class _BottomNavBarState extends State<Home> {
       'Index 1: Dashboard',
     ),
 
-    Text(
-      'Index 2: Dashboard',
-    ), //choice 2 (middle button) 'addNewEvent'
+    AddNewEvent(), //choice 2 (middle button) 'addNewEvent'
 
     Text(
       'Index 3: Planner',
