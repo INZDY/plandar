@@ -8,7 +8,7 @@ class FirestoreService {
 
   User? _user;
 
-  //read all
+  //READ: get user details
   Future getUserData() async {
     //check if authenticated
     if (_auth.currentUser != null) {
@@ -31,7 +31,7 @@ class FirestoreService {
     }
   }
 
-  // //CREATE: add user details
+  //CREATE: add user details
   Future addUserDetails(String username, String email) async {
     await FirebaseFirestore.instance
         .collection('users')
