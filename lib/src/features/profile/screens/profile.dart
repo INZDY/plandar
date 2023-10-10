@@ -1,8 +1,8 @@
-// import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:async';
-
-import 'package:fitgap/src/utils/firestore/firestore.dart';
+import 'package:fitgap/src/features/profile/models/month_constants.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fitgap/src/utils/firestore/firestore.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -17,12 +17,15 @@ class _ProfileState extends State<Profile> {
   bool isLoading = true;
 
   Map<String, dynamic>? _userData;
+  DateTime? date;
 
   Future loadUserData() async {
     final userData = await _firestoreService.getUserData();
+    Timestamp t = userData['birthday'] as Timestamp;
 
     setState(() {
       _userData = userData ?? {};
+      date = t.toDate();
     });
   }
 
@@ -40,34 +43,120 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(color: Colors.black),
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: const Text(
+            'Profile',
+            style: TextStyle(color: Colors.white),
+          ),
+          // backgroundColor: Colors.transparent,
+          // shadowColor: Colors.transparent,
+          centerTitle: true,
         ),
-        // backgroundColor: Colors.transparent,
-        // shadowColor: Colors.transparent,
-        centerTitle: true,
-      ),
-      body: SafeArea(
-          child: isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : ListView(
-                  children: [
-                    ListTile(
-                      title: const Text('Username'),
-                      subtitle: Text('${_userData?['username']}'),
-                    ),
-                  ],
+        body: Container(
+          width: double.maxFinite,
+          height: double.maxFinite,
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFF000000), Color(0xFF07023A)])),
+          child: SafeArea(
+            child: isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView(
+                    children: [
+                      //Quick Profile
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                              color: Color(0xFF191785),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          padding: const EdgeInsets.all(15),
+                          child: Row(
+                            children: [
+                              //image
+                              const SizedBox(
+                                width: 100,
+                              ),
 
-                  //map all to listtiles
-                  // children: (_userData?.entries ?? []).map((entry) {
-                  //   return ListTile(
-                  //     title: Text(entry.key),
-                  //     subtitle: Text(entry.value.toString()),
-                  //   );
-                  // }).toList(),
-                )),
-    );
+                              //username, email, tel.
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Username: ${_userData?['username']}',
+                                  ),
+                                  Text(
+                                    'Email: ${_userData?['email']}',
+                                  ),
+                                  Text(
+                                    'Tel.: ${_userData?['phone_number']}',
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      //Personal Information
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                              color: Color(0xFF191785),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          padding: const EdgeInsets.all(15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Personal Information',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              const Divider(
+                                height: 10,
+                                color: Colors.white,
+                                thickness: 0.5,
+                              ),
+                              Text(
+                                'First Name: ${_userData?['firstname']}',
+                              ),
+                              Text(
+                                'Middle Name: ${_userData?['middlename']}',
+                              ),
+                              Text(
+                                'Last Name: ${_userData?['lastname']}',
+                              ),
+                              Text(
+                                'Gender: ${_userData?['gender']}',
+                              ),
+                              Text(
+                                'Birthday: ${date?.day} ${NumberToMonthMap.monthsInYear[date?.month]} ${date?.year}',
+                              ),
+                              Text(
+                                'Address: ${_userData?['address']}',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+
+                    //map all to listtiles
+                    // children: (_userData?.entries ?? []).map((entry) {
+                    //   return ListTile(
+                    //     title: Text(entry.key),
+                    //     subtitle: Text(entry.value.toString()),
+                    //   );
+                    // }).toList(),
+                  ),
+          ),
+        ));
   }
 }
