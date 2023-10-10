@@ -20,6 +20,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/intl.dart';
 
 class AddNewEvent extends StatefulWidget {
   const AddNewEvent({
@@ -35,11 +36,48 @@ class _AddNewEventState extends State<AddNewEvent> {
   bool isAnimating = false;
   bool isStartDateExpanded = false;
   bool isStartTimeExpanded = false;
+  bool isEndDateExpanded = false;
+  bool isEndTimeExpanded = false;
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
 
   void toggleStartDate() {
     setState(() {
       isStartDateExpanded = !isStartDateExpanded;
-      isStartTimeExpanded = false; //close one tab when other appears
+      isEndDateExpanded = false;
+      isEndTimeExpanded = false;
+      isAnimating = true;
+    });
+
+    if (isStartTimeExpanded) {
+      setState(() {
+        isStartTimeExpanded = false;
+        isAnimating = false;
+      });
+    } else {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          isAnimating = false; // Animation is complete, stop animating
+        });
+      });
+    }
+  }
+
+  void toggleStartTime() {
+    setState(() {
+      isStartTimeExpanded = !isStartTimeExpanded;
+      isStartDateExpanded = false; //close one tab when other appears
+      isEndDateExpanded = false;
+      isEndTimeExpanded = false;
+    });
+  }
+
+  void toggleEndDate() {
+    setState(() {
+      isEndDateExpanded = !isEndDateExpanded;
+      isEndTimeExpanded = false; //close one tab when other appears
+      isStartDateExpanded = false;
+      isStartTimeExpanded = false;
       isAnimating = true;
     });
 
@@ -50,11 +88,29 @@ class _AddNewEventState extends State<AddNewEvent> {
     });
   }
 
-  void toggleStartTime() {
+  void toggleEndTime() {
     setState(() {
-      isStartTimeExpanded = !isStartTimeExpanded;
-      isStartDateExpanded = false; //close one tab when other appears
+      isEndTimeExpanded = !isEndTimeExpanded;
+      isEndDateExpanded = false; //close one tab when other appears
+      isStartDateExpanded = false;
+      isStartTimeExpanded = false;
     });
+  }
+
+  void _startDateSelected(DateTime day, DateTime focusedDay) {
+    setState(() {
+      startDate = day;
+    });
+  }
+
+  void _endDateSelected(DateTime day, DateTime focusedDay) {
+    setState(() {
+      endDate = day;
+    });
+  }
+
+  String dMyformat(DateTime dateTime) {
+    return DateFormat('dd MMM yyyy').format(dateTime);
   }
 
   @override
@@ -93,7 +149,7 @@ class _AddNewEventState extends State<AddNewEvent> {
               ),
               Padding(
                 //Title & Location group
-                padding: const EdgeInsets.symmetric(vertical: 15.0),
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
                 child: Container(
                   height: screenHeight * 0.13,
                   width: screenWidth * 1,
@@ -123,13 +179,16 @@ class _AddNewEventState extends State<AddNewEvent> {
               ),
               Padding(
                 //All-day & Starts & Ends group
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 500),
-                      height: isStartDateExpanded || isStartTimeExpanded
-                          ? screenHeight * 0.48 //48
+                      height: isStartDateExpanded ||
+                              isStartTimeExpanded ||
+                              isEndDateExpanded ||
+                              isEndTimeExpanded
+                          ? screenHeight * 0.49 //48
                           : screenHeight * 0.18,
                       width: screenWidth * 0.9,
                       color: Colors.deepPurple[500],
@@ -162,6 +221,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                               ),
                             ),
                           ),
+                          // Container for selecting Start Date&Time
                           Container(
                             height: screenHeight * 0.06,
                             color: Colors.white30,
@@ -183,8 +243,8 @@ class _AddNewEventState extends State<AddNewEvent> {
                                               toggleStartDate();
                                             },
                                             child: Text(isStartDateExpanded
-                                                ? 'DateO'
-                                                : 'DateC')),
+                                                ? dMyformat(startDate)
+                                                : dMyformat(startDate))),
                                       ),
                                       Visibility(
                                         visible: !isAllDay,
@@ -203,11 +263,12 @@ class _AddNewEventState extends State<AddNewEvent> {
                               ),
                             ),
                           ),
+                          // AnimateContainer for table calendar for start Date
                           AnimatedContainer(
                             duration: const Duration(milliseconds: 500),
                             width: screenWidth * 0.9,
                             height: isStartDateExpanded || isStartTimeExpanded
-                                ? screenHeight * 0.30
+                                ? screenHeight * 0.31
                                 : 0.0,
                             color: Colors.blue,
                             child: Center(
@@ -216,17 +277,21 @@ class _AddNewEventState extends State<AddNewEvent> {
                                   ? isAnimating
                                       ? null
                                       : TableCalendar(
-                                          firstDay: DateTime.utc(2010, 10, 16),
-                                          lastDay: DateTime.utc(2030, 3, 14),
-                                          focusedDay: DateTime.now(),
+                                          firstDay: DateTime.utc(2023, 1, 1),
+                                          lastDay: DateTime.utc(2030, 12, 31),
+                                          focusedDay: startDate,
                                           shouldFillViewport: true,
                                           headerStyle: const HeaderStyle(
+                                            formatButtonVisible: false,
                                             titleTextStyle: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.black,
                                             ),
                                           ),
+                                          selectedDayPredicate: (day) =>
+                                              isSameDay(day, startDate),
+                                          onDaySelected: _startDateSelected,
                                         )
                                   : (isStartTimeExpanded
                                       ?
@@ -235,17 +300,92 @@ class _AddNewEventState extends State<AddNewEvent> {
                                       : Text('')),
                             ),
                           ),
+                          // Container for selecting Ends Date&Time
                           Container(
                             height: screenHeight * 0.06,
                             color: Colors.white60,
-                          )
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text('Ends'),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 5),
+                                        child: ElevatedButton(
+                                            onPressed: () {
+                                              toggleEndDate();
+                                            },
+                                            child: Text(isEndDateExpanded
+                                                ? dMyformat(endDate)
+                                                : dMyformat(endDate))),
+                                      ),
+                                      Visibility(
+                                        visible: !isAllDay,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            toggleEndTime();
+                                          },
+                                          child: Text(isEndTimeExpanded
+                                              ? 'TimeO'
+                                              : 'TimeC'),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          // AnimateContainer for table calendar for End Date
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 500),
+                            width: screenWidth * 0.9,
+                            height: isEndDateExpanded || isEndTimeExpanded
+                                ? screenHeight * 0.31
+                                : 0.0,
+                            color: Colors.blue,
+                            child: Center(
+                              child: isEndDateExpanded
+                                  // if startDate is selected
+                                  ? isAnimating
+                                      ? null
+                                      : TableCalendar(
+                                          firstDay: DateTime.utc(2023, 1, 1),
+                                          lastDay: DateTime.utc(2030, 12, 31),
+                                          focusedDay: endDate,
+                                          shouldFillViewport: true,
+                                          headerStyle: const HeaderStyle(
+                                            formatButtonVisible: false,
+                                            titleTextStyle: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          selectedDayPredicate: (day) =>
+                                              isSameDay(day, endDate),
+                                          onDaySelected: _endDateSelected,
+                                        )
+                                  : (isEndTimeExpanded
+                                      ?
+                                      // if startTime is selected
+                                      Text('End Time')
+                                      : Text('')),
+                            ),
+                          ),
                         ],
                       ),
                     )),
               ),
               Padding(
                 //Tag & People group
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Container(
