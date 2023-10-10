@@ -22,8 +22,8 @@ class FirestoreService {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
+        //Get and return user data only the first entry (no email duplicates)
         final userData = querySnapshot.docs.first.data();
-        //Get and return user data
         return userData;
       } else {
         return {};
@@ -32,8 +32,11 @@ class FirestoreService {
   }
 
   // //CREATE: add user details
-  // final CollectionReference userDetails =
-  //     FirebaseFirestore.instance.collection('');
+  Future addUserDetails(String username, String email) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .add({'username': username, 'email': email});
+  }
 
   //CREATE: add event
 
