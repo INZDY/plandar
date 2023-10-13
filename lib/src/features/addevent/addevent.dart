@@ -6,7 +6,8 @@
             - Page name and Add button
         2.Title & Location 
           - Contain :
-            - 2 Text input boxes use to receive Event's title and location
+            - 1 plain Text input boxes use to receive Event's title 
+            - 1 Text input with map api to receive Event's location
         3.All-day & Starts & Ends 
           - use to determine date&time for an event
           - Contains :
@@ -29,7 +30,7 @@ class AddNewEvent extends StatefulWidget {
   });
 
   @override
-  _AddNewEventState createState() => _AddNewEventState();
+  State<AddNewEvent> createState() => _AddNewEventState();
 }
 
 class _AddNewEventState extends State<AddNewEvent> {

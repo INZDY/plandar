@@ -6,9 +6,11 @@ and later converted as string to put in Text()
 */
 
 class MyMinutes extends StatelessWidget {
-  int mins;
-
-  MyMinutes({required this.mins});
+  final int mins;
+  const MyMinutes({
+    required this.mins,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +28,12 @@ class MyMinutes extends StatelessWidget {
 }
 
 class MyHours extends StatelessWidget {
-  int hours;
+  final int hours;
 
-  MyHours({required this.hours});
+  const MyHours({
+    required this.hours,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
