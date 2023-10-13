@@ -19,6 +19,7 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:fitgap/src/utils/utility/utility.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -34,12 +35,18 @@ class AddNewEvent extends StatefulWidget {
 class _AddNewEventState extends State<AddNewEvent> {
   bool isAllDay = false;
   bool isAnimating = false;
+
   bool isStartDateExpanded = false;
   bool isStartTimeExpanded = false;
   bool isEndDateExpanded = false;
   bool isEndTimeExpanded = false;
+
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
+  String startHours = DateTime.now().hour.toString().padLeft(2, '0');
+  String startMins = DateTime.now().minute.toString().padLeft(2, '0');
+  String endHours = DateTime.now().hour.toString().padLeft(2, '0');
+  String endMins = DateTime.now().minute.toString().padLeft(2, '0');
 
   void toggleStartDate() {
     setState(() {
@@ -66,35 +73,67 @@ class _AddNewEventState extends State<AddNewEvent> {
   void toggleStartTime() {
     setState(() {
       isStartTimeExpanded = !isStartTimeExpanded;
-      isStartDateExpanded = false; //close one tab when other appears
       isEndDateExpanded = false;
       isEndTimeExpanded = false;
+      isAnimating = true;
     });
+
+    if (isStartDateExpanded) {
+      setState(() {
+        isStartDateExpanded = false;
+        isAnimating = false;
+      });
+    } else {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          isAnimating = false; // Animation is complete, stop animating
+        });
+      });
+    }
   }
 
   void toggleEndDate() {
     setState(() {
       isEndDateExpanded = !isEndDateExpanded;
-      isEndTimeExpanded = false; //close one tab when other appears
       isStartDateExpanded = false;
       isStartTimeExpanded = false;
       isAnimating = true;
     });
 
-    Future.delayed(const Duration(milliseconds: 500), () {
+    if (isEndTimeExpanded) {
       setState(() {
-        isAnimating = false; // Animation is complete, stop animating
+        isEndTimeExpanded = false;
+        isAnimating = false;
       });
-    });
+    } else {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          isAnimating = false; // Animation is complete, stop animating
+        });
+      });
+    }
   }
 
   void toggleEndTime() {
     setState(() {
       isEndTimeExpanded = !isEndTimeExpanded;
-      isEndDateExpanded = false; //close one tab when other appears
       isStartDateExpanded = false;
       isStartTimeExpanded = false;
+      isAnimating = true;
     });
+
+    if (isEndDateExpanded) {
+      setState(() {
+        isEndDateExpanded = false;
+        isAnimating = false;
+      });
+    } else {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          isAnimating = false; // Animation is complete, stop animating
+        });
+      });
+    }
   }
 
   void _startDateSelected(DateTime day, DateTime focusedDay) {
@@ -239,12 +278,11 @@ class _AddNewEventState extends State<AddNewEvent> {
                                         padding:
                                             const EdgeInsets.only(right: 5),
                                         child: ElevatedButton(
-                                            onPressed: () {
-                                              toggleStartDate();
-                                            },
-                                            child: Text(isStartDateExpanded
-                                                ? dMyformat(startDate)
-                                                : dMyformat(startDate))),
+                                          onPressed: () {
+                                            toggleStartDate();
+                                          },
+                                          child: Text(dMyformat(startDate)),
+                                        ),
                                       ),
                                       Visibility(
                                         visible: !isAllDay,
@@ -252,11 +290,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                           onPressed: () {
                                             toggleStartTime();
                                           },
-                                          child: Text(isStartTimeExpanded
-                                              ? 'TimeO'
-                                              : 'TimeC'),
+                                          child: Text('$startHours:$startMins'),
                                         ),
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ],
@@ -270,7 +306,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                             height: isStartDateExpanded || isStartTimeExpanded
                                 ? screenHeight * 0.31
                                 : 0.0,
-                            color: Colors.blue,
+                            color: const Color.fromRGBO(153, 175, 255, 1),
                             child: Center(
                               child: isStartDateExpanded
                                   // if startDate is selected
@@ -283,21 +319,110 @@ class _AddNewEventState extends State<AddNewEvent> {
                                           shouldFillViewport: true,
                                           headerStyle: const HeaderStyle(
                                             formatButtonVisible: false,
+                                            titleCentered: true,
                                             titleTextStyle: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.black,
                                             ),
                                           ),
+                                          calendarStyle: const CalendarStyle(
+                                            weekendTextStyle:
+                                                TextStyle(color: Colors.red),
+                                          ),
                                           selectedDayPredicate: (day) =>
                                               isSameDay(day, startDate),
                                           onDaySelected: _startDateSelected,
                                         )
                                   : (isStartTimeExpanded
-                                      ?
-                                      // if startTime is selected
-                                      Text('Start Time')
-                                      : Text('')),
+                                      ? isAnimating
+                                          // if startTime is selected
+                                          ? null
+                                          : Container(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  // hour wheel
+                                                  SizedBox(
+                                                    width: screenWidth * 0.3,
+                                                    child: ListWheelScrollView
+                                                        .useDelegate(
+                                                      itemExtent: 45,
+                                                      perspective: 0.005,
+                                                      diameterRatio: 1.2,
+                                                      controller:
+                                                          FixedExtentScrollController(
+                                                              initialItem:
+                                                                  int.parse(
+                                                                      startHours)),
+                                                      onSelectedItemChanged:
+                                                          (value) {
+                                                        setState(() {
+                                                          startHours = value
+                                                              .toString()
+                                                              .padLeft(2, '0');
+                                                        });
+                                                      },
+                                                      physics:
+                                                          const FixedExtentScrollPhysics(),
+                                                      childDelegate:
+                                                          ListWheelChildBuilderDelegate(
+                                                        childCount: 25,
+                                                        builder:
+                                                            (context, index) {
+                                                          return MyHours(
+                                                              hours: index);
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const Text(
+                                                    " : ",
+                                                    style: TextStyle(
+                                                        fontSize: 30,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  // min wheel
+                                                  SizedBox(
+                                                    width: screenWidth * 0.3,
+                                                    child: ListWheelScrollView
+                                                        .useDelegate(
+                                                      itemExtent: 45,
+                                                      perspective: 0.005,
+                                                      diameterRatio: 1.2,
+                                                      controller:
+                                                          FixedExtentScrollController(
+                                                              initialItem:
+                                                                  int.parse(
+                                                                      startMins)),
+                                                      onSelectedItemChanged:
+                                                          (value) {
+                                                        setState(() {
+                                                          startMins = value
+                                                              .toString()
+                                                              .padLeft(2, '0');
+                                                        });
+                                                      },
+                                                      physics:
+                                                          const FixedExtentScrollPhysics(),
+                                                      childDelegate:
+                                                          ListWheelChildBuilderDelegate(
+                                                        childCount: 60,
+                                                        builder:
+                                                            (context, index) {
+                                                          return MyMinutes(
+                                                              mins: index);
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                      : null),
                             ),
                           ),
                           // Container for selecting Ends Date&Time
@@ -318,12 +443,11 @@ class _AddNewEventState extends State<AddNewEvent> {
                                         padding:
                                             const EdgeInsets.only(right: 5),
                                         child: ElevatedButton(
-                                            onPressed: () {
-                                              toggleEndDate();
-                                            },
-                                            child: Text(isEndDateExpanded
-                                                ? dMyformat(endDate)
-                                                : dMyformat(endDate))),
+                                          onPressed: () {
+                                            toggleEndDate();
+                                          },
+                                          child: Text(dMyformat(endDate)),
+                                        ),
                                       ),
                                       Visibility(
                                         visible: !isAllDay,
@@ -331,9 +455,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                                           onPressed: () {
                                             toggleEndTime();
                                           },
-                                          child: Text(isEndTimeExpanded
-                                              ? 'TimeO'
-                                              : 'TimeC'),
+                                          child: Text('$endHours:$endMins'),
                                         ),
                                       )
                                     ],
@@ -349,10 +471,10 @@ class _AddNewEventState extends State<AddNewEvent> {
                             height: isEndDateExpanded || isEndTimeExpanded
                                 ? screenHeight * 0.31
                                 : 0.0,
-                            color: Colors.blue,
+                            color: const Color.fromRGBO(153, 175, 255, 1),
                             child: Center(
                               child: isEndDateExpanded
-                                  // if startDate is selected
+                                  // if endDate is selected
                                   ? isAnimating
                                       ? null
                                       : TableCalendar(
@@ -362,21 +484,111 @@ class _AddNewEventState extends State<AddNewEvent> {
                                           shouldFillViewport: true,
                                           headerStyle: const HeaderStyle(
                                             formatButtonVisible: false,
+                                            titleCentered: true,
                                             titleTextStyle: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.black,
                                             ),
                                           ),
+                                          calendarStyle: const CalendarStyle(
+                                            weekendTextStyle:
+                                                TextStyle(color: Colors.red),
+                                          ),
                                           selectedDayPredicate: (day) =>
                                               isSameDay(day, endDate),
                                           onDaySelected: _endDateSelected,
                                         )
                                   : (isEndTimeExpanded
-                                      ?
-                                      // if startTime is selected
-                                      Text('End Time')
-                                      : Text('')),
+                                      ? isAnimating
+                                          ?
+                                          // if endTime is selected
+                                          null
+                                          : Container(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  // hour wheel
+                                                  SizedBox(
+                                                    width: screenWidth * 0.3,
+                                                    child: ListWheelScrollView
+                                                        .useDelegate(
+                                                      itemExtent: 45,
+                                                      perspective: 0.005,
+                                                      diameterRatio: 1.2,
+                                                      controller:
+                                                          FixedExtentScrollController(
+                                                              initialItem:
+                                                                  int.parse(
+                                                                      endHours)),
+                                                      onSelectedItemChanged:
+                                                          (value) {
+                                                        setState(() {
+                                                          endHours = value
+                                                              .toString()
+                                                              .padLeft(2, '0');
+                                                        });
+                                                      },
+                                                      physics:
+                                                          const FixedExtentScrollPhysics(),
+                                                      childDelegate:
+                                                          ListWheelChildBuilderDelegate(
+                                                        childCount: 25,
+                                                        builder:
+                                                            (context, index) {
+                                                          return MyHours(
+                                                              hours: index);
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const Text(
+                                                    " : ",
+                                                    style: TextStyle(
+                                                        fontSize: 30,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  // min wheel
+                                                  SizedBox(
+                                                    width: screenWidth * 0.3,
+                                                    child: ListWheelScrollView
+                                                        .useDelegate(
+                                                      itemExtent: 45,
+                                                      perspective: 0.005,
+                                                      diameterRatio: 1.2,
+                                                      controller:
+                                                          FixedExtentScrollController(
+                                                              initialItem:
+                                                                  int.parse(
+                                                                      endMins)),
+                                                      onSelectedItemChanged:
+                                                          (value) {
+                                                        setState(() {
+                                                          endMins = value
+                                                              .toString()
+                                                              .padLeft(2, '0');
+                                                        });
+                                                      },
+                                                      physics:
+                                                          const FixedExtentScrollPhysics(),
+                                                      childDelegate:
+                                                          ListWheelChildBuilderDelegate(
+                                                        childCount: 60,
+                                                        builder:
+                                                            (context, index) {
+                                                          return MyMinutes(
+                                                              mins: index);
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                      : null),
                             ),
                           ),
                         ],
