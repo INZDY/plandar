@@ -21,7 +21,7 @@ class _ProfileState extends State<Profile> {
 
   Future loadUserData() async {
     final userData = await _firestoreService.getUserData();
-    Timestamp t = userData['birthday'] as Timestamp;
+    Timestamp t = userData?['birthday'] as Timestamp;
 
     setState(() {
       _userData = userData ?? {};
