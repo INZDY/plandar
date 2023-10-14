@@ -15,10 +15,10 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final _firestoreService = FirestoreService();
 
-  bool isLoading = true;
-
   Map<String, dynamic>? _userData;
   DateTime? date;
+
+  bool isLoading = true;
 
   Future loadUserData() async {
     final userData = await _firestoreService.getUserData();
@@ -34,7 +34,7 @@ class _ProfileState extends State<Profile> {
   void initState() {
     super.initState();
     loadUserData();
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(milliseconds: 700), () {
       setState(() {
         isLoading = false;
       });
@@ -54,7 +54,9 @@ class _ProfileState extends State<Profile> {
           actions: [
             TextButton(
                 onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const EditProfile())),
+                    builder: (context) => EditProfile(
+                          currentProfile: _userData!,
+                        ))),
                 child: const Text('Edit'))
           ],
           // backgroundColor: Colors.transparent,
