@@ -1,4 +1,5 @@
 import 'package:fitgap/src/features/profile/models/month_constants.dart';
+import 'package:fitgap/src/features/profile/screens/edit_profile.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -50,11 +51,18 @@ class _ProfileState extends State<Profile> {
             'Profile',
             style: TextStyle(color: Colors.white),
           ),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const EditProfile())),
+                child: const Text('Edit'))
+          ],
           // backgroundColor: Colors.transparent,
           // shadowColor: Colors.transparent,
           centerTitle: true,
         ),
         body: Container(
+          //background
           width: double.maxFinite,
           height: double.maxFinite,
           decoration: const BoxDecoration(
@@ -62,6 +70,8 @@ class _ProfileState extends State<Profile> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [Color(0xFF000000), Color(0xFF07023A)])),
+
+          //Widget Render
           child: SafeArea(
             child: isLoading
                 ? const Center(child: CircularProgressIndicator())
