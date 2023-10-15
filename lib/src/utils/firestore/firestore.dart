@@ -7,6 +7,7 @@ class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   late User? _user;
+  late QuerySnapshot userSnapshot;
 
   //initialize user upon calling service
   FirestoreService() {
@@ -16,69 +17,57 @@ class FirestoreService {
   //Private method to initialize user
   Future<void> _initializeCurrentUser() async {
     _user = _auth.currentUser;
-    if (_user == null) return;
+
+    if (_user != null) {
+      userSnapshot = await _db
+          .collection('users')
+          .where('email', isEqualTo: _user!.email)
+          .get();
+      if (userSnapshot.docs.isNotEmpty) return;
+    }
   }
 
   //-------------------------------------------------------------
 
   //CREATE: add user details
   Future addUserDetails(String username, String email) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .add({'username': username, 'email': email});
+    await _db.collection('users').add({'username': username, 'email': email});
   }
 
   //CREATE: add event
 
   //READ: get user details
   Future<Map<String, dynamic>?> getUserData() async {
-    //Query Firestore for user data => first as query snapshot
-    final querySnapshot = await _db
-        .collection('users')
-        .where('email', isEqualTo: _user!.email)
-        .get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      //Get and return user data only the first entry (no email duplicates)
-      final userData = querySnapshot.docs.first.data();
-      return userData;
-    } else {
-      return {};
-    }
+    await _initializeCurrentUser();
+    final userData = userSnapshot.docs.first.data() as Map<String, dynamic>;
+    return userData;
   }
 
   //READ: get events from database
   Future<List<Map<String, dynamic>>?> getEvents() async {
-    //Query user's doc first
-    //use query snapshot to not cut out subcollection
-    QuerySnapshot querySnapshot = await _db
-        .collection('users')
-        .where('email', isEqualTo: _user!.email)
-        .get();
+    await _initializeCurrentUser();
 
-    if (querySnapshot.docs.isNotEmpty) {
-      //Get document snapshot
-      DocumentSnapshot userDoc = querySnapshot.docs.first;
-      QuerySnapshot eventsQuery =
-          await userDoc.reference.collection('events').get();
+    //Get document snapshot
+    DocumentSnapshot userDoc = userSnapshot.docs.first;
+    QuerySnapshot eventsQuery =
+        await userDoc.reference.collection('events').get();
 
-      //for storing events
-      List<Map<String, dynamic>> eventList = [];
+    //for storing events
+    List<Map<String, dynamic>> eventList = [];
 
-      //add all events to list
-      for (QueryDocumentSnapshot eventDoc in eventsQuery.docs) {
-        Map<String, dynamic> eventData =
-            eventDoc.data() as Map<String, dynamic>;
-        eventList.add(eventData);
-      }
-
-      return eventList;
-    } else {
-      return [];
+    //add all events to list
+    for (QueryDocumentSnapshot eventDoc in eventsQuery.docs) {
+      Map<String, dynamic> eventData = eventDoc.data() as Map<String, dynamic>;
+      eventList.add(eventData);
     }
+
+    return eventList;
   }
 
-  //UPDATE: update user given doc id
+  //UPDATE: update profile
+  Future<void> editUserDetails(Map<String, dynamic> updatedData) async {
+  }
+
   //UPDATE: update events given doc id
 
   //DELETE: delete events given doc id
