@@ -35,6 +35,7 @@ class FirestoreService {
   }
 
   //CREATE: add event
+  //CREATE: add contact
 
   //READ: get user details
   Future<Map<String, dynamic>?> getUserData() async {
@@ -64,7 +65,9 @@ class FirestoreService {
     return eventList;
   }
 
-  //UPDATE: update profile
+  //READ: get contacts from database
+
+  //UPDATE: update user profile
   Future<void> updateUserDetails(Map<String, dynamic> updatedData) async {
     await _initializeCurrentUser();
 
@@ -72,7 +75,9 @@ class FirestoreService {
     await userReference.update(updatedData);
   }
 
-  //UPDATE: update events given doc id
+  //UPDATE: update events
+  //UPDATE: update contacts
 
-  //DELETE: delete events given doc id
+  //DELETE: delete events
+  //DELETE: delete contacts
 }
