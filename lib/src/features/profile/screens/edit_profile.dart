@@ -59,12 +59,18 @@ class _EditProfileState extends State<EditProfile> {
         backgroundColor: Colors.transparent,
         title: const Text(
           'Edit Profile',
-          style: TextStyle(color: Colors.red),
+          style: TextStyle(color: Colors.red, fontSize: 20),
         ),
         actions: [
           TextButton(
             onPressed: () => saveProfileChanges(),
-            child: const Text('Done'),
+            child: const Text(
+              'DONE',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+              ),
+            ),
           )
         ],
         centerTitle: true,
@@ -103,7 +109,7 @@ class _EditProfileState extends State<EditProfile> {
                   padding: const EdgeInsets.all(10),
                   child: Container(
                     decoration: const BoxDecoration(
-                        color: Color(0xFF191785),
+                        color: Color(0xFF2B1A6D),
                         borderRadius: BorderRadius.all(Radius.circular(10))),
                     padding: const EdgeInsets.all(15),
                     child: Column(

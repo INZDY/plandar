@@ -57,7 +57,7 @@ class _ProfileState extends State<Profile> {
                     builder: (context) => EditProfile(
                           currentProfile: _userData!,
                         ))),
-                child: const Text('Edit'))
+                child: const Text('EDIT', style: TextStyle(fontSize: 15),))
           ],
           // backgroundColor: Colors.transparent,
           // shadowColor: Colors.transparent,
