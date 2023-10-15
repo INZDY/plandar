@@ -1,10 +1,10 @@
 // import 'package:email_validator/email_validator.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitgap/src/common_widgets/snackbar.dart';
 import 'package:fitgap/src/common_widgets/text_field_validate_controller.dart';
 import 'package:fitgap/main.dart';
 import 'package:fitgap/src/features/authentication/models/auth_button.dart';
+import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fitgap/src/utils/auth/auth.dart';
 import 'package:flutter/material.dart';
@@ -244,7 +244,7 @@ class _SignupPageState extends State<SignupPage> {
         );
 
         //add user details
-        addUserDetails(
+        await FirestoreService().addUserDetails(
             _usernameController.text.trim(), _emailController.text.trim());
       }
       //pop loading
@@ -253,12 +253,6 @@ class _SignupPageState extends State<SignupPage> {
     }
 
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
-  }
-
-  Future addUserDetails(String username, String email) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .add({'username': username, 'email': email});
   }
 
   bool passwordConfirmed() {
