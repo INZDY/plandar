@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitgap/src/features/profile/models/edit_fields.dart';
+import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -36,6 +37,7 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   void saveProfileChanges() {
+    FirestoreService().updateUserDetails(editedProfileData);
     Navigator.pop(context);
   }
 

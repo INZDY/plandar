@@ -13,15 +13,13 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  final _firestoreService = FirestoreService();
-
   Map<String, dynamic>? _userData;
   DateTime? date;
 
   bool isLoading = true;
 
   Future loadUserData() async {
-    final userData = await _firestoreService.getUserData();
+    final userData = await FirestoreService().getUserData();
     Timestamp t = userData?['birthday'] as Timestamp;
 
     setState(() {

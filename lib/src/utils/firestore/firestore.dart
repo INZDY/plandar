@@ -65,7 +65,11 @@ class FirestoreService {
   }
 
   //UPDATE: update profile
-  Future<void> editUserDetails(Map<String, dynamic> updatedData) async {
+  Future<void> updateUserDetails(Map<String, dynamic> updatedData) async {
+    await _initializeCurrentUser();
+
+    DocumentReference userReference = userSnapshot.docs.first.reference;
+    await userReference.update(updatedData);
   }
 
   //UPDATE: update events given doc id
