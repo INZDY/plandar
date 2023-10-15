@@ -55,7 +55,10 @@ class _ProfileState extends State<Profile> {
                     builder: (context) => EditProfile(
                           currentProfile: _userData!,
                         ))),
-                child: const Text('EDIT', style: TextStyle(fontSize: 15),))
+                child: const Text(
+                  'EDIT',
+                  style: TextStyle(fontSize: 15),
+                ))
           ],
           // backgroundColor: Colors.transparent,
           // shadowColor: Colors.transparent,
@@ -118,9 +121,9 @@ class _ProfileState extends State<Profile> {
                         padding: const EdgeInsets.all(10),
                         child: Container(
                           decoration: const BoxDecoration(
-                              color: Color(0xFF191785),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
+                            color: Color(0xFF191785),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
                           padding: const EdgeInsets.all(15),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,6 +154,32 @@ class _ProfileState extends State<Profile> {
                               ),
                               Text(
                                 'Address: ${_userData?['address']}',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      //Friends
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF191785),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          padding: const EdgeInsets.all(15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Friends',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              const Divider(
+                                height: 10,
+                                color: Colors.white,
+                                thickness: 0.5,
                               ),
                             ],
                           ),
