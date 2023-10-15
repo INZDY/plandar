@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class Planner extends StatefulWidget {
   const Planner({super.key});
@@ -33,9 +34,20 @@ class _PlannerState extends State<Planner> {
           ),
         ),
 
-        child: SafeArea(
-          child: Container(
-            child: const Text('test'),
+        //Widget Render
+        child: Padding(
+          padding: const EdgeInsets.all(25),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 500,
+                child: SfCalendar(
+                  view: CalendarView.month,
+                  initialDisplayDate: DateTime.now(),
+                  backgroundColor: Colors.white,
+                ),
+              ),
+            ],
           ),
         ),
       ),
