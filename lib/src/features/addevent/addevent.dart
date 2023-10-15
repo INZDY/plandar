@@ -34,6 +34,11 @@ class AddNewEvent extends StatefulWidget {
 }
 
 class _AddNewEventState extends State<AddNewEvent> {
+  final TextEditingController _titleTextController = TextEditingController();
+  final TextEditingController _locationTextController = TextEditingController();
+  String titleText = '';
+  String locationText = '';
+
   bool isAllDay = false;
   bool isAnimating = false;
 
@@ -161,13 +166,7 @@ class _AddNewEventState extends State<AddNewEvent> {
     return Scaffold(
       body: Container(
         height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.black, Color.fromRGBO(7, 2, 58, 1)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
+        decoration: const BoxDecoration(color: Color.fromRGBO(12, 7, 67, 1)),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -177,14 +176,23 @@ class _AddNewEventState extends State<AddNewEvent> {
                 //Top menu
                 height: screenHeight * 0.07,
                 width: screenWidth * 1,
-                color: Colors.deepPurple[600],
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                        onPressed: () {}, child: const Text('New Event')),
-                    TextButton(onPressed: () {}, child: const Text('Add')),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            'Create New Event',
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          )),
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text('Add'),
+                      ), // Submit event data (Sprint 3)
+                    ],
+                  ),
                 ),
               ),
               Padding(
@@ -193,26 +201,55 @@ class _AddNewEventState extends State<AddNewEvent> {
                 child: Container(
                   height: screenHeight * 0.13,
                   width: screenWidth * 1,
-                  color: Colors.deepPurple[500],
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          height: screenHeight * 0.06,
-                          width: screenWidth * 0.9,
-                          color: Colors.white,
+                      SizedBox(
+                        height: screenHeight * 0.06,
+                        width: screenWidth * 0.9,
+                        child: TextField(
+                          controller: _titleTextController,
+                          textAlignVertical: TextAlignVertical.bottom,
+                          decoration: InputDecoration(
+                            hintText: 'Title',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  10.0), // Adjust the radius as needed
+                            ),
+                            filled: true,
+                            fillColor: const Color.fromRGBO(153, 175, 255,
+                                1), // Adjust the background color
+                          ),
+                          onChanged: (text) {
+                            setState(() {
+                              titleText = text;
+                            });
+                          },
                         ),
                       ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          height: screenHeight * 0.06,
-                          width: screenWidth * 0.9,
-                          color: Colors.white,
+                      SizedBox(
+                        height: screenHeight * 0.06,
+                        width: screenWidth * 0.9,
+                        child: TextField(
+                          controller: _locationTextController,
+                          textAlignVertical: TextAlignVertical.bottom,
+                          decoration: InputDecoration(
+                            hintText: 'Location',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  10.0), // Adjust the radius as needed
+                            ),
+                            filled: true,
+                            fillColor: const Color.fromRGBO(153, 175, 255,
+                                1), // Adjust the background color
+                          ),
+                          onChanged: (text) {
+                            setState(() {
+                              locationText = text;
+                            });
+                          },
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -231,12 +268,11 @@ class _AddNewEventState extends State<AddNewEvent> {
                           ? screenHeight * 0.49 //48
                           : screenHeight * 0.18,
                       width: screenWidth * 0.9,
-                      color: Colors.deepPurple[500],
+                      color: const Color.fromRGBO(153, 175, 255, 1),
                       child: Column(
                         children: [
                           Container(
                             height: screenHeight * 0.06,
-                            color: Colors.white10,
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15.0),
@@ -261,10 +297,18 @@ class _AddNewEventState extends State<AddNewEvent> {
                               ),
                             ),
                           ),
+                          Expanded(
+                            child: SizedBox(
+                              width: screenWidth * 0.8,
+                              child: const Divider(
+                                color: Colors.white,
+                                thickness: 1.0,
+                              ),
+                            ),
+                          ),
                           // Container for selecting Start Date&Time
                           Container(
                             height: screenHeight * 0.06,
-                            color: Colors.white30,
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15.0),
@@ -282,7 +326,18 @@ class _AddNewEventState extends State<AddNewEvent> {
                                           onPressed: () {
                                             toggleStartDate();
                                           },
-                                          child: Text(dMyformat(startDate)),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color.fromRGBO(
+                                                    217, 217, 217, 1),
+                                          ),
+                                          child: Text(
+                                            dMyformat(startDate),
+                                            style: const TextStyle(
+                                              color:
+                                                  Color.fromRGBO(88, 88, 88, 1),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                       Visibility(
@@ -291,12 +346,32 @@ class _AddNewEventState extends State<AddNewEvent> {
                                           onPressed: () {
                                             toggleStartTime();
                                           },
-                                          child: Text('$startHours:$startMins'),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color.fromRGBO(
+                                                    217, 217, 217, 1),
+                                          ),
+                                          child: Text(
+                                            '$startHours:$startMins',
+                                            style: const TextStyle(
+                                              color:
+                                                  Color.fromRGBO(88, 88, 88, 1),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: SizedBox(
+                              width: screenWidth * 0.8,
+                              child: const Divider(
+                                color: Colors.white,
+                                thickness: 1.0,
                               ),
                             ),
                           ),
@@ -429,7 +504,6 @@ class _AddNewEventState extends State<AddNewEvent> {
                           // Container for selecting Ends Date&Time
                           Container(
                             height: screenHeight * 0.06,
-                            color: Colors.white60,
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15.0),
@@ -447,7 +521,18 @@ class _AddNewEventState extends State<AddNewEvent> {
                                           onPressed: () {
                                             toggleEndDate();
                                           },
-                                          child: Text(dMyformat(endDate)),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color.fromRGBO(
+                                                    217, 217, 217, 1),
+                                          ),
+                                          child: Text(
+                                            dMyformat(endDate),
+                                            style: const TextStyle(
+                                              color:
+                                                  Color.fromRGBO(88, 88, 88, 1),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                       Visibility(
@@ -456,7 +541,18 @@ class _AddNewEventState extends State<AddNewEvent> {
                                           onPressed: () {
                                             toggleEndTime();
                                           },
-                                          child: Text('$endHours:$endMins'),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color.fromRGBO(
+                                                    217, 217, 217, 1),
+                                          ),
+                                          child: Text(
+                                            '$endHours:$endMins',
+                                            style: const TextStyle(
+                                              color:
+                                                  Color.fromRGBO(88, 88, 88, 1),
+                                            ),
+                                          ),
                                         ),
                                       )
                                     ],
@@ -604,16 +700,101 @@ class _AddNewEventState extends State<AddNewEvent> {
                   child: Container(
                     height: screenHeight * 0.12,
                     width: screenWidth * 0.9,
-                    color: Colors.deepPurple[500],
+                    color: const Color.fromRGBO(153, 175, 255, 1),
                     child: Column(
                       children: [
                         Container(
                           height: screenHeight * 0.06,
                           color: Colors.white10,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Tag'),
+                                SizedBox(
+                                  width: screenWidth * 0.3,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromRGBO(
+                                          217, 217, 217, 1),
+                                    ),
+                                    onPressed:
+                                        () {}, // route to Tag pages (Sprint 3)
+                                    child: const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'None',
+                                            style: TextStyle(
+                                              color:
+                                                  Color.fromRGBO(88, 88, 88, 1),
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.manage_search,
+                                            color:
+                                                Color.fromRGBO(88, 88, 88, 1),
+                                          )
+                                        ]),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            width: screenWidth * 0.8,
+                            child: const Divider(
+                              color: Colors.white,
+                              thickness: 1.0,
+                            ),
+                          ),
                         ),
                         Container(
                           height: screenHeight * 0.06,
-                          color: Colors.white30,
+                          color: Colors.white10,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                    'People'), // route to People pages (Sprint 3)
+                                SizedBox(
+                                  width: screenWidth * 0.3,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromRGBO(
+                                          217, 217, 217, 1),
+                                    ),
+                                    onPressed: () {},
+                                    child: const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'None',
+                                            style: TextStyle(
+                                              color:
+                                                  Color.fromRGBO(88, 88, 88, 1),
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.manage_search,
+                                            color:
+                                                Color.fromRGBO(88, 88, 88, 1),
+                                          )
+                                        ]),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
