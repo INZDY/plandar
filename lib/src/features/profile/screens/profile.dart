@@ -78,18 +78,19 @@ class _ProfileState extends State<Profile> {
           child: SafeArea(
             child: isLoading
                 ? const Center(child: CircularProgressIndicator())
-                : ListView(
-                    children: [
-                      //Quick Profile
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Container(
+                : Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: ListView(
+                      children: [
+                        //Quick Profile
+                        Container(
                           decoration: const BoxDecoration(
                               color: Color(0xFF191785),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10))),
                           padding: const EdgeInsets.all(15),
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               //image
                               const SizedBox(
@@ -97,29 +98,33 @@ class _ProfileState extends State<Profile> {
                               ),
 
                               //username, email, tel.
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Username: ${_userData?['username']}',
-                                  ),
-                                  Text(
-                                    'Email: ${_userData?['email']}',
-                                  ),
-                                  Text(
-                                    'Tel.: ${_userData?['phone_number']}',
-                                  ),
-                                ],
+                              SizedBox(
+                                width: 250,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Username: ${_userData?['username']}',
+                                    ),
+                                    Text(
+                                      'Email: ${_userData?['email']}',
+                                    ),
+                                    Text(
+                                      'Tel.: ${_userData?['phone_number']}',
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
-                      ),
 
-                      //Personal Information
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Container(
+                        const SizedBox(
+                          height: 20,
+                        ),
+
+                        //Personal Information
+                        Container(
                           decoration: const BoxDecoration(
                             color: Color(0xFF191785),
                             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -158,12 +163,13 @@ class _ProfileState extends State<Profile> {
                             ],
                           ),
                         ),
-                      ),
 
-                      //Friends
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Container(
+                        const SizedBox(
+                          height: 20,
+                        ),
+
+                        //Friends
+                        Container(
                           decoration: const BoxDecoration(
                             color: Color(0xFF191785),
                             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -184,16 +190,16 @@ class _ProfileState extends State<Profile> {
                             ],
                           ),
                         ),
-                      ),
-                    ],
+                      ],
 
-                    //map all to listtiles
-                    // children: (_userData?.entries ?? []).map((entry) {
-                    //   return ListTile(
-                    //     title: Text(entry.key),
-                    //     subtitle: Text(entry.value.toString()),
-                    //   );
-                    // }).toList(),
+                      //map all to listtiles
+                      // children: (_userData?.entries ?? []).map((entry) {
+                      //   return ListTile(
+                      //     title: Text(entry.key),
+                      //     subtitle: Text(entry.value.toString()),
+                      //   );
+                      // }).toList(),
+                    ),
                   ),
           ),
         ));

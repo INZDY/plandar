@@ -90,26 +90,31 @@ class _EditProfileState extends State<EditProfile> {
         //widget render
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                //image
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  //image
+                  Container(
                     width: 100,
                     height: 100,
                     decoration: const BoxDecoration(
                         color: Colors.white, shape: BoxShape.circle),
                   ),
-                ),
 
-                //text under image
-                const Text('Change Profile Picture'),
+                  const SizedBox(
+                    height: 10,
+                  ),
 
-                //Personal Information
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Container(
+                  //text under image
+                  const Text('Edit Profile Picture'),
+
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  //Personal Information
+                  Container(
                     decoration: const BoxDecoration(
                         color: Color(0xFF2B1A6D),
                         borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -230,8 +235,8 @@ class _EditProfileState extends State<EditProfile> {
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
