@@ -4,4 +4,5 @@ var appTheme = ThemeData(
     fontFamily: 'Poppins',
     textTheme: const TextTheme(
       labelMedium: TextStyle(fontSize: 20, color: Color(0xFF28154C)),
+      labelSmall: TextStyle(fontSize: 14, color: Color(0xFF28154C)),
     ));

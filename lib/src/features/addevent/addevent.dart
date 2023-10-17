@@ -280,7 +280,10 @@ class _AddNewEventState extends State<AddNewEvent> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text('All-day'),
+                                  Text('All-day',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall),
                                   Switch(
                                     value: isAllDay,
                                     onChanged: (value) {
@@ -316,7 +319,10 @@ class _AddNewEventState extends State<AddNewEvent> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text('Starts'),
+                                  Text('Starts',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall),
                                   Row(
                                     children: [
                                       Padding(
@@ -403,8 +409,12 @@ class _AddNewEventState extends State<AddNewEvent> {
                                             ),
                                           ),
                                           calendarStyle: const CalendarStyle(
-                                            weekendTextStyle:
-                                                TextStyle(color: Colors.red),
+                                            defaultTextStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                            weekendTextStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.red),
                                           ),
                                           selectedDayPredicate: (day) =>
                                               isSameDay(day, startDate),
@@ -511,7 +521,10 @@ class _AddNewEventState extends State<AddNewEvent> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text('Ends'),
+                                  Text('Ends',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall),
                                   Row(
                                     children: [
                                       Padding(
@@ -589,6 +602,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                             ),
                                           ),
                                           calendarStyle: const CalendarStyle(
+                                            defaultTextStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black),
                                             weekendTextStyle:
                                                 TextStyle(color: Colors.red),
                                           ),
@@ -712,7 +728,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text('Tag'),
+                                Text('Tag',
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall),
                                 SizedBox(
                                   width: screenWidth * 0.3,
                                   child: ElevatedButton(
@@ -763,8 +781,10 @@ class _AddNewEventState extends State<AddNewEvent> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                    'People'), // route to People pages (Sprint 3)
+                                Text('People',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall), // route to People pages (Sprint 3)
                                 SizedBox(
                                   width: screenWidth * 0.3,
                                   child: ElevatedButton(
