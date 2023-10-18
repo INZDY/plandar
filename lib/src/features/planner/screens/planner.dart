@@ -39,12 +39,37 @@ class _PlannerState extends State<Planner> {
           padding: const EdgeInsets.all(25),
           child: Column(
             children: [
-              SizedBox(
-                height: 500,
+              Container(
+                height: 400,
+                padding: const EdgeInsets.all(30),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: const Color(0xFF99AFFF),
+                ),
                 child: SfCalendar(
+                  //settings
                   view: CalendarView.month,
+                  monthViewSettings: const MonthViewSettings(
+                    navigationDirection: MonthNavigationDirection.vertical,
+                    dayFormat: 'EEE',
+                  ),
+                  headerStyle: const CalendarHeaderStyle(
+                    textAlign: TextAlign.center,
+                  ),
+                  viewHeaderHeight: 60,
+                  firstDayOfWeek: 1, //Monday
                   initialDisplayDate: DateTime.now(),
-                  backgroundColor: Colors.white,
+                  showCurrentTimeIndicator: true,
+                  // showNavigationArrow: true,
+
+                  //appearance
+                  selectionDecoration: BoxDecoration(
+                      color: Colors.transparent,
+                      border: Border.all(color: Colors.black, width: 2),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(10))),
+                  cellBorderColor: Colors.transparent,
+                  backgroundColor: Colors.transparent,
                 ),
               ),
             ],
