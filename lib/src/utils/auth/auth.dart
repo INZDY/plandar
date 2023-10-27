@@ -1,10 +1,10 @@
 // import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final userStream = FirebaseAuth.instance.authStateChanges();
-  final user = FirebaseAuth.instance.currentUser;
 
   //Email login is in login_page
 
@@ -30,6 +30,19 @@ class AuthService {
       idToken: gAuth.idToken,
     );
 
-    await FirebaseAuth.instance.signInWithCredential(credential);
+    //sign user in, obtain auth result
+    final UserCredential authResult =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+    //add user detail to DB if new
+    final userEmail = authResult.user?.email ?? '';
+    final userExist = await FirestoreService().existUser(userEmail);
+
+    if (!userExist) {
+      FirestoreService().addUserDetails(
+        userEmail.split('@').first,
+        userEmail,
+      );
+    }
   }
 }
