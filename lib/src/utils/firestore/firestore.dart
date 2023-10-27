@@ -29,9 +29,21 @@ class FirestoreService {
 
   //-------------------------------------------------------------
 
-  //CREATE: add user details
+  //CREATE: add new user details
   Future addUserDetails(String username, String email) async {
-    await _db.collection('users').add({'username': username, 'email': email});
+    await _db.collection('users').add(
+      {
+        'username': username,
+        'email': email,
+        'firstname': '',
+        'middlename': '',
+        'lastname': '',
+        'birthday': DateTime(2000, 1, 1),
+        'gender': 'Other',
+        'phone_number': '',
+        'address': '',
+      },
+    );
   }
 
   //CREATE: add event
@@ -80,4 +92,16 @@ class FirestoreService {
 
   //DELETE: delete events
   //DELETE: delete contacts
+
+  //UTIL: does user exist
+  Future<bool> existUser(String email) async {
+    userSnapshot =
+        await _db.collection('users').where('email', isEqualTo: email).get();
+
+    if (userSnapshot.docs.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
