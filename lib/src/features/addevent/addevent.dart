@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:fitgap/src/utils/utility/utility.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:fitgap/src/features/addevent/addeventpeople.dart';
 
 class AddNewEvent extends StatefulWidget {
   const AddNewEvent({
@@ -53,6 +54,8 @@ class _AddNewEventState extends State<AddNewEvent> {
   String startMins = DateTime.now().minute.toString().padLeft(2, '0');
   String endHours = DateTime.now().hour.toString().padLeft(2, '0');
   String endMins = DateTime.now().minute.toString().padLeft(2, '0');
+
+  String peoplelist = '';
 
   void toggleStartDate() {
     setState(() {
@@ -605,8 +608,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                             defaultTextStyle: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.black),
-                                            weekendTextStyle:
-                                                TextStyle(color: Colors.red),
+                                            weekendTextStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.red),
                                           ),
                                           selectedDayPredicate: (day) =>
                                               isSameDay(day, endDate),
@@ -792,19 +796,32 @@ class _AddNewEventState extends State<AddNewEvent> {
                                       backgroundColor: const Color.fromRGBO(
                                           217, 217, 217, 1),
                                     ),
-                                    onPressed: () {},
-                                    child: const Row(
+                                    onPressed: () async {
+                                      final returndata = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              AddNewEventPeople(),
+                                        ),
+                                      );
+                                      setState(() {
+                                        peoplelist = returndata;
+                                      });
+                                    },
+                                    child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            'None',
-                                            style: TextStyle(
+                                            (peoplelist == '')
+                                                ? 'None'
+                                                : peoplelist,
+                                            style: const TextStyle(
                                               color:
                                                   Color.fromRGBO(88, 88, 88, 1),
                                             ),
                                           ),
-                                          Icon(
+                                          const Icon(
                                             Icons.manage_search,
                                             color:
                                                 Color.fromRGBO(88, 88, 88, 1),
