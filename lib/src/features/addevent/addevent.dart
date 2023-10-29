@@ -22,6 +22,7 @@
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/utils/utility/utility.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:intl/intl.dart';
 import 'package:fitgap/src/features/addevent/addeventpeople.dart';
 
@@ -54,6 +55,9 @@ class _AddNewEventState extends State<AddNewEvent> {
   String startMins = DateTime.now().minute.toString().padLeft(2, '0');
   String endHours = DateTime.now().hour.toString().padLeft(2, '0');
   String endMins = DateTime.now().minute.toString().padLeft(2, '0');
+
+  Color pickerColor = const Color(0xff443a49);
+  String finalColor = '';
 
   String peoplelist = '';
 
@@ -159,6 +163,10 @@ class _AddNewEventState extends State<AddNewEvent> {
 
   String dMyformat(DateTime dateTime) {
     return DateFormat('dd MMM yyyy').format(dateTime);
+  }
+
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
   }
 
   @override
@@ -739,23 +747,56 @@ class _AddNewEventState extends State<AddNewEvent> {
                                   width: screenWidth * 0.3,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromRGBO(
-                                          217, 217, 217, 1),
+                                      backgroundColor: finalColor == ''
+                                          ? const Color.fromRGBO(
+                                              217, 217, 217, 1)
+                                          : //convert from color int to color type
+                                          Color(int.parse(finalColor))
+                                              .withOpacity(1),
                                     ),
-                                    onPressed:
-                                        () {}, // route to Tag pages (Sprint 3)
-                                    child: const Row(
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: const Text(
+                                                "Select tag's color"),
+                                            content: SingleChildScrollView(
+                                              child: BlockPicker(
+                                                pickerColor: pickerColor,
+                                                onColorChanged: changeColor,
+                                              ),
+                                            ),
+                                            actions: <Widget>[
+                                              ElevatedButton(
+                                                child: const Text('Confirm'),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    finalColor = pickerColor
+                                                        .value
+                                                        .toString();
+                                                  });
+                                                  print(finalColor);
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            'None',
-                                            style: TextStyle(
+                                            finalColor == '' ? 'None' : '',
+                                            style: const TextStyle(
                                               color:
                                                   Color.fromRGBO(88, 88, 88, 1),
                                             ),
                                           ),
-                                          Icon(
+                                          const Icon(
                                             Icons.manage_search,
                                             color:
                                                 Color.fromRGBO(88, 88, 88, 1),
