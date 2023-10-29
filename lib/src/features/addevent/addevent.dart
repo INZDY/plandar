@@ -28,7 +28,11 @@ import 'package:fitgap/src/utils/utility/utility.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:intl/intl.dart';
+
 import 'package:fitgap/src/features/addevent/addeventpeople.dart';
+import 'package:fitgap/src/common_widgets/snackbar.dart';
+
+import 'package:fitgap/src/utils/firestore/firestore.dart';
 
 class AddNewEvent extends StatefulWidget {
   const AddNewEvent({
@@ -70,6 +74,27 @@ class _AddNewEventState extends State<AddNewEvent> {
   String finalColor = '';
 
   List<String> peoplelist = [];
+
+  void resetAllValues() {
+    setState(() {
+      titleText = '';
+      _titleTextController.text = '';
+      _locationTextController.text = '';
+      locationText = '';
+      isAllDay = false;
+      allowAdded = false;
+      startDate = DateFormat('yyyy-MM-dd')
+          .parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+      endDate = DateFormat('yyyy-MM-dd')
+          .parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+      startHours = DateTime.now().hour.toString().padLeft(2, '0');
+      startMins = DateTime.now().minute.toString().padLeft(2, '0');
+      endHours = DateTime.now().hour.toString().padLeft(2, '0');
+      endMins = DateTime.now().minute.toString().padLeft(2, '0');
+      finalColor = '';
+      peoplelist = [];
+    });
+  }
 
   void toggleStartDate() {
     setState(() {
@@ -203,6 +228,21 @@ class _AddNewEventState extends State<AddNewEvent> {
     }
   }
 
+  void addEvent() async {
+    try {
+      DateTime startDateTime = startDate.add(Duration(
+          hours: int.parse(startHours), minutes: int.parse(startMins)));
+      DateTime endDateTime = endDate.add(
+          Duration(hours: int.parse(endHours), minutes: int.parse(endMins)));
+      await FirestoreService().addEvent(titleText, locationText, startDateTime,
+          endDateTime, isAllDay, finalColor, peoplelist);
+      SnackbarUtil.showSnackBar('Event added');
+      resetAllValues();
+    } catch (e) {
+      SnackbarUtil.showSnackBar(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -226,15 +266,13 @@ class _AddNewEventState extends State<AddNewEvent> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            'Create New Event',
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          )),
+                      const Text(
+                        'Create New Event',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
                       TextButton(
                         onPressed: () {
-                          allowAdded ? null : null;
+                          allowAdded ? addEvent() : null;
                         },
                         child: Text(
                           'Add',
