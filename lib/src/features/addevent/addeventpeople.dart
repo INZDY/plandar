@@ -6,9 +6,6 @@
 
       -doesn't remember element in selected list after this page is popped 
 */
-
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class AddNewEventPeople extends StatefulWidget {
@@ -68,7 +65,7 @@ class _AddNewEventPeopleState extends State<AddNewEventPeople> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   //Top menu
                   height: screenHeight * 0.07,
                   width: screenWidth * 0.95,
@@ -93,7 +90,7 @@ class _AddNewEventPeopleState extends State<AddNewEventPeople> {
                       const Expanded(
                         child: Center(
                           child: Padding(
-                            padding: const EdgeInsets.only(right: 40.0),
+                            padding: EdgeInsets.only(right: 40.0),
                             child: Text(
                               'Select People',
                               style: TextStyle(
@@ -110,7 +107,7 @@ class _AddNewEventPeopleState extends State<AddNewEventPeople> {
                 Padding(
                   // search bar
                   padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  child: Container(
+                  child: SizedBox(
                     height: screenHeight * 0.06,
                     width: screenWidth * 0.8,
                     child: TextField(
@@ -133,7 +130,7 @@ class _AddNewEventPeopleState extends State<AddNewEventPeople> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 13.0),
-                  child: Container(
+                  child: SizedBox(
                     height: screenHeight * 0.7,
                     width: screenWidth * 0.85,
                     child: ListView.builder(

@@ -184,7 +184,7 @@ class _AddNewEventState extends State<AddNewEvent> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
+              SizedBox(
                 //Top menu
                 height: screenHeight * 0.07,
                 width: screenWidth * 1,
@@ -210,7 +210,7 @@ class _AddNewEventState extends State<AddNewEvent> {
               Padding(
                 //Title & Location group
                 padding: const EdgeInsets.symmetric(vertical: 5.0),
-                child: Container(
+                child: SizedBox(
                   height: screenHeight * 0.13,
                   width: screenWidth * 1,
                   child: Column(
@@ -283,7 +283,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                       color: const Color.fromRGBO(153, 175, 255, 1),
                       child: Column(
                         children: [
-                          Container(
+                          SizedBox(
                             height: screenHeight * 0.06,
                             child: Padding(
                               padding:
@@ -322,7 +322,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                             ),
                           ),
                           // Container for selecting Start Date&Time
-                          Container(
+                          SizedBox(
                             height: screenHeight * 0.06,
                             child: Padding(
                               padding:
@@ -411,6 +411,15 @@ class _AddNewEventState extends State<AddNewEvent> {
                                           lastDay: DateTime.utc(2030, 12, 31),
                                           focusedDay: startDate,
                                           shouldFillViewport: true,
+                                          daysOfWeekStyle:
+                                              const DaysOfWeekStyle(
+                                            weekdayStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                            weekendStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.red),
+                                          ),
                                           headerStyle: const HeaderStyle(
                                             formatButtonVisible: false,
                                             titleCentered: true,
@@ -427,6 +436,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                             weekendTextStyle: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.red),
+                                            outsideTextStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey),
                                           ),
                                           selectedDayPredicate: (day) =>
                                               isSameDay(day, startDate),
@@ -436,95 +448,93 @@ class _AddNewEventState extends State<AddNewEvent> {
                                       ? isAnimating
                                           // if startTime is selected
                                           ? null
-                                          : Container(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  // hour wheel
-                                                  SizedBox(
-                                                    width: screenWidth * 0.3,
-                                                    child: ListWheelScrollView
-                                                        .useDelegate(
-                                                      itemExtent: 45,
-                                                      perspective: 0.005,
-                                                      diameterRatio: 1.2,
-                                                      controller:
-                                                          FixedExtentScrollController(
-                                                              initialItem:
-                                                                  int.parse(
-                                                                      startHours)),
-                                                      onSelectedItemChanged:
-                                                          (value) {
-                                                        setState(() {
-                                                          startHours = value
-                                                              .toString()
-                                                              .padLeft(2, '0');
-                                                        });
+                                          : Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                // hour wheel
+                                                SizedBox(
+                                                  width: screenWidth * 0.3,
+                                                  child: ListWheelScrollView
+                                                      .useDelegate(
+                                                    itemExtent: 45,
+                                                    perspective: 0.005,
+                                                    diameterRatio: 1.2,
+                                                    controller:
+                                                        FixedExtentScrollController(
+                                                            initialItem:
+                                                                int.parse(
+                                                                    startHours)),
+                                                    onSelectedItemChanged:
+                                                        (value) {
+                                                      setState(() {
+                                                        startHours = value
+                                                            .toString()
+                                                            .padLeft(2, '0');
+                                                      });
+                                                    },
+                                                    physics:
+                                                        const FixedExtentScrollPhysics(),
+                                                    childDelegate:
+                                                        ListWheelChildBuilderDelegate(
+                                                      childCount: 25,
+                                                      builder:
+                                                          (context, index) {
+                                                        return MyHours(
+                                                            hours: index);
                                                       },
-                                                      physics:
-                                                          const FixedExtentScrollPhysics(),
-                                                      childDelegate:
-                                                          ListWheelChildBuilderDelegate(
-                                                        childCount: 25,
-                                                        builder:
-                                                            (context, index) {
-                                                          return MyHours(
-                                                              hours: index);
-                                                        },
-                                                      ),
                                                     ),
                                                   ),
-                                                  const Text(
-                                                    " : ",
-                                                    style: TextStyle(
-                                                        fontSize: 30,
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                  // min wheel
-                                                  SizedBox(
-                                                    width: screenWidth * 0.3,
-                                                    child: ListWheelScrollView
-                                                        .useDelegate(
-                                                      itemExtent: 45,
-                                                      perspective: 0.005,
-                                                      diameterRatio: 1.2,
-                                                      controller:
-                                                          FixedExtentScrollController(
-                                                              initialItem:
-                                                                  int.parse(
-                                                                      startMins)),
-                                                      onSelectedItemChanged:
-                                                          (value) {
-                                                        setState(() {
-                                                          startMins = value
-                                                              .toString()
-                                                              .padLeft(2, '0');
-                                                        });
+                                                ),
+                                                const Text(
+                                                  " : ",
+                                                  style: TextStyle(
+                                                      fontSize: 30,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                // min wheel
+                                                SizedBox(
+                                                  width: screenWidth * 0.3,
+                                                  child: ListWheelScrollView
+                                                      .useDelegate(
+                                                    itemExtent: 45,
+                                                    perspective: 0.005,
+                                                    diameterRatio: 1.2,
+                                                    controller:
+                                                        FixedExtentScrollController(
+                                                            initialItem:
+                                                                int.parse(
+                                                                    startMins)),
+                                                    onSelectedItemChanged:
+                                                        (value) {
+                                                      setState(() {
+                                                        startMins = value
+                                                            .toString()
+                                                            .padLeft(2, '0');
+                                                      });
+                                                    },
+                                                    physics:
+                                                        const FixedExtentScrollPhysics(),
+                                                    childDelegate:
+                                                        ListWheelChildBuilderDelegate(
+                                                      childCount: 60,
+                                                      builder:
+                                                          (context, index) {
+                                                        return MyMinutes(
+                                                            mins: index);
                                                       },
-                                                      physics:
-                                                          const FixedExtentScrollPhysics(),
-                                                      childDelegate:
-                                                          ListWheelChildBuilderDelegate(
-                                                        childCount: 60,
-                                                        builder:
-                                                            (context, index) {
-                                                          return MyMinutes(
-                                                              mins: index);
-                                                        },
-                                                      ),
                                                     ),
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             )
                                       : null),
                             ),
                           ),
                           // Container for selecting Ends Date&Time
-                          Container(
+                          SizedBox(
                             height: screenHeight * 0.06,
                             child: Padding(
                               padding:
@@ -604,6 +614,15 @@ class _AddNewEventState extends State<AddNewEvent> {
                                           lastDay: DateTime.utc(2030, 12, 31),
                                           focusedDay: endDate,
                                           shouldFillViewport: true,
+                                          daysOfWeekStyle:
+                                              const DaysOfWeekStyle(
+                                            weekdayStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                            weekendStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.red),
+                                          ),
                                           headerStyle: const HeaderStyle(
                                             formatButtonVisible: false,
                                             titleCentered: true,
@@ -620,6 +639,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                             weekendTextStyle: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.red),
+                                            outsideTextStyle: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey),
                                           ),
                                           selectedDayPredicate: (day) =>
                                               isSameDay(day, endDate),
@@ -630,89 +652,87 @@ class _AddNewEventState extends State<AddNewEvent> {
                                           ?
                                           // if endTime is selected
                                           null
-                                          : Container(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  // hour wheel
-                                                  SizedBox(
-                                                    width: screenWidth * 0.3,
-                                                    child: ListWheelScrollView
-                                                        .useDelegate(
-                                                      itemExtent: 45,
-                                                      perspective: 0.005,
-                                                      diameterRatio: 1.2,
-                                                      controller:
-                                                          FixedExtentScrollController(
-                                                              initialItem:
-                                                                  int.parse(
-                                                                      endHours)),
-                                                      onSelectedItemChanged:
-                                                          (value) {
-                                                        setState(() {
-                                                          endHours = value
-                                                              .toString()
-                                                              .padLeft(2, '0');
-                                                        });
+                                          : Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                // hour wheel
+                                                SizedBox(
+                                                  width: screenWidth * 0.3,
+                                                  child: ListWheelScrollView
+                                                      .useDelegate(
+                                                    itemExtent: 45,
+                                                    perspective: 0.005,
+                                                    diameterRatio: 1.2,
+                                                    controller:
+                                                        FixedExtentScrollController(
+                                                            initialItem:
+                                                                int.parse(
+                                                                    endHours)),
+                                                    onSelectedItemChanged:
+                                                        (value) {
+                                                      setState(() {
+                                                        endHours = value
+                                                            .toString()
+                                                            .padLeft(2, '0');
+                                                      });
+                                                    },
+                                                    physics:
+                                                        const FixedExtentScrollPhysics(),
+                                                    childDelegate:
+                                                        ListWheelChildBuilderDelegate(
+                                                      childCount: 25,
+                                                      builder:
+                                                          (context, index) {
+                                                        return MyHours(
+                                                            hours: index);
                                                       },
-                                                      physics:
-                                                          const FixedExtentScrollPhysics(),
-                                                      childDelegate:
-                                                          ListWheelChildBuilderDelegate(
-                                                        childCount: 25,
-                                                        builder:
-                                                            (context, index) {
-                                                          return MyHours(
-                                                              hours: index);
-                                                        },
-                                                      ),
                                                     ),
                                                   ),
-                                                  const Text(
-                                                    " : ",
-                                                    style: TextStyle(
-                                                        fontSize: 30,
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                  // min wheel
-                                                  SizedBox(
-                                                    width: screenWidth * 0.3,
-                                                    child: ListWheelScrollView
-                                                        .useDelegate(
-                                                      itemExtent: 45,
-                                                      perspective: 0.005,
-                                                      diameterRatio: 1.2,
-                                                      controller:
-                                                          FixedExtentScrollController(
-                                                              initialItem:
-                                                                  int.parse(
-                                                                      endMins)),
-                                                      onSelectedItemChanged:
-                                                          (value) {
-                                                        setState(() {
-                                                          endMins = value
-                                                              .toString()
-                                                              .padLeft(2, '0');
-                                                        });
+                                                ),
+                                                const Text(
+                                                  " : ",
+                                                  style: TextStyle(
+                                                      fontSize: 30,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                // min wheel
+                                                SizedBox(
+                                                  width: screenWidth * 0.3,
+                                                  child: ListWheelScrollView
+                                                      .useDelegate(
+                                                    itemExtent: 45,
+                                                    perspective: 0.005,
+                                                    diameterRatio: 1.2,
+                                                    controller:
+                                                        FixedExtentScrollController(
+                                                            initialItem:
+                                                                int.parse(
+                                                                    endMins)),
+                                                    onSelectedItemChanged:
+                                                        (value) {
+                                                      setState(() {
+                                                        endMins = value
+                                                            .toString()
+                                                            .padLeft(2, '0');
+                                                      });
+                                                    },
+                                                    physics:
+                                                        const FixedExtentScrollPhysics(),
+                                                    childDelegate:
+                                                        ListWheelChildBuilderDelegate(
+                                                      childCount: 60,
+                                                      builder:
+                                                          (context, index) {
+                                                        return MyMinutes(
+                                                            mins: index);
                                                       },
-                                                      physics:
-                                                          const FixedExtentScrollPhysics(),
-                                                      childDelegate:
-                                                          ListWheelChildBuilderDelegate(
-                                                        childCount: 60,
-                                                        builder:
-                                                            (context, index) {
-                                                          return MyMinutes(
-                                                              mins: index);
-                                                        },
-                                                      ),
                                                     ),
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             )
                                       : null),
                             ),
@@ -777,7 +797,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                                                         .value
                                                         .toString();
                                                   });
-                                                  print(finalColor);
+
                                                   Navigator.of(context).pop();
                                                 },
                                               ),
@@ -797,10 +817,12 @@ class _AddNewEventState extends State<AddNewEvent> {
                                                   Color.fromRGBO(88, 88, 88, 1),
                                             ),
                                           ),
-                                          const Icon(
-                                            Icons.manage_search,
-                                            color:
-                                                Color.fromRGBO(88, 88, 88, 1),
+                                          Icon(
+                                            finalColor == ''
+                                                ? Icons.manage_search
+                                                : null,
+                                            color: const Color.fromRGBO(
+                                                88, 88, 88, 1),
                                           )
                                         ]),
                                   ),
@@ -850,9 +872,6 @@ class _AddNewEventState extends State<AddNewEvent> {
                                       );
                                       setState(() {
                                         peoplelist = returndata;
-                                      });
-                                      peoplelist.forEach((item) {
-                                        print(item);
                                       });
                                     },
                                     child: Row(
