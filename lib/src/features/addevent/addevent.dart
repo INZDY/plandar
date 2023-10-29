@@ -18,6 +18,9 @@
           - Contains :
             - 1 color picker
             - 1 button linked to addeventpeople.dart  
+      The event can be added only when at least :
+        1. Title field is filled
+        2. Ends date&time > Start date&time
 */
 
 import 'package:flutter/material.dart';
@@ -50,8 +53,14 @@ class _AddNewEventState extends State<AddNewEvent> {
   bool isEndDateExpanded = false;
   bool isEndTimeExpanded = false;
 
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now();
+  bool allowAdded = false;
+
+  //init startdate/enddate without hours and mins
+  DateTime startDate = DateFormat('yyyy-MM-dd')
+      .parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+  DateTime endDate = DateFormat('yyyy-MM-dd')
+      .parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+
   String startHours = DateTime.now().hour.toString().padLeft(2, '0');
   String startMins = DateTime.now().minute.toString().padLeft(2, '0');
   String endHours = DateTime.now().hour.toString().padLeft(2, '0');
@@ -154,12 +163,14 @@ class _AddNewEventState extends State<AddNewEvent> {
     setState(() {
       startDate = day;
     });
+    checkcondition();
   }
 
   void _endDateSelected(DateTime day, DateTime focusedDay) {
     setState(() {
       endDate = day;
     });
+    checkcondition();
   }
 
   String dMyformat(DateTime dateTime) {
@@ -168,6 +179,28 @@ class _AddNewEventState extends State<AddNewEvent> {
 
   void changeColor(Color color) {
     setState(() => pickerColor = color);
+  }
+
+  void checkcondition() {
+    if (titleText.isNotEmpty) {
+      if (endDate
+          .add(
+              Duration(hours: int.parse(endHours), minutes: int.parse(endMins)))
+          .isAfter(startDate.add(Duration(
+              hours: int.parse(startHours), minutes: int.parse(startMins))))) {
+        setState(() {
+          allowAdded = true;
+        });
+      } else {
+        setState(() {
+          allowAdded = false;
+        });
+      }
+    } else {
+      setState(() {
+        allowAdded = false;
+      });
+    }
   }
 
   @override
@@ -200,8 +233,14 @@ class _AddNewEventState extends State<AddNewEvent> {
                             style: TextStyle(color: Colors.white, fontSize: 20),
                           )),
                       TextButton(
-                        onPressed: () {},
-                        child: const Text('Add'),
+                        onPressed: () {
+                          allowAdded ? null : null;
+                        },
+                        child: Text(
+                          'Add',
+                          style: TextStyle(
+                              color: allowAdded ? Colors.blue : Colors.grey),
+                        ),
                       ),
                     ],
                   ),
@@ -236,6 +275,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                             setState(() {
                               titleText = text;
                             });
+                            checkcondition();
                           },
                         ),
                       ),
@@ -302,10 +342,17 @@ class _AddNewEventState extends State<AddNewEvent> {
                                       setState(() {
                                         isAllDay = value;
                                         if (isAllDay == true) {
-                                          isStartTimeExpanded =
-                                              false; // close expanded time picker if allDay is selected
+                                          // close expanded time picker if allDay is selected
+                                          setState(() {
+                                            isStartTimeExpanded = false;
+                                            startHours = '00';
+                                            endHours = '00';
+                                            startMins = '00';
+                                            endMins = '00';
+                                          });
                                         }
                                       });
+                                      checkcondition();
                                     },
                                   ),
                                 ],
@@ -472,6 +519,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                                                             .toString()
                                                             .padLeft(2, '0');
                                                       });
+                                                      checkcondition();
                                                     },
                                                     physics:
                                                         const FixedExtentScrollPhysics(),
@@ -514,6 +562,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                                                             .toString()
                                                             .padLeft(2, '0');
                                                       });
+                                                      checkcondition();
                                                     },
                                                     physics:
                                                         const FixedExtentScrollPhysics(),
@@ -676,6 +725,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                                                             .toString()
                                                             .padLeft(2, '0');
                                                       });
+                                                      checkcondition();
                                                     },
                                                     physics:
                                                         const FixedExtentScrollPhysics(),
@@ -718,6 +768,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                                                             .toString()
                                                             .padLeft(2, '0');
                                                       });
+                                                      checkcondition();
                                                     },
                                                     physics:
                                                         const FixedExtentScrollPhysics(),
