@@ -208,18 +208,43 @@ class _AddNewEventState extends State<AddNewEvent> {
 
   void checkcondition() {
     if (titleText.isNotEmpty) {
-      if (endDate
-          .add(
-              Duration(hours: int.parse(endHours), minutes: int.parse(endMins)))
-          .isAfter(startDate.add(Duration(
-              hours: int.parse(startHours), minutes: int.parse(startMins))))) {
-        setState(() {
-          allowAdded = true;
-        });
+      if (isAllDay == true) {
+        // endDateTime is equal or more than startDateTime only when allDay switch is on
+        if (endDate.isAtSameMomentAs(startDate) ||
+            endDate
+                .add(Duration(
+                    hours: int.parse(endHours), minutes: int.parse(endMins)))
+                .isAfter(startDate.add(Duration(
+                    hours: int.parse(startHours),
+                    minutes: int.parse(startMins))))) {
+          setState(
+            () {
+              allowAdded = true;
+            },
+          );
+        } else {
+          setState(() {
+            allowAdded = false;
+          });
+        }
+        // endDateTime must more than startDateTime when allDay switch is off
       } else {
-        setState(() {
-          allowAdded = false;
-        });
+        if (endDate
+            .add(Duration(
+                hours: int.parse(endHours), minutes: int.parse(endMins)))
+            .isAfter(startDate.add(Duration(
+                hours: int.parse(startHours),
+                minutes: int.parse(startMins))))) {
+          setState(
+            () {
+              allowAdded = true;
+            },
+          );
+        } else {
+          setState(() {
+            allowAdded = false;
+          });
+        }
       }
     } else {
       setState(() {
