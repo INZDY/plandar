@@ -16,7 +16,8 @@
         4.Tag & People
           - use to select a tag and assign people in an event
           - Contains :
-            - two container with botton in each, link to other pages
+            - 1 color picker
+            - 1 button linked to addeventpeople.dart  
 */
 
 import 'package:flutter/material.dart';
@@ -59,7 +60,7 @@ class _AddNewEventState extends State<AddNewEvent> {
   Color pickerColor = const Color(0xff443a49);
   String finalColor = '';
 
-  String peoplelist = '';
+  List<String> peoplelist = [];
 
   void toggleStartDate() {
     setState(() {
@@ -201,7 +202,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                       TextButton(
                         onPressed: () {},
                         child: const Text('Add'),
-                      ), // Submit event data (Sprint 3)
+                      ),
                     ],
                   ),
                 ),
@@ -831,22 +832,28 @@ class _AddNewEventState extends State<AddNewEvent> {
                                         .textTheme
                                         .labelSmall), // route to People pages (Sprint 3)
                                 SizedBox(
-                                  width: screenWidth * 0.3,
+                                  width: peoplelist.isEmpty
+                                      ? screenWidth * 0.3
+                                      : screenWidth * 0.35,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: const Color.fromRGBO(
                                           217, 217, 217, 1),
                                     ),
                                     onPressed: () async {
-                                      final returndata = await Navigator.push(
+                                      List<String> returndata =
+                                          await Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              AddNewEventPeople(),
+                                              const AddNewEventPeople(),
                                         ),
                                       );
                                       setState(() {
                                         peoplelist = returndata;
+                                      });
+                                      peoplelist.forEach((item) {
+                                        print(item);
                                       });
                                     },
                                     child: Row(
@@ -854,9 +861,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            (peoplelist == '')
+                                            peoplelist.isEmpty
                                                 ? 'None'
-                                                : peoplelist,
+                                                : '${peoplelist.length.toString()} selected',
                                             style: const TextStyle(
                                               color:
                                                   Color.fromRGBO(88, 88, 88, 1),
