@@ -828,9 +828,8 @@ class _AddNewEventState extends State<AddNewEvent> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('People',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelSmall), // route to People pages (Sprint 3)
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall),
                                 SizedBox(
                                   width: peoplelist.isEmpty
                                       ? screenWidth * 0.3
