@@ -51,6 +51,7 @@ class _AddNewEventState extends State<AddNewEvent> {
 
   bool isAllDay = false;
   bool isAnimating = false;
+  bool isInprogress = false;
 
   bool isStartDateExpanded = false;
   bool isStartTimeExpanded = false;
@@ -255,6 +256,9 @@ class _AddNewEventState extends State<AddNewEvent> {
 
   void addEvent() async {
     try {
+      setState(() {
+        isInprogress = true;
+      });
       DateTime startDateTime = startDate.add(Duration(
           hours: int.parse(startHours), minutes: int.parse(startMins)));
       DateTime endDateTime = endDate.add(
@@ -263,6 +267,9 @@ class _AddNewEventState extends State<AddNewEvent> {
           endDateTime, isAllDay, finalColor, peoplelist);
       SnackbarUtil.showSnackBar('Event added');
       resetAllValues();
+      setState(() {
+        isInprogress = false;
+      });
     } catch (e) {
       SnackbarUtil.showSnackBar(e.toString());
     }
@@ -305,6 +312,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                               color: allowAdded ? Colors.blue : Colors.grey),
                         ),
                       ),
+                      if (isInprogress) const CircularProgressIndicator(),
                     ],
                   ),
                 ),
