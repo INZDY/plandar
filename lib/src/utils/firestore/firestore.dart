@@ -57,7 +57,7 @@ class FirestoreService {
   }
 
   //READ: get events from database
-  Future<List<Map<String, dynamic>>?> getEvents() async {
+  Future<List<Map<String, dynamic>>> getEvents() async {
     await _initializeCurrentUser();
 
     //Get document snapshot
