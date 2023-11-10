@@ -47,8 +47,15 @@ class FirestoreService {
   }
 
   //CREATE: add event
-  Future<void> addEvent(String title, String location, DateTime startDate,
-      DateTime endDate, bool allDay, String tag, List<String> people) async {
+  Future<void> addEvent(
+    String title,
+    String location,
+    DateTime startDate,
+    DateTime endDate,
+    bool allDay,
+    String tag,
+    List<String> people,
+  ) async {
     try {
       await _initializeCurrentUser();
       DocumentSnapshot userDoc = userSnapshot.docs.first;
@@ -65,13 +72,13 @@ class FirestoreService {
       );
       CollectionReference peopleCollection = eventRef.collection('people');
 
-      for (String name in people) {
+      for (String id in people) {
         await peopleCollection.add({
-          'name': name,
+          'id': id,
         });
       }
     } catch (e) {
-      print('Error adding event $e');
+      // print('Error adding event $e');
     }
   }
   //CREATE: add contact
@@ -84,7 +91,7 @@ class FirestoreService {
   }
 
   //READ: get events from database
-  Future<List<Map<String, dynamic>>?> getEvents() async {
+  Future<List<Map<String, dynamic>>> getEvents() async {
     await _initializeCurrentUser();
 
     //Get document snapshot
@@ -105,6 +112,26 @@ class FirestoreService {
   }
 
   //READ: get contacts from database
+  Future<List<Map<String, dynamic>>> getContacts() async {
+    await _initializeCurrentUser();
+
+    DocumentSnapshot userDoc = userSnapshot.docs.first;
+    QuerySnapshot contactsQuery =
+        await userDoc.reference.collection('contacts').get();
+
+    List<Map<String, dynamic>> contactList = [];
+
+    for (QueryDocumentSnapshot contactDoc in contactsQuery.docs) {
+      Map<String, dynamic> contactData =
+          contactDoc.data() as Map<String, dynamic>;
+
+      //attatch id to the doc details
+      contactData['id'] = contactDoc.id;
+      contactList.add(contactData);
+    }
+
+    return contactList;
+  }
 
   //UPDATE: update user profile
   Future<void> updateUserDetails(Map<String, dynamic> updatedData) async {
