@@ -1,6 +1,7 @@
 import 'package:fitgap/src/features/planner/screens/planner.dart';
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/features/settings/settings.dart';
+import 'package:fitgap/src/features/addevent/addevent.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -21,9 +22,7 @@ class _BottomNavBarState extends State<Home> {
       'Index 1: Dashboard',
     ),
 
-    Text(
-      'Index 2: Dashboard',
-    ), //choice 2 (middle button) 'addNewEvent'
+    AddNewEvent(), //choice 2 (middle button) 'addNewEvent'
 
     Planner(),
     Settings(),
@@ -115,12 +114,14 @@ class HomePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Container(
-                  height: screenHeight * 0.0525,
-                  width: screenWidth * 1,
-                  color: Colors.deepPurple[400],
-                  padding: const EdgeInsets.only(left: 30),
-                  alignment: Alignment.centerLeft,
-                  child: const Text('Here is your schedule today:')),
+                height: screenHeight * 0.0525,
+                width: screenWidth * 1,
+                color: Colors.deepPurple[400],
+                padding: const EdgeInsets.only(left: 30),
+                alignment: Alignment.centerLeft,
+                child: Text('Here is your schedule today:',
+                    style: Theme.of(context).textTheme.labelSmall),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -138,7 +139,8 @@ class HomePage extends StatelessWidget {
                 color: Colors.deepPurple[200],
                 padding: const EdgeInsets.only(left: 30),
                 alignment: Alignment.centerLeft,
-                child: const Text('Here is your schedule tomorrow:'),
+                child: Text('Here is your schedule tomorrow:',
+                    style: Theme.of(context).textTheme.labelSmall),
               ),
             ),
             Padding(

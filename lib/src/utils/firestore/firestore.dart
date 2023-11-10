@@ -47,6 +47,33 @@ class FirestoreService {
   }
 
   //CREATE: add event
+  Future<void> addEvent(String title, String location, DateTime startDate,
+      DateTime endDate, bool allDay, String tag, List<String> people) async {
+    try {
+      await _initializeCurrentUser();
+      DocumentSnapshot userDoc = userSnapshot.docs.first;
+      DocumentReference eventRef =
+          await userDoc.reference.collection('events').add(
+        {
+          'title': title,
+          'location': location,
+          'start_date': startDate,
+          'end_date': endDate,
+          'allday': allDay,
+          'tag': tag,
+        },
+      );
+      CollectionReference peopleCollection = eventRef.collection('people');
+
+      for (String name in people) {
+        await peopleCollection.add({
+          'name': name,
+        });
+      }
+    } catch (e) {
+      print('Error adding event $e');
+    }
+  }
   //CREATE: add contact
 
   //READ: get user details
