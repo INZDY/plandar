@@ -130,36 +130,43 @@ class _PlannerState extends State<Planner> {
                                   // Alignment: ListTileTitleAlignment.center,
                                   trailing: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        appointmentDetails[index].isAllDay
-                                            ? 'All day'
-                                            : DateFormat('hh:mm a').format(
-                                                appointmentDetails[index]
-                                                    .startTime),
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      Text(
-                                        appointmentDetails[index].isAllDay
-                                            ? ''
-                                            : DateFormat('hh:mm a').format(
-                                                appointmentDetails[index]
-                                                    .endTime),
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
+                                    children: appointmentDetails[index].isAllDay
+                                        ? [
+                                            const Text(
+                                              'All day',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          ]
+                                        : [
+                                            Text(
+                                              DateFormat('hh:mm a').format(
+                                                  appointmentDetails[index]
+                                                      .startTime),
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            Text(
+                                              DateFormat('hh:mm a').format(
+                                                  appointmentDetails[index]
+                                                      .endTime),
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
                                   ),
                                   title: Container(
                                       child: Text(
-                                          '${appointmentDetails[index].title}',
+                                          appointmentDetails[index].title,
                                           textAlign: TextAlign.center,
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w600,
