@@ -6,45 +6,56 @@
 
       -doesn't remember element in selected list after this page is popped 
 */
+import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 
 class AddNewEventPeople extends StatefulWidget {
-  const AddNewEventPeople({super.key});
+  final List<String> chosenPeople;
+
+  const AddNewEventPeople({super.key, required this.chosenPeople});
 
   @override
   State<AddNewEventPeople> createState() => _AddNewEventPeopleState();
 }
 
 class _AddNewEventPeopleState extends State<AddNewEventPeople> {
-// change to query list of people from firebase *****
-  List<String> people = [
-    'Person 1',
-    'Person 2',
-    'Person 3',
-    'Person 4',
-    'Person 5',
-    'Person 6',
-    'Person 7',
-    'Person 8',
-    'Person 9',
-    'Person 10',
-    'Person 11',
-    'Person 12',
-    'Person 13',
-  ];
+  List<Map<String, dynamic>> people = [];
+  List<Map<String, dynamic>> filteredPeople = [];
   List<String> selectedPeople = [];
-  List<String> filteredPeople = [];
 
   @override
   void initState() {
     super.initState();
-    filteredPeople = List.from(people);
+    //initialize all people list and base unfiltered(searched) list
+    loadPeople();
+    selectedPeople = widget.chosenPeople;
+  }
+
+  Future loadPeople() async {
+    final peopleData = await FirestoreService().getContacts();
+
+    //no need to show circulr load
+    //not a full page render
+
+    setState(() {
+      people = peopleData.map((map) {
+        Map<String, dynamic> newMap = {};
+        for (String key in ['id', 'name']) {
+          if (map.containsKey(key)) {
+            newMap[key] = map[key];
+          }
+        }
+        return newMap;
+      }).toList();
+
+      filteredPeople = people;
+    });
   }
 
   void filter(String value) {
     setState(() {
       filteredPeople = people.where((person) {
-        return person.toLowerCase().contains(value.toLowerCase());
+        return person['name'].toLowerCase().contains(value.toLowerCase());
       }).toList();
     });
   }
@@ -104,8 +115,9 @@ class _AddNewEventPeopleState extends State<AddNewEventPeople> {
                     ],
                   ),
                 ),
+
+                // search bar
                 Padding(
-                  // search bar
                   padding: const EdgeInsets.symmetric(vertical: 5.0),
                   child: SizedBox(
                     height: screenHeight * 0.06,
@@ -128,6 +140,8 @@ class _AddNewEventPeopleState extends State<AddNewEventPeople> {
                     ),
                   ),
                 ),
+
+                //people listview
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 13.0),
                   child: SizedBox(
@@ -137,7 +151,9 @@ class _AddNewEventPeopleState extends State<AddNewEventPeople> {
                       itemCount: filteredPeople.length,
                       itemBuilder: (context, index) {
                         final person = filteredPeople[index];
-                        final isSelected = selectedPeople.contains(person);
+                        final isSelected =
+                            selectedPeople.contains(person['id']);
+                        //changeto checkboxlisttile?
                         return Column(
                           children: [
                             Row(
@@ -146,13 +162,14 @@ class _AddNewEventPeopleState extends State<AddNewEventPeople> {
                                 const CircleAvatar(),
                                 SizedBox(width: screenWidth * 0.05),
                                 // name
-                                Text(person,
+                                Text(person['name'],
                                     style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 16,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold)),
                                 const Spacer(),
+
                                 // checkbox
                                 Container(
                                   width: screenWidth * 0.2,
@@ -171,9 +188,10 @@ class _AddNewEventPeopleState extends State<AddNewEventPeople> {
                                         setState(() {
                                           if (value != null) {
                                             if (value) {
-                                              selectedPeople.add(person);
+                                              selectedPeople.add(person['id']);
                                             } else {
-                                              selectedPeople.remove(person);
+                                              selectedPeople
+                                                  .remove(person['id']);
                                             }
                                           }
                                         });

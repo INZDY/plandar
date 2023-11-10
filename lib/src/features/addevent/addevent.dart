@@ -855,8 +855,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                       ),
                     )),
               ),
+
+              //Tag & People group
               Padding(
-                //Tag & People group
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
@@ -866,6 +867,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                     color: const Color.fromRGBO(153, 175, 255, 1),
                     child: Column(
                       children: [
+                        //tag
                         Container(
                           height: screenHeight * 0.06,
                           color: Colors.white10,
@@ -954,6 +956,8 @@ class _AddNewEventState extends State<AddNewEvent> {
                             ),
                           ),
                         ),
+
+                        //people
                         Container(
                           height: screenHeight * 0.06,
                           color: Colors.white10,
@@ -981,7 +985,8 @@ class _AddNewEventState extends State<AddNewEvent> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              const AddNewEventPeople(),
+                                              AddNewEventPeople(
+                                                  chosenPeople: peoplelist),
                                         ),
                                       );
                                       setState(() {
