@@ -1,3 +1,4 @@
+import 'package:fitgap/src/features/home/homeall.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -46,6 +47,7 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.bold),
                     ),
                   ),
+                  //Link to setting page *****
                   Container(
                     width: screenWidth * 0.1,
                     child: IconButton(
@@ -110,7 +112,15 @@ class _HomePageState extends State<HomePage> {
                             height: screenHeight * 0.04,
                             alignment: Alignment.centerRight,
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const HomeAll(date: 'today'),
+                                  ),
+                                );
+                              },
                               child: const Text(
                                 'See all >>',
                                 style: TextStyle(
@@ -237,7 +247,15 @@ class _HomePageState extends State<HomePage> {
                             height: screenHeight * 0.04,
                             alignment: Alignment.centerRight,
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const HomeAll(date: 'tomorrow'),
+                                  ),
+                                );
+                              },
                               child: const Text(
                                 'See all >>',
                                 style: TextStyle(
