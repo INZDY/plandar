@@ -1,5 +1,6 @@
 import 'package:fitgap/src/features/contract/contract_page/add_contract.dart';
 import 'package:fitgap/src/features/contract/contract_page/contract_profile.dart';
+import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 
 class ContractPage extends StatefulWidget {
@@ -10,16 +11,22 @@ class ContractPage extends StatefulWidget {
 }
 
 class _ContractPageState extends State<ContractPage> {
-  //example list name
-  List<String> name = ['Shifu', 'Po', 'Ben', 'Max', 'Oogway'];
-  late List<String> visibleName;
+  late List<Map<String, dynamic>> contacts;
+  List<Map<String, dynamic>> visibleContacts = []; // Initialize here
 
-  get controller => null;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
-    visibleName = name;
     super.initState();
+    _loadContacts();
+  }
+
+  Future<void> _loadContacts() async {
+    // Load contacts from Firestore
+    contacts = await FirestoreService().getContacts();
+    visibleContacts = List.from(contacts);
+    setState(() {});
   }
 
   @override
@@ -76,13 +83,12 @@ class _ContractPageState extends State<ContractPage> {
 
                 //searchbar
                 TextField(
-                  controller: controller,
+                  controller: _searchController, // Use _searchController here
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.search),
                     hintText: 'Search',
-                    filled: true, // Set to true to enable background color
-                    fillColor:
-                        Colors.grey[200], // Set the background color here
+                    filled: true,
+                    fillColor: Colors.grey[200],
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide(color: Colors.black),
@@ -90,9 +96,10 @@ class _ContractPageState extends State<ContractPage> {
                   ),
                   onChanged: (value) {
                     String lowercaseValue = value.toLowerCase();
-                    visibleName = name
-                        .where((name) =>
-                            name.toLowerCase().contains(lowercaseValue))
+                    visibleContacts = contacts
+                        .where((contact) => contact['name']
+                            .toLowerCase()
+                            .contains(lowercaseValue))
                         .toList();
                     setState(() {});
                   },
@@ -107,13 +114,16 @@ class _ContractPageState extends State<ContractPage> {
                   flex: 2,
                   child: ListView.builder(
                     itemBuilder: (context, index) {
+                      final contact = visibleContacts[index];
                       return GestureDetector(
                         onTap: () {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return ContractProfile(
-                                name: visibleName[index],
+                                name: contact['name'],
+                                email: contact['email'],
+                                tel: contact['tel'],
                               );
                             },
                           );
@@ -126,23 +136,22 @@ class _ContractPageState extends State<ContractPage> {
                                   Icon(
                                     Icons.account_circle,
                                     color: Colors.white,
-                                  ), // Profile icon
-                                  SizedBox(
-                                      width:
-                                          10), // Add some space between the icon and text
-                                  Text(visibleName[index]),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(contact['name']),
                                 ],
                               ),
                               textColor: Colors.white,
                             ),
                             Divider(
-                                height: 1,
-                                color: Colors.grey), // Add a line separator
+                              height: 1,
+                              color: Colors.grey,
+                            ),
                           ],
                         ),
                       );
                     },
-                    itemCount: visibleName.length,
+                    itemCount: visibleContacts.length,
                   ),
                 ),
               ],

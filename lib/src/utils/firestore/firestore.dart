@@ -81,7 +81,25 @@ class FirestoreService {
       // print('Error adding event $e');
     }
   }
+
   //CREATE: add contact
+  Future<void> addContact(String name, String email, String tel) async {
+    try {
+      await _initializeCurrentUser();
+      DocumentSnapshot userDoc = userSnapshot.docs.first;
+
+      await userDoc.reference.collection('contacts').add(
+        {
+          'name': name,
+          'email': email,
+          'tel': tel,
+          'note': '-',
+        },
+      );
+    } catch (e) {
+      //print('Error adding contract: $e');
+    }
+  }
 
   //READ: get user details
   Future<Map<String, dynamic>?> getUserData() async {

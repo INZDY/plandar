@@ -2,6 +2,7 @@
 
 import 'package:fitgap/src/features/contract/contract_page/contract.dart';
 import 'package:fitgap/src/features/contract/contract_wiget/add_contract_field.dart';
+import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 
 class AddContract extends StatefulWidget {
@@ -12,6 +13,9 @@ class AddContract extends StatefulWidget {
 }
 
 class _AddContractState extends State<AddContract> {
+  String name = '';
+  String email = '';
+  String tel = '';
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -99,17 +103,28 @@ class _AddContractState extends State<AddContract> {
 
                 //call input box
                 AddContractField(
-                  InputBox: 'Name',
+                  inputBox: 'Name',
+                  onValueChanged: (value) {
+                    setState(() {
+                      name = value;
+                    });
+                  },
                 ),
-
                 AddContractField(
-                  InputBox: 'Email',
+                  inputBox: 'Email',
+                  onValueChanged: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
                 ),
                 AddContractField(
-                  InputBox: 'Tel',
-                ),
-                SizedBox(
-                  height: 10,
+                  inputBox: 'Tel',
+                  onValueChanged: (value) {
+                    setState(() {
+                      tel = value;
+                    });
+                  },
                 ),
 
                 //add button
@@ -118,7 +133,9 @@ class _AddContractState extends State<AddContract> {
                     width: 115,
                     height: 50,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        FirestoreService().addContact(name, email, tel);
+                      },
                       style: TextButton.styleFrom(
                         backgroundColor: Color(0xff5936B4),
                         elevation: 10,

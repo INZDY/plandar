@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 
 class ContractProfile extends StatefulWidget {
   final String name;
+  final String email;
+  final String tel;
 
-  const ContractProfile({Key? key, required this.name}) : super(key: key);
+  const ContractProfile({
+    Key? key,
+    required this.name,
+    required this.email,
+    required this.tel,
+  }) : super(key: key);
 
   @override
   _ContractProfileState createState() => _ContractProfileState();
@@ -12,12 +19,19 @@ class ContractProfile extends StatefulWidget {
 
 class _ContractProfileState extends State<ContractProfile> {
   bool isEditMode = false;
-  // default and var for input box
-  TextEditingController emailController =
-      TextEditingController(text: 'Email@example.com');
-  TextEditingController telController =
-      TextEditingController(text: '(+66) 12-345-6789');
-  TextEditingController noteController = TextEditingController(text: '-');
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController telController = TextEditingController();
+  TextEditingController noteController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controllers with the provided data
+    emailController.text = widget.email;
+    telController.text = widget.tel;
+    // You may add similar lines for other fields if needed
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +57,9 @@ class _ContractProfileState extends State<ContractProfile> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      // Back contract / Cancel
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context)
-                              .pop(); // Handle cancel button click
+                          Navigator.of(context).pop();
                         },
                         child: Row(
                           children: [
@@ -65,12 +77,9 @@ class _ContractProfileState extends State<ContractProfile> {
                           ],
                         ),
                       ),
-
-                      // Edit button
                       TextButton(
                         onPressed: () {
                           setState(() {
-                            // Toggle edit mode
                             isEditMode = !isEditMode;
                           });
                         },
@@ -84,17 +93,13 @@ class _ContractProfileState extends State<ContractProfile> {
                       ),
                     ],
                   ),
-
-                  //image section
                   Icon(
                     Icons.account_circle,
                     size: 75,
                     color: Colors.white,
                   ),
-
-                  //name section
                   Text(
-                    widget.name, // Use the name from the widget parameter
+                    widget.name,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
@@ -103,46 +108,35 @@ class _ContractProfileState extends State<ContractProfile> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  // Adjust the spacing as needed
-
-                  //box Email can refactor
                   CustomTextField(
                     label: 'Email',
                     controller: emailController,
                     isEditMode: isEditMode,
                   ),
-
                   SizedBox(height: 20),
-
-                  //tel box
                   CustomTextField(
                     label: 'Tel',
                     controller: telController,
                     isEditMode: isEditMode,
                   ),
                   SizedBox(height: 20),
-
-                  //Note box
                   CustomTextField(
                     label: 'Note',
                     controller: noteController,
                     isEditMode: isEditMode,
                   ),
                   SizedBox(height: 20),
-
-                  //delete
                   Visibility(
                     visible: isEditMode,
                     child: Container(
                       decoration: BoxDecoration(
-                        color:
-                            Color(0xff2B1A6D), // Set the background color here
-                        borderRadius: BorderRadius.circular(
-                            8), // Optional: Add border radius for rounded corners
+                        color: Color(0xff2B1A6D),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       child: TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
+                          // You may add code here to delete the contact
                         },
                         child: Text(
                           'Delete',
