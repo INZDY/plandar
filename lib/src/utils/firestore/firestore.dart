@@ -105,6 +105,8 @@ class FirestoreService {
     //add all events to list
     for (QueryDocumentSnapshot eventDoc in eventsQuery.docs) {
       Map<String, dynamic> eventData = eventDoc.data() as Map<String, dynamic>;
+
+      eventData['id'] = eventDoc.id;
       eventList.add(eventData);
     }
 
