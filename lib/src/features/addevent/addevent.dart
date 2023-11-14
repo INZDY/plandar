@@ -71,8 +71,9 @@ class _AddNewEventState extends State<AddNewEvent> {
   String endHours = DateTime.now().hour.toString().padLeft(2, '0');
   String endMins = DateTime.now().minute.toString().padLeft(2, '0');
 
-  Color pickerColor = const Color(0xff443a49);
-  String finalColor = '';
+  Color pickerColor =
+      const Color(0xfff44336); //set red color as a default color
+  String finalColor = '4294198070'; //set red color as a default color
 
   List<String> peoplelist = [];
 
@@ -596,7 +597,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                                                         const FixedExtentScrollPhysics(),
                                                     childDelegate:
                                                         ListWheelChildBuilderDelegate(
-                                                      childCount: 25,
+                                                      childCount: 24,
                                                       builder:
                                                           (context, index) {
                                                         return MyHours(
@@ -919,6 +920,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                                                         .value
                                                         .toString();
                                                   });
+                                                  print(pickerColor);
 
                                                   Navigator.of(context).pop();
                                                 },
