@@ -161,3 +161,24 @@ class FirestoreService {
     }
   }
 }
+
+//extra classes
+class EventDetails {
+  final String title;
+  final String location;
+  final Timestamp start_date;
+  final Timestamp end_date;
+  final bool allday;
+  final String tag;
+  final CollectionReference people;
+
+  EventDetails({
+    required this.title,
+    required this.location,
+    required this.start_date,
+    required this.end_date,
+    required this.allday,
+    required this.tag,
+    required this.people,
+  });
+}

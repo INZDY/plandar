@@ -1,4 +1,4 @@
-import 'package:fitgap/src/features/profile/models/month_constants.dart';
+import 'package:fitgap/src/utils/utility/month_constants.dart';
 import 'package:fitgap/src/features/profile/screens/edit_profile.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
