@@ -1,3 +1,15 @@
+/*
+    Home page 
+      There are 6 section in total for this page, arranged by column
+      list with ordinal number in comment.
+        -First column element : welcome text and setting button
+        -Second column element : today's weather
+        -Third column element : plain text
+        -Fourth column element : today event card & see all option (if avaliable)
+        -Fifth column element : plain text
+        -Sixth column element : tomorrow event card & see all option (if avaliable)
+*/
+
 import 'package:fitgap/src/features/home/homeall.dart';
 import 'package:fitgap/src/features/settings/settings.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +37,7 @@ class _HomePageState extends State<HomePage> {
     loadEvents();
   }
 
+  //get event and user's data, set to variable
   Future loadEvents() async {
     DateTime now = DateTime.now();
     final List<Map<String, dynamic>> eventsToday = await FirestoreService()
@@ -77,15 +90,16 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
+            //First column element : welcome text and setting button
+            SizedBox(
               height: screenHeight * 0.0833,
               width: screenWidth * 0.9,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
+                  SizedBox(
                       width: screenWidth * 0.1, child: const CircleAvatar()),
-                  Container(
+                  SizedBox(
                     width: screenWidth * 0.65,
                     child: isLoading
                         ? const Center(child: CircularProgressIndicator())
@@ -98,15 +112,14 @@ class _HomePageState extends State<HomePage> {
                                 fontWeight: FontWeight.bold),
                           ),
                   ),
-                  //Link to setting page *****
-                  Container(
+                  SizedBox(
                     width: screenWidth * 0.1,
                     child: IconButton(
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Settings(),
+                            builder: (context) => const Settings(),
                           ),
                         );
                       },
@@ -119,7 +132,8 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            Container(
+            //Second column element : today's weather
+            SizedBox(
               height: screenHeight * 0.0625,
               width: screenWidth * 0.9,
               child: Row(
@@ -142,6 +156,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+            //Third column element : plain text
             Container(
               height: screenHeight * 0.06,
               width: screenWidth * 0.9,
@@ -149,9 +164,10 @@ class _HomePageState extends State<HomePage> {
               child: const Text('Here is your schedule today:',
                   style: TextStyle(fontFamily: 'Poppins')),
             ),
+            //Fourth column element : today event card & see all option (if avaliable)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Container(
+              child: SizedBox(
                   height: screenHeight * 0.25,
                   width: screenWidth * 0.95,
                   child: Stack(
@@ -237,7 +253,7 @@ class _HomePageState extends State<HomePage> {
                                       (firstEventToday == null)
                                           ? "You don’t have any schedule today!!"
                                           : "${DateFormat('dd MMM HH:mma').format(firstEventToday!['start_date'].toDate())}\nEvent: ${firstEventToday!['title']}",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 20,
                                         color: Colors.white,
@@ -247,7 +263,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Transform.translate(
                                   offset: Offset(0, -screenHeight * 0.01),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: screenHeight * 0.035,
                                     width: screenWidth * 0.85,
                                     child: Row(
@@ -261,21 +277,19 @@ class _HomePageState extends State<HomePage> {
                                             (firstEventToday == null)
                                                 ? ''
                                                 : "${firstEventToday!['location']}",
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontSize: 16,
                                               color: Colors.white,
                                               fontFamily: 'Poppins',
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          child: const Text(
-                                            'Rainny',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.white),
-                                          ),
-                                        )
+                                        const Text(
+                                          'Rainny',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -285,19 +299,21 @@ class _HomePageState extends State<HomePage> {
                           ],
                   )),
             ),
+            //Fifth column element : plain text
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Container(
                 height: screenHeight * 0.0525,
                 width: screenWidth * 0.9,
                 alignment: Alignment.centerLeft,
-                child: Text('Here is your schedule tomorrow:',
+                child: const Text('Here is your schedule tomorrow:',
                     style: TextStyle(fontFamily: 'Poppins')),
               ),
             ),
+            //Sixth column element : tomorrow event card & see all option (if avaliable)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Container(
+              child: SizedBox(
                   height: screenHeight * 0.25,
                   width: screenWidth * 0.95,
                   child: Stack(
@@ -393,7 +409,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Transform.translate(
                                   offset: Offset(0, -screenHeight * 0.01),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: screenHeight * 0.035,
                                     width: screenWidth * 0.85,
                                     child: Row(
@@ -407,23 +423,21 @@ class _HomePageState extends State<HomePage> {
                                             (firstEventTomorrow == null)
                                                 ? ''
                                                 : "${firstEventTomorrow!['location']}",
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontSize: 16,
                                               color: Colors.white,
                                               fontFamily: 'Poppins',
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          child: const Text(
-                                            'Sunny',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
-                                              fontFamily: 'Poppins',
-                                            ),
+                                        const Text(
+                                          'Sunny',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                            fontFamily: 'Poppins',
                                           ),
-                                        )
+                                        ),
                                       ],
                                     ),
                                   ),

@@ -34,49 +34,47 @@ class _HomeAllState extends State<HomeAll> {
           ),
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 height: screenHeight * 0.1,
                 width: screenWidth * 0.95,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                        ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
                       ),
                     ),
-                    CircleAvatar(),
+                    const CircleAvatar(),
                   ],
                 ),
               ),
-              Container(
+              SizedBox(
                 height: screenHeight * 0.05,
                 width: screenWidth * 0.95,
                 child: Text(
                   'Here is your schedule $date:',
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.white,
                       fontFamily: 'Poppins',
                       fontSize: 20,
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              Container(
+              SizedBox(
                 height: screenHeight * 0.03,
                 width: screenWidth * 0.95,
                 child: Text(
                   "${DateFormat('EEEE, d MMM').format(event[0]['start_date'].toDate())}",
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.white, fontFamily: 'Poppins', fontSize: 16),
                 ),
               ),
-              Container(
+              SizedBox(
                 height: screenHeight * 0.06,
                 width: screenWidth * 0.95,
                 child: Row(
@@ -101,14 +99,14 @@ class _HomeAllState extends State<HomeAll> {
                   ],
                 ),
               ),
-              Container(
+              SizedBox(
                 height: screenHeight * 0.715,
                 width: screenWidth * 1,
                 child: ListView.builder(
                   itemCount: event.length,
                   itemBuilder: (context, index) {
-                    Map<String, dynamic> eventData = event[index];
-                    return Container(
+                    //Map<String, dynamic> eventData = event[index];
+                    return SizedBox(
                       height: screenHeight * 0.15,
                       child: Row(
                         children: [
@@ -118,7 +116,7 @@ class _HomeAllState extends State<HomeAll> {
                             alignment: Alignment.topCenter,
                             child: Text(
                               "${DateFormat('HH:mm').format(event[index]['start_date'].toDate())}",
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.white,
                                   fontFamily: 'Poppins',
                                   fontSize: 16),
@@ -134,7 +132,7 @@ class _HomeAllState extends State<HomeAll> {
                                   const EdgeInsets.symmetric(horizontal: 8.0),
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             width: screenWidth * 0.7,
                             height: screenHeight * 0.13,
                             child: Container(
@@ -146,7 +144,7 @@ class _HomeAllState extends State<HomeAll> {
                                 children: [
                                   Row(
                                     children: [
-                                      Container(
+                                      SizedBox(
                                         height: screenHeight * 0.075,
                                         width: screenWidth * 0.55,
                                         child: Text(
@@ -170,7 +168,7 @@ class _HomeAllState extends State<HomeAll> {
                                       ),
                                     ],
                                   ),
-                                  Container(
+                                  SizedBox(
                                     height: screenHeight * 0.03,
                                     width: screenWidth * 0.7,
                                     child: Text(
