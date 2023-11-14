@@ -1,3 +1,4 @@
+import 'package:fitgap/src/features/contract/contract_page/contract.dart';
 import 'package:fitgap/src/features/planner/screens/planner.dart';
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/features/settings/settings.dart';
@@ -18,9 +19,7 @@ class _BottomNavBarState extends State<Home> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(), //choice 0 (most left button) 'HomePage'
 
-    Text(
-      'Index 1: Dashboard',
-    ),
+    ContractPage(),
 
     AddNewEvent(), //choice 2 (middle button) 'addNewEvent'
 
