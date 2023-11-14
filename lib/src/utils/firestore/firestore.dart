@@ -56,29 +56,25 @@ class FirestoreService {
     String tag,
     List<String> people,
   ) async {
-    try {
-      await _initializeCurrentUser();
-      DocumentSnapshot userDoc = userSnapshot.docs.first;
-      DocumentReference eventRef =
-          await userDoc.reference.collection('events').add(
-        {
-          'title': title,
-          'location': location,
-          'start_date': startDate,
-          'end_date': endDate,
-          'allday': allDay,
-          'tag': tag,
-        },
-      );
-      CollectionReference peopleCollection = eventRef.collection('people');
+    await _initializeCurrentUser();
+    DocumentSnapshot userDoc = userSnapshot.docs.first;
+    DocumentReference eventRef =
+        await userDoc.reference.collection('events').add(
+      {
+        'title': title,
+        'location': location,
+        'start_date': startDate,
+        'end_date': endDate,
+        'allday': allDay,
+        'tag': tag,
+      },
+    );
+    CollectionReference peopleCollection = eventRef.collection('people');
 
-      for (String id in people) {
-        await peopleCollection.add({
-          'id': id,
-        });
-      }
-    } catch (e) {
-      // print('Error adding event $e');
+    for (String id in people) {
+      await peopleCollection.add({
+        'id': id,
+      });
     }
   }
   //CREATE: add contact
@@ -91,26 +87,49 @@ class FirestoreService {
   }
 
   //READ: get events from database
-  Future<List<Map<String, dynamic>>> getEvents() async {
+  Future<List<EventDetails>> getEvents() async {
     await _initializeCurrentUser();
 
-    //Get document snapshot
+    //event collection
     DocumentSnapshot userDoc = userSnapshot.docs.first;
-    QuerySnapshot eventsQuery =
+    QuerySnapshot eventsSnapshot =
         await userDoc.reference.collection('events').get();
 
-    //for storing events
-    List<Map<String, dynamic>> eventList = [];
+    //map event datails
+    List<EventDetails> events =
+        await Future.wait(eventsSnapshot.docs.map((DocumentSnapshot doc) async {
+      //event data
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-    //add all events to list
-    for (QueryDocumentSnapshot eventDoc in eventsQuery.docs) {
-      Map<String, dynamic> eventData = eventDoc.data() as Map<String, dynamic>;
+      //documents from people subcollection
+      QuerySnapshot peopleSnapshot =
+          await doc.reference.collection('people').get();
 
-      eventData['id'] = eventDoc.id;
-      eventList.add(eventData);
-    }
+      List<String> peopleList = [];
 
-    return eventList;
+      //map ids to list if any
+      if (peopleSnapshot.docs.isNotEmpty) {
+        peopleList = peopleSnapshot.docs
+            .map((peopleDoc) => peopleDoc['id'] as String)
+            .toList();
+      }
+
+      return EventDetails(
+        id: doc.id,
+        title: data['title'],
+        location: data['location'],
+        start_date: data['start_date'],
+        end_date: data['end_date'],
+        allday: data['allday'],
+        tag: data['tag'],
+        people: peopleList,
+      );
+    }).toList());
+
+    //Sort by date
+    events.sort((a, b) => (a.start_date.compareTo(b.start_date)));
+
+    return events;
   }
 
   //READ: get contacts from database
@@ -144,9 +163,57 @@ class FirestoreService {
   }
 
   //UPDATE: update events
+  Future<void> updateEvent(
+    String eventId,
+    String title,
+    String location,
+    DateTime startDate,
+    DateTime endDate,
+    bool allDay,
+    String tag,
+    List<String> people,
+  ) async {
+    await _initializeCurrentUser();
+    DocumentSnapshot userDoc = userSnapshot.docs.first;
+    DocumentReference eventRef =
+        userDoc.reference.collection('events').doc(eventId);
+
+    //Replace with new data
+    await eventRef.set({
+      'title': title,
+      'location': location,
+      'start_date': startDate,
+      'end_date': endDate,
+      'allday': allDay,
+      'tag': tag,
+    });
+
+    CollectionReference peopleCollection = eventRef.collection('people');
+
+    //clear all people first
+    QuerySnapshot peopleData = await peopleCollection.get();
+    for (QueryDocumentSnapshot doc in peopleData.docs) {
+      await doc.reference.delete();
+    }
+
+    //Add new people
+    for (String id in people) {
+      await peopleCollection.add({
+        'id': id,
+      });
+    }
+  }
   //UPDATE: update contacts
 
   //DELETE: delete events
+  Future<void> deleteEvent(String eventId) async {
+    await _initializeCurrentUser();
+    DocumentSnapshot userDoc = userSnapshot.docs.first;
+    DocumentReference eventRef =
+        userDoc.reference.collection('events').doc(eventId);
+
+    await eventRef.delete();
+  }
   //DELETE: delete contacts
 
   //UTIL: does user exist
@@ -164,15 +231,17 @@ class FirestoreService {
 
 //extra classes
 class EventDetails {
+  final String id;
   final String title;
   final String location;
   final Timestamp start_date;
   final Timestamp end_date;
   final bool allday;
   final String tag;
-  final CollectionReference people;
+  final List<String> people;
 
   EventDetails({
+    required this.id,
     required this.title,
     required this.location,
     required this.start_date,

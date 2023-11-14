@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fitgap/src/features/planner/models/modify_event.dart';
 import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:fitgap/src/utils/utility/month_constants.dart';
@@ -14,7 +16,7 @@ class Planner extends StatefulWidget {
 }
 
 class _PlannerState extends State<Planner> {
-  late List<Map<String, dynamic>> _eventsData;
+  late List<EventDetails> _eventsData;
 
   List<Appointment> appointmentDetails = <Appointment>[];
   late _AppointmentDataSource dataSource;
@@ -112,6 +114,10 @@ class _PlannerState extends State<Planner> {
                       ),
                     ),
 
+                    const SizedBox(
+                      height: 15,
+                    ),
+
                     Container(
                       alignment: Alignment.centerLeft,
                       height: 50,
@@ -137,56 +143,55 @@ class _PlannerState extends State<Planner> {
                                 color: appointmentDetails[index].color,
                               ),
                               child: ListTile(
-                                trailing: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: appointmentDetails[index].isAllDay
-                                      ? [
-                                          const Text(
-                                            'All day',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
+                                  trailing: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: appointmentDetails[index].isAllDay
+                                        ? [
+                                            const Text(
+                                              'All day',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          ]
+                                        : [
+                                            Text(
+                                              DateFormat('hh:mm a').format(
+                                                  appointmentDetails[index]
+                                                      .startTime),
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                          )
-                                        ]
-                                      : [
-                                          Text(
-                                            DateFormat('hh:mm a').format(
-                                                appointmentDetails[index]
-                                                    .startTime),
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
+                                            Text(
+                                              DateFormat('hh:mm a').format(
+                                                  appointmentDetails[index]
+                                                      .endTime),
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            DateFormat('hh:mm a').format(
-                                                appointmentDetails[index]
-                                                    .endTime),
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
-                                ),
-                                title: Text(
-                                  appointmentDetails[index].title,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white),
-                                ),
-                                onTap: () => Navigator.of(context)
-                                    .push(MaterialPageRoute(
-                                        builder: (context) => ModifyEvent(
-                                              eventDetail:
-                                                  appointmentDetails[index],
-                                            ))),
-                              ),
+                                          ],
+                                  ),
+                                  title: Text(
+                                    appointmentDetails[index].title,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white),
+                                  ),
+                                  onTap: () async{
+                                    bool isChanged = await eventPopup(
+                                        context, appointmentDetails[index]);
+                                    
+                                    isChanged ? await loadEvents() : null;
+                                  }),
                             );
                           },
                           separatorBuilder: (BuildContext context, int index) =>
@@ -201,6 +206,28 @@ class _PlannerState extends State<Planner> {
               ),
       ),
     );
+  }
+
+  Future<bool> eventPopup(BuildContext context, Appointment appointment) {
+    Completer<bool> completer = Completer<bool>();
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            width: double.infinity,
+            height: double.infinity,
+            alignment: Alignment.center,
+            color: const Color.fromARGB(0, 45, 45, 45),
+            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+            child: ModifyEvent(
+              eventDetail: appointment,
+            ),
+          );
+        }).then((value) => completer.complete(value));
+
+    print(completer.future);
+    return completer.future;
   }
 
   void selectionChanged(CalendarSelectionDetails calendarSelectionDetails) {
@@ -256,19 +283,19 @@ class _PlannerState extends State<Planner> {
 
     for (var event in _eventsData) {
       //color from value to color
-      int colorValue = int.parse(event['tag']);
+      int colorValue = int.parse(event.tag);
       Color color = Color(colorValue).withOpacity(1);
 
-      print('HERE');
-      print(_eventsData[0]);
       appointments.add(Appointment(
-          title: event['title'],
-          startTime: event['start_date'].toDate(),
-          endTime: event['end_date'].toDate(),
-          color: color,
-          isAllDay: event['allday'],
-          location: event['location'],
-          people: event['people']));
+        id: event.id,
+        title: event.title,
+        startTime: event.start_date.toDate(),
+        endTime: event.end_date.toDate(),
+        color: color,
+        isAllDay: event.allday,
+        location: event.location,
+        people: event.people,
+      ));
     }
     return _AppointmentDataSource(appointments);
   }
@@ -280,18 +307,20 @@ class Appointment {
     required this.startTime,
     required this.endTime,
     required this.title,
+    required this.id,
     this.isAllDay = false,
     this.color = Colors.transparent,
     this.location = '',
     this.people = const [],
   });
 
+  String id;
+  String title;
+  String location;
   DateTime startTime;
   DateTime endTime;
-  String title;
-  Color color;
   bool isAllDay;
-  String location;
+  Color color;
   List<String> people;
 }
 
@@ -332,5 +361,10 @@ class _AppointmentDataSource extends CalendarDataSource {
 
   List<String> getPeople(int index) {
     return appointments![index].people;
+  }
+
+  @override
+  String getId(int index) {
+    return appointments![index].id;
   }
 }
