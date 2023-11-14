@@ -1070,9 +1070,6 @@ class _ModifyEventState extends State<ModifyEvent> {
       DateTime endDateTime = endDate.add(
           Duration(hours: int.parse(endHours), minutes: int.parse(endMins)));
 
-      print(startDateTime);
-      print(endDateTime);
-
       await FirestoreService().updateEvent(
           widget.eventDetail.id,
           titleText,

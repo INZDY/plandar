@@ -225,8 +225,7 @@ class _PlannerState extends State<Planner> {
             ),
           );
         }).then((value) => completer.complete(value));
-
-    print(completer.future);
+        
     return completer.future;
   }
 
