@@ -18,6 +18,7 @@
           - Contains :
             - 1 color picker
             - 1 button linked to addeventpeople.dart  
+        5.Delete Event
       The event can be added only when at least :
         1. Title field is filled
         2. Ends date&time > Start date&time
@@ -903,27 +904,6 @@ class _ModifyEventState extends State<ModifyEvent> {
         ),
       ),
     );
-  }
-
-  void resetAllValues() {
-    setState(() {
-      titleText = '';
-      _titleTextController.text = '';
-      _locationTextController.text = '';
-      locationText = '';
-      isAllDay = false;
-      allowAdded = false;
-      startDate = DateFormat('yyyy-MM-dd')
-          .parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
-      endDate = DateFormat('yyyy-MM-dd')
-          .parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
-      startHours = DateTime.now().hour.toString().padLeft(2, '0');
-      startMins = DateTime.now().minute.toString().padLeft(2, '0');
-      endHours = DateTime.now().hour.toString().padLeft(2, '0');
-      endMins = DateTime.now().minute.toString().padLeft(2, '0');
-      finalColor = '';
-      peoplelist = [];
-    });
   }
 
   void toggleStartDate() {

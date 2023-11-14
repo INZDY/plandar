@@ -190,7 +190,7 @@ class FirestoreService {
 
     CollectionReference peopleCollection = eventRef.collection('people');
 
-    //clear all people first
+    //delete existing people first
     QuerySnapshot peopleData = await peopleCollection.get();
     for (QueryDocumentSnapshot doc in peopleData.docs) {
       await doc.reference.delete();
@@ -206,17 +206,20 @@ class FirestoreService {
   //UPDATE: update contacts
 
   //DELETE: delete events
+  //**Note**
+  //Should need to loop delete subcollection before parent (does not need)
   Future<void> deleteEvent(String eventId) async {
     await _initializeCurrentUser();
     DocumentSnapshot userDoc = userSnapshot.docs.first;
     DocumentReference eventRef =
         userDoc.reference.collection('events').doc(eventId);
 
+    //Delete parent
     await eventRef.delete();
   }
   //DELETE: delete contacts
 
-  //UTIL: does user exist
+  //UTIL-client: does user exist
   Future<bool> existUser(String email) async {
     userSnapshot =
         await _db.collection('users').where('email', isEqualTo: email).get();
