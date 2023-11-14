@@ -1,6 +1,5 @@
 import 'package:fitgap/src/features/planner/screens/planner.dart';
 import 'package:flutter/material.dart';
-import 'package:fitgap/src/features/settings/settings.dart';
 import 'package:fitgap/src/features/addevent/addevent.dart';
 import 'package:fitgap/src/features/home/homepage.dart';
 
@@ -26,7 +25,9 @@ class _BottomNavBarState extends State<Home> {
     AddNewEvent(), //choice 2 (middle button) 'addNewEvent'
 
     Planner(),
-    Settings(),
+    Text(
+      'Index 4: ',
+    ),
   ];
 
   void _onItemTapped(int index) {

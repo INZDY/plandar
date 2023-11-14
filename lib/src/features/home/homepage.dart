@@ -1,5 +1,8 @@
 import 'package:fitgap/src/features/home/homeall.dart';
+import 'package:fitgap/src/features/settings/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:fitgap/src/utils/firestore/firestore.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,6 +12,52 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late List<Map<String, dynamic>> eventsDataToday;
+  late List<Map<String, dynamic>> eventsDataTomorrow;
+  Map<String, dynamic>? userData;
+  Map<String, dynamic>? firstEventToday;
+  Map<String, dynamic>? firstEventTomorrow;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadEvents();
+  }
+
+  Future loadEvents() async {
+    DateTime now = DateTime.now();
+    final List<Map<String, dynamic>> eventsToday = await FirestoreService()
+        .getEventsToday(
+            now, DateTime(now.year, now.month, now.day + 1, 0, 0, 0));
+    final List<Map<String, dynamic>> eventsTomorrow = await FirestoreService()
+        .getEventsTomorrow(DateTime(now.year, now.month, now.day + 1, 0, 0, 0),
+            DateTime(now.year, now.month, now.day + 2, 0, 0, 0));
+    final userDetail = await FirestoreService().getUserData();
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      setState(() {
+        isLoading = false;
+      });
+    });
+
+    setState(() {
+      eventsDataToday = eventsToday;
+      eventsDataTomorrow = eventsTomorrow;
+      userData = userDetail;
+      if (eventsToday.isNotEmpty) {
+        firstEventToday = eventsToday[0];
+      } else {
+        firstEventToday = null;
+      }
+      if (eventsTomorrow.isNotEmpty) {
+        firstEventTomorrow = eventsTomorrow[0];
+      } else {
+        firstEventTomorrow = null;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -38,21 +87,30 @@ class _HomePageState extends State<HomePage> {
                       width: screenWidth * 0.1, child: const CircleAvatar()),
                   Container(
                     width: screenWidth * 0.65,
-                    child: Text(
-                      'WELCOME BACK {JOEMama}',
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                    ),
+                    child: isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : Text(
+                            "WELCOME BACK ${userData!['username']}",
+                            style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                   ),
                   //Link to setting page *****
                   Container(
                     width: screenWidth * 0.1,
                     child: IconButton(
-                      onPressed: () {},
-                      icon: Icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Settings(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
                         Icons.settings,
                         color: Colors.white,
                       ),
@@ -67,13 +125,13 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.cloudy_snowing,
                     color: Colors.white,
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: screenWidth * 0.05),
-                    child: Text(
+                    child: const Text(
                       'Rainy 27°',
                       style: TextStyle(
                           fontFamily: 'Poppins',
@@ -88,7 +146,7 @@ class _HomePageState extends State<HomePage> {
               height: screenHeight * 0.06,
               width: screenWidth * 0.9,
               alignment: Alignment.centerLeft,
-              child: Text('Here is your schedule today:',
+              child: const Text('Here is your schedule today:',
                   style: TextStyle(fontFamily: 'Poppins')),
             ),
             Padding(
@@ -97,123 +155,134 @@ class _HomePageState extends State<HomePage> {
                   height: screenHeight * 0.25,
                   width: screenWidth * 0.95,
                   child: Stack(
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image:
-                                  AssetImage('assets/images/homeElement.png'),
-                              fit: BoxFit.cover),
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            height: screenHeight * 0.04,
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const HomeAll(date: 'today'),
-                                  ),
-                                );
-                              },
-                              child: const Text(
-                                'See all >>',
-                                style: TextStyle(
-                                  color: Color.fromRGBO(184, 184, 184, 1),
-                                  fontSize: 14,
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            ),
-                          ),
-                          Transform.translate(
-                            offset: Offset(0, -screenHeight * 0.01),
-                            child: Container(
-                              height: screenHeight * 0.05,
-                              width: screenWidth * 0.85,
-                              alignment: Alignment.centerLeft,
-                              child: const Text(
-                                '27°',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: screenHeight * 0.05,
-                            width: screenWidth * 0.9,
-                            alignment: Alignment.centerRight,
-                            child: Container(
-                              height: screenHeight * 0.08,
-                              width: screenWidth * 0.08,
+                    children: isLoading
+                        ? [const Center(child: CircularProgressIndicator())]
+                        : [
+                            Container(
                               decoration: const BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage(
-                                        'assets/images/rainnyIcon.png'),
-                                    fit: BoxFit.contain),
+                                        'assets/images/homeElement.png'),
+                                    fit: BoxFit.cover),
                               ),
                             ),
-                          ),
-                          Transform.translate(
-                            offset: Offset(0, -screenHeight * 0.04),
-                            child: Container(
-                              height: screenHeight * 0.075,
-                              width: screenWidth * 0.85,
-                              alignment: Alignment.centerLeft,
-                              child: const Text(
-                                '{15 Sep 22:00pm}\nEvent: {hang hang}',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 20,
-                                  color: Colors.white,
+                            Column(
+                              children: [
+                                Container(
+                                  height: screenHeight * 0.04,
+                                  alignment: Alignment.centerRight,
+                                  child: (firstEventToday == null)
+                                      ? null
+                                      : TextButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => HomeAll(
+                                                    date: 'today',
+                                                    event: eventsDataToday),
+                                              ),
+                                            );
+                                          },
+                                          child: const Text(
+                                            'See all >>',
+                                            style: TextStyle(
+                                              color: Color.fromRGBO(
+                                                  184, 184, 184, 1),
+                                              fontSize: 14,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                        ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          Transform.translate(
-                            offset: Offset(0, -screenHeight * 0.01),
-                            child: Container(
-                              height: screenHeight * 0.035,
-                              width: screenWidth * 0.85,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: screenWidth * 0.6,
+                                Transform.translate(
+                                  offset: Offset(0, -screenHeight * 0.01),
+                                  child: Container(
+                                    height: screenHeight * 0.05,
+                                    width: screenWidth * 0.85,
                                     alignment: Alignment.centerLeft,
                                     child: const Text(
-                                      '{KMUTT, Bangmod, Bangkok}',
+                                      '27°',
                                       style: TextStyle(
-                                        fontSize: 16,
                                         color: Colors.white,
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold,
                                         fontFamily: 'Poppins',
                                       ),
                                     ),
                                   ),
-                                  Container(
-                                    child: const Text(
-                                      'Rainny',
-                                      style: TextStyle(
-                                          fontSize: 16, color: Colors.white),
+                                ),
+                                Container(
+                                  height: screenHeight * 0.05,
+                                  width: screenWidth * 0.9,
+                                  alignment: Alignment.centerRight,
+                                  child: Container(
+                                    height: screenHeight * 0.08,
+                                    width: screenWidth * 0.08,
+                                    decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/rainnyIcon.png'),
+                                          fit: BoxFit.contain),
                                     ),
-                                  )
-                                ],
-                              ),
+                                  ),
+                                ),
+                                Transform.translate(
+                                  offset: Offset(0, -screenHeight * 0.04),
+                                  child: Container(
+                                    height: screenHeight * 0.075,
+                                    width: screenWidth * 0.85,
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      (firstEventToday == null)
+                                          ? "You don’t have any schedule today!!"
+                                          : "${DateFormat('dd MMM HH:mma').format(firstEventToday!['start_date'].toDate())}\nEvent: ${firstEventToday!['title']}",
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Transform.translate(
+                                  offset: Offset(0, -screenHeight * 0.01),
+                                  child: Container(
+                                    height: screenHeight * 0.035,
+                                    width: screenWidth * 0.85,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          width: screenWidth * 0.6,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            (firstEventToday == null)
+                                                ? ''
+                                                : "${firstEventToday!['location']}",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          child: const Text(
+                                            'Rainny',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
-                          )
-                        ],
-                      ),
-                    ],
+                          ],
                   )),
             ),
             Padding(
@@ -232,126 +301,136 @@ class _HomePageState extends State<HomePage> {
                   height: screenHeight * 0.25,
                   width: screenWidth * 0.95,
                   child: Stack(
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image:
-                                  AssetImage('assets/images/homeElement.png'),
-                              fit: BoxFit.cover),
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            height: screenHeight * 0.04,
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const HomeAll(date: 'tomorrow'),
-                                  ),
-                                );
-                              },
-                              child: const Text(
-                                'See all >>',
-                                style: TextStyle(
-                                  color: Color.fromRGBO(184, 184, 184, 1),
-                                  fontSize: 14,
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            ),
-                          ),
-                          Transform.translate(
-                            offset: Offset(0, -screenHeight * 0.01),
-                            child: Container(
-                              height: screenHeight * 0.05,
-                              width: screenWidth * 0.85,
-                              alignment: Alignment.centerLeft,
-                              child: const Text(
-                                '30°',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: screenHeight * 0.05,
-                            width: screenWidth * 0.9,
-                            alignment: Alignment.centerRight,
-                            child: Container(
-                              height: screenHeight * 0.08,
-                              width: screenWidth * 0.08,
+                    children: isLoading
+                        ? [const Center(child: CircularProgressIndicator())]
+                        : [
+                            Container(
                               decoration: const BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage(
-                                        'assets/images/sunnyIcon.png'),
-                                    fit: BoxFit.contain),
+                                        'assets/images/homeElement.png'),
+                                    fit: BoxFit.cover),
                               ),
                             ),
-                          ),
-                          Transform.translate(
-                            offset: Offset(0, -screenHeight * 0.04),
-                            child: Container(
-                              height: screenHeight * 0.075,
-                              width: screenWidth * 0.85,
-                              alignment: Alignment.centerLeft,
-                              child: const Text(
-                                '{15 Sep 22:00pm}\nEvent: {hang hang}',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                  fontFamily: 'Poppins',
+                            Column(
+                              children: [
+                                Container(
+                                  height: screenHeight * 0.04,
+                                  alignment: Alignment.centerRight,
+                                  child: (firstEventTomorrow == null)
+                                      ? null
+                                      : TextButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => HomeAll(
+                                                    date: 'tomorrow',
+                                                    event: eventsDataTomorrow),
+                                              ),
+                                            );
+                                          },
+                                          child: const Text(
+                                            'See all >>',
+                                            style: TextStyle(
+                                              color: Color.fromRGBO(
+                                                  184, 184, 184, 1),
+                                              fontSize: 14,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                        ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          Transform.translate(
-                            offset: Offset(0, -screenHeight * 0.01),
-                            child: Container(
-                              height: screenHeight * 0.035,
-                              width: screenWidth * 0.85,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: screenWidth * 0.6,
+                                Transform.translate(
+                                  offset: Offset(0, -screenHeight * 0.01),
+                                  child: Container(
+                                    height: screenHeight * 0.05,
+                                    width: screenWidth * 0.85,
                                     alignment: Alignment.centerLeft,
                                     child: const Text(
-                                      '{KMUTT, Bangmod, Bangkok}',
+                                      '30°',
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        color: Colors.white,
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: screenHeight * 0.05,
+                                  width: screenWidth * 0.9,
+                                  alignment: Alignment.centerRight,
+                                  child: Container(
+                                    height: screenHeight * 0.08,
+                                    width: screenWidth * 0.08,
+                                    decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/sunnyIcon.png'),
+                                          fit: BoxFit.contain),
+                                    ),
+                                  ),
+                                ),
+                                Transform.translate(
+                                  offset: Offset(0, -screenHeight * 0.04),
+                                  child: Container(
+                                    height: screenHeight * 0.075,
+                                    width: screenWidth * 0.85,
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      (firstEventTomorrow == null)
+                                          ? "You don’t have any schedule tomorrow!!"
+                                          : "${DateFormat('dd MMM HH:mma').format(firstEventTomorrow!['start_date'].toDate())}\nEvent: ${firstEventTomorrow!['title']}",
+                                      style: const TextStyle(
+                                        fontSize: 20,
                                         color: Colors.white,
                                         fontFamily: 'Poppins',
                                       ),
                                     ),
                                   ),
-                                  Container(
-                                    child: const Text(
-                                      'Sunny',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                        fontFamily: 'Poppins',
-                                      ),
+                                ),
+                                Transform.translate(
+                                  offset: Offset(0, -screenHeight * 0.01),
+                                  child: Container(
+                                    height: screenHeight * 0.035,
+                                    width: screenWidth * 0.85,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          width: screenWidth * 0.6,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            (firstEventTomorrow == null)
+                                                ? ''
+                                                : "${firstEventTomorrow!['location']}",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          child: const Text(
+                                            'Sunny',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                  )
-                                ],
-                              ),
+                                  ),
+                                )
+                              ],
                             ),
-                          )
-                        ],
-                      ),
-                    ],
+                          ],
                   )),
             ),
           ],
