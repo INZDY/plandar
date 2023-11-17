@@ -175,14 +175,14 @@ class _ProfileState extends State<Profile> {
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                           padding: const EdgeInsets.all(15),
-                          child: Column(
+                          child: const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              Text(
                                 'Friends',
                                 style: TextStyle(color: Colors.white),
                               ),
-                              const Divider(
+                              Divider(
                                 height: 10,
                                 color: Colors.white,
                                 thickness: 0.5,

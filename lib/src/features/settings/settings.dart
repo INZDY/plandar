@@ -14,7 +14,7 @@ class Settings extends StatelessWidget {
         children: [
           //profile
           ListTile(
-            leading: const Text('Profile', style: TextStyle(color: Colors.black),),
+            leading: const Text('Profile'),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => const Profile(),
             )),

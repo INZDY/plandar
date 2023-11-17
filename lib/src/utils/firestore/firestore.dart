@@ -70,7 +70,25 @@ class FirestoreService {
       });
     }
   }
+
   //CREATE: add contact
+  Future<void> addContact(String name, String email, String tel) async {
+    try {
+      await _initializeCurrentUser();
+      DocumentSnapshot userDoc = userSnapshot.docs.first;
+
+      await userDoc.reference.collection('contacts').add(
+        {
+          'name': name,
+          'email': email,
+          'tel': tel,
+          'note': '-',
+        },
+      );
+    } catch (e) {
+      //print('Error adding contract: $e');
+    }
+  }
 
   //READ: get user details
   Future<Map<String, dynamic>?> getUserData() async {
@@ -80,7 +98,7 @@ class FirestoreService {
   }
 
   //READ: get events from database
-  Future<List<Map<String, dynamic>>?> getEvents() async {
+  Future<List<Map<String, dynamic>>> getEvents() async {
     await _initializeCurrentUser();
 
     //Get document snapshot
@@ -101,6 +119,26 @@ class FirestoreService {
   }
 
   //READ: get contacts from database
+  Future<List<Map<String, dynamic>>> getContacts() async {
+    await _initializeCurrentUser();
+
+    DocumentSnapshot userDoc = userSnapshot.docs.first;
+    QuerySnapshot contactsQuery =
+        await userDoc.reference.collection('contacts').get();
+
+    List<Map<String, dynamic>> contactList = [];
+
+    for (QueryDocumentSnapshot contactDoc in contactsQuery.docs) {
+      Map<String, dynamic> contactData =
+          contactDoc.data() as Map<String, dynamic>;
+
+      //attatch id to the doc details
+      contactData['id'] = contactDoc.id;
+      contactList.add(contactData);
+    }
+
+    return contactList;
+  }
 
   //UPDATE: update user profile
   Future<void> updateUserDetails(Map<String, dynamic> updatedData) async {

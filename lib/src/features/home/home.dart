@@ -1,3 +1,5 @@
+import 'package:fitgap/src/features/contract/contract_page/contract.dart';
+import 'package:fitgap/src/features/planner/screens/planner.dart';
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/features/settings/settings.dart';
 import 'package:fitgap/src/features/addevent/addevent.dart';
@@ -17,15 +19,11 @@ class _BottomNavBarState extends State<Home> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(), //choice 0 (most left button) 'HomePage'
 
-    Text(
-      'Index 1: Dashboard',
-    ),
+    ContractPage(),
 
     AddNewEvent(), //choice 2 (middle button) 'addNewEvent'
 
-    Text(
-      'Index 3: Planner',
-    ),
+    Planner(),
     Settings(),
   ];
 
@@ -38,6 +36,7 @@ class _BottomNavBarState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Center(
           child: _widgetOptions.elementAt(_selectedIndex),

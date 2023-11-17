@@ -188,14 +188,15 @@ class _AddNewEventState extends State<AddNewEvent> {
 
   void _startDateSelected(DateTime day, DateTime focusedDay) {
     setState(() {
-      startDate = day;
+      startDate = DateTime(day.year, day.month, day.day);
     });
+
     checkcondition();
   }
 
   void _endDateSelected(DateTime day, DateTime focusedDay) {
     setState(() {
-      endDate = day;
+      endDate = DateTime(day.year, day.month, day.day);
     });
     checkcondition();
   }
@@ -212,6 +213,7 @@ class _AddNewEventState extends State<AddNewEvent> {
     if (titleText.isNotEmpty) {
       if (isAllDay == true) {
         // endDateTime is equal or more than startDateTime only when allDay switch is on
+
         if (endDate.isAtSameMomentAs(startDate) ||
             endDate
                 .add(Duration(
@@ -260,10 +262,12 @@ class _AddNewEventState extends State<AddNewEvent> {
       setState(() {
         isInprogress = true;
       });
+
       DateTime startDateTime = startDate.add(Duration(
           hours: int.parse(startHours), minutes: int.parse(startMins)));
       DateTime endDateTime = endDate.add(
           Duration(hours: int.parse(endHours), minutes: int.parse(endMins)));
+
       await FirestoreService().addEvent(titleText, locationText, startDateTime,
           endDateTime, isAllDay, finalColor, peoplelist);
       SnackbarUtil.showSnackBar('Event added');
@@ -526,8 +530,8 @@ class _AddNewEventState extends State<AddNewEvent> {
                                   ? isAnimating
                                       ? null
                                       : TableCalendar(
-                                          firstDay: DateTime.utc(2023, 1, 1),
-                                          lastDay: DateTime.utc(2030, 12, 31),
+                                          firstDay: DateTime(2023, 1, 1),
+                                          lastDay: DateTime(2030, 12, 31),
                                           focusedDay: startDate,
                                           shouldFillViewport: true,
                                           daysOfWeekStyle:
@@ -731,8 +735,8 @@ class _AddNewEventState extends State<AddNewEvent> {
                                   ? isAnimating
                                       ? null
                                       : TableCalendar(
-                                          firstDay: DateTime.utc(2023, 1, 1),
-                                          lastDay: DateTime.utc(2030, 12, 31),
+                                          firstDay: DateTime(2023, 1, 1),
+                                          lastDay: DateTime(2030, 12, 31),
                                           focusedDay: endDate,
                                           shouldFillViewport: true,
                                           daysOfWeekStyle:
@@ -864,8 +868,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                       ),
                     )),
               ),
+
+              //Tag & People group
               Padding(
-                //Tag & People group
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
@@ -875,6 +880,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                     color: const Color.fromRGBO(153, 175, 255, 1),
                     child: Column(
                       children: [
+                        //tag
                         Container(
                           height: screenHeight * 0.06,
                           color: Colors.white10,
@@ -963,6 +969,8 @@ class _AddNewEventState extends State<AddNewEvent> {
                             ),
                           ),
                         ),
+
+                        //people
                         Container(
                           height: screenHeight * 0.06,
                           color: Colors.white10,
@@ -990,7 +998,8 @@ class _AddNewEventState extends State<AddNewEvent> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              const AddNewEventPeople(),
+                                              AddNewEventPeople(
+                                                  chosenPeople: peoplelist),
                                         ),
                                       );
                                       setState(() {
