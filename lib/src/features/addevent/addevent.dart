@@ -51,6 +51,7 @@ class _AddNewEventState extends State<AddNewEvent> {
 
   bool isAllDay = false;
   bool isAnimating = false;
+  bool isInprogress = false;
 
   bool isStartDateExpanded = false;
   bool isStartTimeExpanded = false;
@@ -70,8 +71,9 @@ class _AddNewEventState extends State<AddNewEvent> {
   String endHours = DateTime.now().hour.toString().padLeft(2, '0');
   String endMins = DateTime.now().minute.toString().padLeft(2, '0');
 
-  Color pickerColor = const Color(0xff443a49);
-  String finalColor = '';
+  Color pickerColor =
+      const Color(0xfff44336); //set red color as a default color
+  String finalColor = '4294198070'; //set red color as a default color
 
   List<String> peoplelist = [];
 
@@ -186,14 +188,15 @@ class _AddNewEventState extends State<AddNewEvent> {
 
   void _startDateSelected(DateTime day, DateTime focusedDay) {
     setState(() {
-      startDate = day;
+      startDate = DateTime(day.year, day.month, day.day);
     });
+
     checkcondition();
   }
 
   void _endDateSelected(DateTime day, DateTime focusedDay) {
     setState(() {
-      endDate = day;
+      endDate = DateTime(day.year, day.month, day.day);
     });
     checkcondition();
   }
@@ -210,6 +213,7 @@ class _AddNewEventState extends State<AddNewEvent> {
     if (titleText.isNotEmpty) {
       if (isAllDay == true) {
         // endDateTime is equal or more than startDateTime only when allDay switch is on
+
         if (endDate.isAtSameMomentAs(startDate) ||
             endDate
                 .add(Duration(
@@ -255,14 +259,22 @@ class _AddNewEventState extends State<AddNewEvent> {
 
   void addEvent() async {
     try {
+      setState(() {
+        isInprogress = true;
+      });
+
       DateTime startDateTime = startDate.add(Duration(
           hours: int.parse(startHours), minutes: int.parse(startMins)));
       DateTime endDateTime = endDate.add(
           Duration(hours: int.parse(endHours), minutes: int.parse(endMins)));
+
       await FirestoreService().addEvent(titleText, locationText, startDateTime,
           endDateTime, isAllDay, finalColor, peoplelist);
       SnackbarUtil.showSnackBar('Event added');
       resetAllValues();
+      setState(() {
+        isInprogress = false;
+      });
     } catch (e) {
       SnackbarUtil.showSnackBar(e.toString());
     }
@@ -305,6 +317,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                               color: allowAdded ? Colors.blue : Colors.grey),
                         ),
                       ),
+                      if (isInprogress) const CircularProgressIndicator(),
                     ],
                   ),
                 ),
@@ -517,8 +530,8 @@ class _AddNewEventState extends State<AddNewEvent> {
                                   ? isAnimating
                                       ? null
                                       : TableCalendar(
-                                          firstDay: DateTime.utc(2023, 1, 1),
-                                          lastDay: DateTime.utc(2030, 12, 31),
+                                          firstDay: DateTime(2023, 1, 1),
+                                          lastDay: DateTime(2030, 12, 31),
                                           focusedDay: startDate,
                                           shouldFillViewport: true,
                                           daysOfWeekStyle:
@@ -588,7 +601,7 @@ class _AddNewEventState extends State<AddNewEvent> {
                                                         const FixedExtentScrollPhysics(),
                                                     childDelegate:
                                                         ListWheelChildBuilderDelegate(
-                                                      childCount: 25,
+                                                      childCount: 24,
                                                       builder:
                                                           (context, index) {
                                                         return MyHours(
@@ -722,8 +735,8 @@ class _AddNewEventState extends State<AddNewEvent> {
                                   ? isAnimating
                                       ? null
                                       : TableCalendar(
-                                          firstDay: DateTime.utc(2023, 1, 1),
-                                          lastDay: DateTime.utc(2030, 12, 31),
+                                          firstDay: DateTime(2023, 1, 1),
+                                          lastDay: DateTime(2030, 12, 31),
                                           focusedDay: endDate,
                                           shouldFillViewport: true,
                                           daysOfWeekStyle:

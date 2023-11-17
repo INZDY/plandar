@@ -5,6 +5,7 @@
       -return list of selected people
 
       -doesn't remember element in selected list after this page is popped 
+      -some part will need to be revise, refer to *****
 */
 import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:flutter/material.dart';
