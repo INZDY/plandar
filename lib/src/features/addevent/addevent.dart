@@ -920,7 +920,6 @@ class _AddNewEventState extends State<AddNewEvent> {
                                                         .value
                                                         .toString();
                                                   });
-                                                  print(pickerColor);
 
                                                   Navigator.of(context).pop();
                                                 },
