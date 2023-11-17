@@ -1,6 +1,3 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:fitgap/src/features/contract/contract_page/contract.dart';
 import 'package:fitgap/src/features/contract/contract_wiget/add_contract_field.dart';
 import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:flutter/material.dart';
@@ -47,11 +44,7 @@ class _AddContractState extends State<AddContract> {
                       ),
                       color: Colors.white,
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ContractPage()),
-                        );
+                        Navigator.of(context).pop();
                       },
                     ),
                     Text(
@@ -135,6 +128,7 @@ class _AddContractState extends State<AddContract> {
                     child: TextButton(
                       onPressed: () {
                         FirestoreService().addContact(name, email, tel);
+                        Navigator.of(context).pop();
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Color(0xff5936B4),

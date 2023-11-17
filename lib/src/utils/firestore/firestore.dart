@@ -161,9 +161,30 @@ class FirestoreService {
 
   //UPDATE: update events
   //UPDATE: update contacts
+  Future<void> updateContact(
+      String contactId, Map<String, dynamic> updatedData) async {
+    await _initializeCurrentUser();
+
+    CollectionReference contactsCollection =
+        userSnapshot.docs.first.reference.collection('contacts');
+
+    DocumentReference contactRef = contactsCollection.doc(contactId);
+
+    await contactRef.update(updatedData);
+  }
 
   //DELETE: delete events
   //DELETE: delete contacts
+  Future<void> deleteContact(String contactId) async {
+    await _initializeCurrentUser();
+
+    CollectionReference contactsCollection =
+        userSnapshot.docs.first.reference.collection('contacts');
+
+    DocumentReference contactRef = contactsCollection.doc(contactId);
+
+    await contactRef.delete();
+  }
 
   //UTIL: does user exist
   Future<bool> existUser(String email) async {

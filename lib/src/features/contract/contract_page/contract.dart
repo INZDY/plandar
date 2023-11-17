@@ -1,10 +1,12 @@
+import 'dart:ui';
+
 import 'package:fitgap/src/features/contract/contract_page/add_contract.dart';
 import 'package:fitgap/src/features/contract/contract_page/contract_profile.dart';
 import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 
 class ContractPage extends StatefulWidget {
-  const ContractPage({super.key});
+  const ContractPage({Key? key});
 
   @override
   State<ContractPage> createState() => _ContractPageState();
@@ -12,27 +14,31 @@ class ContractPage extends StatefulWidget {
 
 class _ContractPageState extends State<ContractPage> {
   late List<Map<String, dynamic>> contacts;
-  List<Map<String, dynamic>> visibleContacts = []; // Initialize here
+  List<Map<String, dynamic>> visibleContacts = [];
 
   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _loadContacts();
+    loadContacts();
   }
 
-  Future<void> _loadContacts() async {
+  Future<void> loadContacts() async {
     // Load contacts from Firestore
     contacts = await FirestoreService().getContacts();
-    visibleContacts = List.from(contacts);
-    setState(() {});
+    _updateVisibleContacts();
+  }
+
+  void _updateVisibleContacts() {
+    setState(() {
+      visibleContacts = List.from(contacts);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      //gradient background
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xff000000), Color(0xff07023A)],
@@ -52,7 +58,6 @@ class _ContractPageState extends State<ContractPage> {
                 const SizedBox(
                   height: 20,
                 ),
-
                 //title
                 Row(
                   children: [
@@ -69,9 +74,10 @@ class _ContractPageState extends State<ContractPage> {
                       icon: Icon(Icons.add),
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => AddContract())));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddContract()),
+                        );
                       },
                       color: Colors.white,
                     )
@@ -81,9 +87,9 @@ class _ContractPageState extends State<ContractPage> {
                   height: 20,
                 ),
 
-                //searchbar
+                //search
                 TextField(
-                  controller: _searchController, // Use _searchController here
+                  controller: _searchController,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.search),
                     hintText: 'Search',
@@ -101,58 +107,122 @@ class _ContractPageState extends State<ContractPage> {
                             .toLowerCase()
                             .contains(lowercaseValue))
                         .toList();
-                    setState(() {});
+                    _updateVisibleContacts();
                   },
                 ),
-
                 const SizedBox(
                   height: 20,
                 ),
 
-                //list view
+                //list contact
                 Expanded(
                   flex: 2,
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      final contact = visibleContacts[index];
-                      return GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return ContractProfile(
-                                name: contact['name'],
-                                email: contact['email'],
-                                tel: contact['tel'],
-                              );
-                            },
-                          );
-                        },
-                        child: Column(
-                          children: [
-                            ListTile(
-                              title: Row(
-                                children: [
-                                  Icon(
-                                    Icons.account_circle,
-                                    color: Colors.white,
+                  //check is it no contact
+                  child: visibleContacts.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "You don't have any contact.",
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Image.asset(
+                                'assets/icons/nofriend.png',
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Ink(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color(0xFF9C2CF3),
+                                      Color(0xFF3A49F9)
+                                    ],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
                                   ),
-                                  SizedBox(width: 10),
-                                  Text(contact['name']),
+                                  borderRadius: BorderRadius.circular(35),
+                                ),
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AddContract(),
+                                      ),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24, vertical: 10),
+                                    child: Text(
+                                      "Add Contact",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.builder(
+                          itemBuilder: (context, index) {
+                            final contact = visibleContacts[index];
+                            return GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return ContractProfile(
+                                      name: contact['name'],
+                                      email: contact['email'],
+                                      tel: contact['tel'],
+                                      contactId: contact['id'],
+                                      onSaveChanges: (updatedData) async {
+                                        await FirestoreService().updateContact(
+                                          contact['id'],
+                                          updatedData,
+                                        );
+                                        loadContacts();
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    title: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.account_circle,
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text(contact['name']),
+                                      ],
+                                    ),
+                                    textColor: Colors.white,
+                                  ),
+                                  Divider(
+                                    height: 1,
+                                    color: Colors.grey,
+                                  ),
                                 ],
                               ),
-                              textColor: Colors.white,
-                            ),
-                            Divider(
-                              height: 1,
-                              color: Colors.grey,
-                            ),
-                          ],
+                            );
+                          },
+                          itemCount: visibleContacts.length,
                         ),
-                      );
-                    },
-                    itemCount: visibleContacts.length,
-                  ),
                 ),
               ],
             ),
