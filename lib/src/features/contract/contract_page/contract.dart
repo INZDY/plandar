@@ -62,22 +62,21 @@ class _ContractPageState extends State<ContractPage> {
                 Row(
                   children: [
                     const Text(
-                      'Contract',
+                      'Contact',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 25,
                         color: Colors.white,
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     IconButton(
-                      icon: Icon(Icons.add),
+                      icon: const Icon(Icons.add),
                       onPressed: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddContract()),
-                        );
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => AddContract())));
                       },
                       color: Colors.white,
                     )
@@ -97,7 +96,7 @@ class _ContractPageState extends State<ContractPage> {
                     fillColor: Colors.grey[200],
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.black),
+                      borderSide: const BorderSide(color: Colors.black),
                     ),
                   ),
                   onChanged: (value) {

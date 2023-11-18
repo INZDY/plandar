@@ -38,7 +38,7 @@ class _AddContractState extends State<AddContract> {
                 Row(
                   children: [
                     IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.chevron_left,
                         size: 32,
                       ),
@@ -47,10 +47,10 @@ class _AddContractState extends State<AddContract> {
                         Navigator.of(context).pop();
                       },
                     ),
-                    Text(
-                      'Add Contracts',
+                    const Text(
+                      'Add Contact',
                       textAlign: TextAlign.left,
-                      style: const TextStyle(fontSize: 18, color: Colors.white),
+                      style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ],
                 ),
@@ -66,7 +66,7 @@ class _AddContractState extends State<AddContract> {
                       Transform.scale(
                         scale: 3.0,
                         child: IconButton(
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.account_circle,
                           ),
                           color: Colors.white,
@@ -82,7 +82,7 @@ class _AddContractState extends State<AddContract> {
                 Center(
                   child: GestureDetector(
                     onTap: () {},
-                    child: Text(
+                    child: const Text(
                       'ADD IMAGE',
                       style: TextStyle(
                           color: Colors.blue,
@@ -112,7 +112,7 @@ class _AddContractState extends State<AddContract> {
                   },
                 ),
                 AddContractField(
-                  inputBox: 'Tel',
+                  inputBox: 'Tel.',
                   onValueChanged: (value) {
                     setState(() {
                       tel = value;
@@ -122,7 +122,7 @@ class _AddContractState extends State<AddContract> {
 
                 //add button
                 Center(
-                  child: Container(
+                  child: SizedBox(
                     width: 115,
                     height: 50,
                     child: TextButton(
@@ -131,10 +131,10 @@ class _AddContractState extends State<AddContract> {
                         Navigator.of(context).pop();
                       },
                       style: TextButton.styleFrom(
-                        backgroundColor: Color(0xff5936B4),
+                        backgroundColor: const Color(0xff5936B4),
                         elevation: 10,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(35),
                         ),

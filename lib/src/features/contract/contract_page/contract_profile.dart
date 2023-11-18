@@ -6,16 +6,17 @@ class ContractProfile extends StatefulWidget {
   final String name;
   final String email;
   final String tel;
-  final String contactId;
-  final Function(Map<String, dynamic> updatedData) onSaveChanges;
+  final String contactId; // Add this line
+  final Function(Map<String, dynamic> updatedData)
+      onSaveChanges; // Add this line
 
   const ContractProfile({
     Key? key,
     required this.name,
     required this.email,
     required this.tel,
-    required this.contactId,
-    required this.onSaveChanges,
+    required this.contactId, // Add this line
+    required this.onSaveChanges, // Add this line
   }) : super(key: key);
 
   @override
@@ -32,9 +33,10 @@ class _ContractProfileState extends State<ContractProfile> {
   @override
   void initState() {
     super.initState();
-
+    // Initialize controllers with the provided data
     emailController.text = widget.email;
     telController.text = widget.tel;
+    // You may add similar lines for other fields if needed
   }
 
   @override
@@ -72,7 +74,7 @@ class _ContractProfileState extends State<ContractProfile> {
                               color: Colors.white,
                             ),
                             Text(
-                              isEditMode ? 'Cancel' : 'Contracts',
+                              isEditMode ? 'Cancel' : 'Contacts',
                               style: TextStyle(
                                 fontSize: 16.0,
                                 color: Colors.white,
@@ -81,10 +83,15 @@ class _ContractProfileState extends State<ContractProfile> {
                           ],
                         ),
                       ),
-
-                      //done|edit
                       TextButton(
                         onPressed: () {
+                          if (isEditMode) {
+                            widget.onSaveChanges({
+                              'email': emailController.text,
+                              'tel': telController.text,
+                              'note': noteController.text,
+                            });
+                          }
                           setState(() {
                             isEditMode = !isEditMode;
                           });
@@ -99,15 +106,11 @@ class _ContractProfileState extends State<ContractProfile> {
                       ),
                     ],
                   ),
-
-                  // icon picute
                   Icon(
                     Icons.account_circle,
                     size: 75,
                     color: Colors.white,
                   ),
-
-                  //name
                   Text(
                     widget.name,
                     textAlign: TextAlign.center,
@@ -118,32 +121,24 @@ class _ContractProfileState extends State<ContractProfile> {
                     ),
                   ),
                   SizedBox(height: 20),
-
-                  // email
                   CustomTextField(
                     label: 'Email',
                     controller: emailController,
                     isEditMode: isEditMode,
                   ),
                   SizedBox(height: 20),
-
-                  //Tel
                   CustomTextField(
                     label: 'Tel',
                     controller: telController,
                     isEditMode: isEditMode,
                   ),
                   SizedBox(height: 20),
-
-                  //note
                   CustomTextField(
                     label: 'Note',
                     controller: noteController,
                     isEditMode: isEditMode,
                   ),
                   SizedBox(height: 20),
-
-                  //delete button visilbe with edit was clicked
                   Visibility(
                     visible: isEditMode,
                     child: Container(
@@ -152,10 +147,8 @@ class _ContractProfileState extends State<ContractProfile> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: TextButton(
-                        onPressed: () async {
-                          await FirestoreService()
-                              .deleteContact(widget.contactId);
-                          Navigator.of(context).pop();
+                        onPressed: () {
+                          // Add code here to delete the contact
                         },
                         child: Text(
                           'Delete',

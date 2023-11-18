@@ -85,15 +85,15 @@ class _AddNewEventPeopleState extends State<AddNewEventPeople> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 20.0),
-                        child: GestureDetector(
-                          onTap: () {
+                        child: IconButton(
+                          onPressed: () {
                             // Clear the selected people list
                             setState(() {
                               selectedPeople.clear();
                             });
                             Navigator.pop(context, selectedPeople);
                           },
-                          child: const Icon(
+                          icon: const Icon(
                             Icons.arrow_back,
                             color: Colors.white,
                           ),
