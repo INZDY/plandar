@@ -69,6 +69,7 @@ class _ContractProfileState extends State<ContractProfile> {
                         },
                         child: Row(
                           children: [
+                            //cancel | back to contacts
                             Icon(
                               Icons.chevron_left,
                               color: Colors.white,
@@ -83,6 +84,8 @@ class _ContractProfileState extends State<ContractProfile> {
                           ],
                         ),
                       ),
+
+                      //done| edit
                       TextButton(
                         onPressed: () {
                           if (isEditMode) {
@@ -106,7 +109,9 @@ class _ContractProfileState extends State<ContractProfile> {
                       ),
                     ],
                   ),
-                  Icon(
+
+                  //Profile image section
+                  const Icon(
                     Icons.account_circle,
                     size: 75,
                     color: Colors.white,
@@ -121,40 +126,51 @@ class _ContractProfileState extends State<ContractProfile> {
                     ),
                   ),
                   SizedBox(height: 20),
+
+                  //call contact profile field
+                  //email
                   CustomTextField(
                     label: 'Email',
                     controller: emailController,
                     isEditMode: isEditMode,
                   ),
                   SizedBox(height: 20),
+
+                  //tel
                   CustomTextField(
                     label: 'Tel',
                     controller: telController,
                     isEditMode: isEditMode,
                   ),
                   SizedBox(height: 20),
+
+                  //Note
                   CustomTextField(
                     label: 'Note',
                     controller: noteController,
                     isEditMode: isEditMode,
                   ),
                   SizedBox(height: 20),
+
+                  //delete button
                   Visibility(
                     visible: isEditMode,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xff2B1A6D),
+                        color: const Color(0xff2B1A6D),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: TextButton(
-                        onPressed: () {
-                          // Add code here to delete the contact
+                        onPressed: () async {
+                          await FirestoreService()
+                              .deleteContact(widget.contactId);
+                          Navigator.of(context).pop();
                         },
-                        child: Text(
+                        child: const Text(
                           'Delete',
                           style: TextStyle(
                             fontSize: 14.0,
-                            color: const Color.fromARGB(255, 255, 0, 0),
+                            color: Color.fromARGB(255, 255, 0, 0),
                           ),
                         ),
                       ),
