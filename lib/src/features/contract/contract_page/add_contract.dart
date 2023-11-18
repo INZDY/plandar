@@ -41,7 +41,7 @@ class _AddContractState extends State<AddContract> {
                 Row(
                   children: [
                     IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.chevron_left,
                         size: 32,
                       ),
@@ -50,14 +50,14 @@ class _AddContractState extends State<AddContract> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ContractPage()),
+                              builder: (context) => const ContractPage()),
                         );
                       },
                     ),
-                    Text(
+                    const Text(
                       'Add Contracts',
                       textAlign: TextAlign.left,
-                      style: const TextStyle(fontSize: 18, color: Colors.white),
+                      style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ],
                 ),
@@ -73,7 +73,7 @@ class _AddContractState extends State<AddContract> {
                       Transform.scale(
                         scale: 3.0,
                         child: IconButton(
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.account_circle,
                           ),
                           color: Colors.white,
@@ -89,7 +89,7 @@ class _AddContractState extends State<AddContract> {
                 Center(
                   child: GestureDetector(
                     onTap: () {},
-                    child: Text(
+                    child: const Text(
                       'ADD IMAGE',
                       style: TextStyle(
                           color: Colors.blue,
@@ -129,7 +129,7 @@ class _AddContractState extends State<AddContract> {
 
                 //add button
                 Center(
-                  child: Container(
+                  child: SizedBox(
                     width: 115,
                     height: 50,
                     child: TextButton(
@@ -137,10 +137,10 @@ class _AddContractState extends State<AddContract> {
                         FirestoreService().addContact(name, email, tel);
                       },
                       style: TextButton.styleFrom(
-                        backgroundColor: Color(0xff5936B4),
+                        backgroundColor: const Color(0xff5936B4),
                         elevation: 10,
                         padding:
-                            EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                            const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(35),
                         ),

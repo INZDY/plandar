@@ -14,7 +14,7 @@ class ContractProfile extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ContractProfileState createState() => _ContractProfileState();
+  State<ContractProfile> createState() => _ContractProfileState();
 }
 
 class _ContractProfileState extends State<ContractProfile> {
@@ -40,7 +40,7 @@ class _ContractProfileState extends State<ContractProfile> {
       content: SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [Color(0xff5936B4), Color(0xff362A84)],
@@ -63,13 +63,13 @@ class _ContractProfileState extends State<ContractProfile> {
                         },
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.chevron_left,
                               color: Colors.white,
                             ),
                             Text(
                               isEditMode ? 'Cancel' : 'Contracts',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16.0,
                                 color: Colors.white,
                               ),
@@ -93,7 +93,7 @@ class _ContractProfileState extends State<ContractProfile> {
                       ),
                     ],
                   ),
-                  Icon(
+                  const Icon(
                     Icons.account_circle,
                     size: 75,
                     color: Colors.white,
@@ -101,36 +101,36 @@ class _ContractProfileState extends State<ContractProfile> {
                   Text(
                     widget.name,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   CustomTextField(
                     label: 'Email',
                     controller: emailController,
                     isEditMode: isEditMode,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   CustomTextField(
                     label: 'Tel',
                     controller: telController,
                     isEditMode: isEditMode,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   CustomTextField(
                     label: 'Note',
                     controller: noteController,
                     isEditMode: isEditMode,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Visibility(
                     visible: isEditMode,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xff2B1A6D),
+                        color: const Color(0xff2B1A6D),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: TextButton(
@@ -138,11 +138,11 @@ class _ContractProfileState extends State<ContractProfile> {
                           Navigator.of(context).pop();
                           // You may add code here to delete the contact
                         },
-                        child: Text(
+                        child: const Text(
                           'Delete',
                           style: TextStyle(
                             fontSize: 14.0,
-                            color: const Color.fromARGB(255, 255, 0, 0),
+                            color: Color.fromARGB(255, 255, 0, 0),
                           ),
                         ),
                       ),

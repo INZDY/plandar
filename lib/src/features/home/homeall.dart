@@ -69,7 +69,7 @@ class _HomeAllState extends State<HomeAll> {
                 height: screenHeight * 0.03,
                 width: screenWidth * 0.95,
                 child: Text(
-                  "${DateFormat('EEEE, d MMM').format(event[0]['start_date'].toDate())}",
+                  DateFormat('EEEE, d MMM').format(event[0]['start_date'].toDate()),
                   style: const TextStyle(
                       color: Colors.white, fontFamily: 'Poppins', fontSize: 16),
                 ),
@@ -115,7 +115,7 @@ class _HomeAllState extends State<HomeAll> {
                             width: screenWidth * 0.2,
                             alignment: Alignment.topCenter,
                             child: Text(
-                              "${DateFormat('HH:mm').format(event[index]['start_date'].toDate())}",
+                              DateFormat('HH:mm').format(event[index]['start_date'].toDate()),
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontFamily: 'Poppins',

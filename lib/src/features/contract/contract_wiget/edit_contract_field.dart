@@ -18,7 +18,7 @@ class CustomTextField extends StatelessWidget {
       width: 200,
       height: 80,
       decoration: BoxDecoration(
-        color: Color(0xff2B1A6D),
+        color: const Color(0xff2B1A6D),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
@@ -28,21 +28,21 @@ class CustomTextField extends StatelessWidget {
           children: [
             Text(
               '  $label:',
-              style: TextStyle(color: Colors.white, fontSize: 15),
+              style: const TextStyle(color: Colors.white, fontSize: 15),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             isEditMode
                 ? TextField(
                     controller: controller,
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    style: const TextStyle(color: Colors.white, fontSize: 15),
                     enabled: isEditMode,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
                   )
                 : Text(
                     '    ${_truncateText(controller.text)}',
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    style: const TextStyle(color: Colors.white, fontSize: 15),
                   ),
           ],
         ),
@@ -57,7 +57,7 @@ class CustomTextField extends StatelessWidget {
     if (text.length <= maxLength) {
       return text;
     } else {
-      return text.substring(0, maxLength - 3) + '...';
+      return '${text.substring(0, maxLength - 3)}...';
     }
   }
 }

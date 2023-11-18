@@ -64,14 +64,14 @@ class _ContractPageState extends State<ContractPage> {
                         color: Colors.white,
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     IconButton(
-                      icon: Icon(Icons.add),
+                      icon: const Icon(Icons.add),
                       onPressed: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: ((context) => AddContract())));
+                                builder: ((context) => const AddContract())));
                       },
                       color: Colors.white,
                     )
@@ -91,7 +91,7 @@ class _ContractPageState extends State<ContractPage> {
                     fillColor: Colors.grey[200],
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.black),
+                      borderSide: const BorderSide(color: Colors.black),
                     ),
                   ),
                   onChanged: (value) {
@@ -133,17 +133,17 @@ class _ContractPageState extends State<ContractPage> {
                             ListTile(
                               title: Row(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.account_circle,
                                     color: Colors.white,
                                   ),
-                                  SizedBox(width: 10),
+                                  const SizedBox(width: 10),
                                   Text(contact['name']),
                                 ],
                               ),
                               textColor: Colors.white,
                             ),
-                            Divider(
+                           const Divider(
                               height: 1,
                               color: Colors.grey,
                             ),
