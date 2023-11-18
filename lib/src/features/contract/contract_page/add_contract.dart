@@ -128,6 +128,7 @@ class _AddContractState extends State<AddContract> {
                     child: TextButton(
                       onPressed: () {
                         FirestoreService().addContact(name, email, tel);
+                        Navigator.of(context).pop();
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: const Color(0xff5936B4),

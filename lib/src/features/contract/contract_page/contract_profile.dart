@@ -1,20 +1,26 @@
 import 'package:fitgap/src/features/contract/contract_wiget/edit_contract_field.dart';
+import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 
 class ContractProfile extends StatefulWidget {
   final String name;
   final String email;
   final String tel;
+  final String contactId; // Add this line
+  final Function(Map<String, dynamic> updatedData)
+      onSaveChanges; // Add this line
 
   const ContractProfile({
     Key? key,
     required this.name,
     required this.email,
     required this.tel,
+    required this.contactId, // Add this line
+    required this.onSaveChanges, // Add this line
   }) : super(key: key);
 
   @override
-  State<ContractProfile> createState() => _ContractProfileState();
+  _ContractProfileState createState() => _ContractProfileState();
 }
 
 class _ContractProfileState extends State<ContractProfile> {
@@ -40,7 +46,7 @@ class _ContractProfileState extends State<ContractProfile> {
       content: SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [Color(0xff5936B4), Color(0xff362A84)],
@@ -63,13 +69,14 @@ class _ContractProfileState extends State<ContractProfile> {
                         },
                         child: Row(
                           children: [
-                            const Icon(
+                            //cancel | back to contacts
+                            Icon(
                               Icons.chevron_left,
                               color: Colors.white,
                             ),
                             Text(
                               isEditMode ? 'Cancel' : 'Contacts',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16.0,
                                 color: Colors.white,
                               ),
@@ -77,8 +84,17 @@ class _ContractProfileState extends State<ContractProfile> {
                           ],
                         ),
                       ),
+
+                      //done| edit
                       TextButton(
                         onPressed: () {
+                          if (isEditMode) {
+                            widget.onSaveChanges({
+                              'email': emailController.text,
+                              'tel': telController.text,
+                              'note': noteController.text,
+                            });
+                          }
                           setState(() {
                             isEditMode = !isEditMode;
                           });
@@ -93,6 +109,8 @@ class _ContractProfileState extends State<ContractProfile> {
                       ),
                     ],
                   ),
+
+                  //Profile image section
                   const Icon(
                     Icons.account_circle,
                     size: 75,
@@ -101,31 +119,40 @@ class _ContractProfileState extends State<ContractProfile> {
                   Text(
                     widget.name,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
+
+                  //call contact profile field
+                  //email
                   CustomTextField(
                     label: 'Email',
                     controller: emailController,
                     isEditMode: isEditMode,
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
+
+                  //tel
                   CustomTextField(
                     label: 'Tel',
                     controller: telController,
                     isEditMode: isEditMode,
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
+
+                  //Note
                   CustomTextField(
                     label: 'Note',
                     controller: noteController,
                     isEditMode: isEditMode,
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
+
+                  //delete button
                   Visibility(
                     visible: isEditMode,
                     child: Container(
@@ -134,9 +161,10 @@ class _ContractProfileState extends State<ContractProfile> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: TextButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          await FirestoreService()
+                              .deleteContact(widget.contactId);
                           Navigator.of(context).pop();
-                          // You may add code here to delete the contact
                         },
                         child: const Text(
                           'Delete',
