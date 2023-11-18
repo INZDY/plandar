@@ -78,7 +78,25 @@ class FirestoreService {
       });
     }
   }
+
   //CREATE: add contact
+  Future<void> addContact(String name, String email, String tel) async {
+    try {
+      await _initializeCurrentUser();
+      DocumentSnapshot userDoc = userSnapshot.docs.first;
+
+      await userDoc.reference.collection('contacts').add(
+        {
+          'name': name,
+          'email': email,
+          'tel': tel,
+          'note': '-',
+        },
+      );
+    } catch (e) {
+      //print('Error adding contract: $e');
+    }
+  }
 
   //READ: get user details
   Future<Map<String, dynamic>?> getUserData() async {
@@ -131,6 +149,58 @@ class FirestoreService {
     events.sort((a, b) => (a.start_date.compareTo(b.start_date)));
 
     return events;
+  }
+
+  //READ: get events from database Today
+  Future<List<Map<String, dynamic>>> getEventsToday(
+      DateTime now, DateTime midnightToday) async {
+    await _initializeCurrentUser();
+
+    //Get document snapshot
+    DocumentSnapshot userDoc = userSnapshot.docs.first;
+    QuerySnapshot eventsQuery = await userDoc.reference
+        .collection('events')
+        .where('start_date', isGreaterThanOrEqualTo: now)
+        .where('start_date', isLessThan: midnightToday)
+        .orderBy('start_date')
+        .get();
+
+    //for storing events
+    List<Map<String, dynamic>> eventList = [];
+
+    //add all events to list
+    for (QueryDocumentSnapshot eventDoc in eventsQuery.docs) {
+      Map<String, dynamic> eventData = eventDoc.data() as Map<String, dynamic>;
+      eventList.add(eventData);
+    }
+
+    return eventList;
+  }
+
+  //READ: get events from database Tomorrow
+  Future<List<Map<String, dynamic>>> getEventsTomorrow(
+      DateTime midnight, DateTime tomorrow) async {
+    await _initializeCurrentUser();
+
+    //Get document snapshot
+    DocumentSnapshot userDoc = userSnapshot.docs.first;
+    QuerySnapshot eventsQuery = await userDoc.reference
+        .collection('events')
+        .where('start_date', isGreaterThanOrEqualTo: midnight)
+        .where('start_date', isLessThan: tomorrow)
+        .orderBy('start_date')
+        .get();
+
+    //for storing events
+    List<Map<String, dynamic>> eventList = [];
+
+    //add all events to list
+    for (QueryDocumentSnapshot eventDoc in eventsQuery.docs) {
+      Map<String, dynamic> eventData = eventDoc.data() as Map<String, dynamic>;
+      eventList.add(eventData);
+    }
+
+    return eventList;
   }
 
   //READ: get contacts from database
