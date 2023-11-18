@@ -1,6 +1,3 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:fitgap/src/features/contract/contract_page/contract.dart';
 import 'package:fitgap/src/features/contract/contract_wiget/add_contract_field.dart';
 import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:flutter/material.dart';
@@ -47,15 +44,11 @@ class _AddContractState extends State<AddContract> {
                       ),
                       color: Colors.white,
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ContractPage()),
-                        );
+                        Navigator.of(context).pop();
                       },
                     ),
                     const Text(
-                      'Add Contracts',
+                      'Add Contact',
                       textAlign: TextAlign.left,
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
@@ -119,7 +112,7 @@ class _AddContractState extends State<AddContract> {
                   },
                 ),
                 AddContractField(
-                  inputBox: 'Tel',
+                  inputBox: 'Tel.',
                   onValueChanged: (value) {
                     setState(() {
                       tel = value;
@@ -139,8 +132,8 @@ class _AddContractState extends State<AddContract> {
                       style: TextButton.styleFrom(
                         backgroundColor: const Color(0xff5936B4),
                         elevation: 10,
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(35),
                         ),

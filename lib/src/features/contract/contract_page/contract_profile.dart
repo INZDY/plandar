@@ -68,7 +68,7 @@ class _ContractProfileState extends State<ContractProfile> {
                               color: Colors.white,
                             ),
                             Text(
-                              isEditMode ? 'Cancel' : 'Contracts',
+                              isEditMode ? 'Cancel' : 'Contacts',
                               style: const TextStyle(
                                 fontSize: 16.0,
                                 color: Colors.white,

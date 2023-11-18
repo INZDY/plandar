@@ -57,7 +57,7 @@ class _ContractPageState extends State<ContractPage> {
                 Row(
                   children: [
                     const Text(
-                      'Contract',
+                      'Contact',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 25,

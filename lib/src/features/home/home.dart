@@ -19,14 +19,13 @@ class _BottomNavBarState extends State<Home> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(), //choice 0 (most left button) 'HomePage'
 
-    ContractPage(),
+    Text('Index 1: Dashboard'),
 
     AddNewEvent(), //choice 2 (middle button) 'addNewEvent'
 
     Planner(),
-    Text(
-      'Index 4: ',
-    ),
+
+    ContractPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -65,7 +64,7 @@ class _BottomNavBarState extends State<Home> {
               label: 'Planner',
               backgroundColor: Colors.pink),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
+              icon: Icon(Icons.contacts),
               label: 'Settings',
               backgroundColor: Colors.grey),
         ],
