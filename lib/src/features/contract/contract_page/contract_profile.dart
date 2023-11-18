@@ -20,7 +20,7 @@ class ContractProfile extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ContractProfileState createState() => _ContractProfileState();
+  State<ContractProfile> createState() => _ContractProfileState();
 }
 
 class _ContractProfileState extends State<ContractProfile> {
@@ -46,7 +46,7 @@ class _ContractProfileState extends State<ContractProfile> {
       content: SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [Color(0xff5936B4), Color(0xff362A84)],
@@ -70,13 +70,13 @@ class _ContractProfileState extends State<ContractProfile> {
                         child: Row(
                           children: [
                             //cancel | back to contacts
-                            Icon(
+                            const Icon(
                               Icons.chevron_left,
                               color: Colors.white,
                             ),
                             Text(
                               isEditMode ? 'Cancel' : 'Contacts',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16.0,
                                 color: Colors.white,
                               ),
@@ -119,13 +119,13 @@ class _ContractProfileState extends State<ContractProfile> {
                   Text(
                     widget.name,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   //call contact profile field
                   //email
@@ -134,7 +134,7 @@ class _ContractProfileState extends State<ContractProfile> {
                     controller: emailController,
                     isEditMode: isEditMode,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   //tel
                   CustomTextField(
@@ -142,7 +142,7 @@ class _ContractProfileState extends State<ContractProfile> {
                     controller: telController,
                     isEditMode: isEditMode,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   //Note
                   CustomTextField(
@@ -150,7 +150,7 @@ class _ContractProfileState extends State<ContractProfile> {
                     controller: noteController,
                     isEditMode: isEditMode,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   //delete button
                   Visibility(
@@ -161,9 +161,8 @@ class _ContractProfileState extends State<ContractProfile> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: TextButton(
-                        onPressed: () async {
-                          await FirestoreService()
-                              .deleteContact(widget.contactId);
+                        onPressed: () {
+                          FirestoreService().deleteContact(widget.contactId);
                           Navigator.of(context).pop();
                         },
                         child: const Text(

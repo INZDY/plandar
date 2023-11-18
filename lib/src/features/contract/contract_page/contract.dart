@@ -1,12 +1,10 @@
-import 'dart:ui';
-
 import 'package:fitgap/src/features/contract/contract_page/add_contract.dart';
 import 'package:fitgap/src/features/contract/contract_page/contract_profile.dart';
 import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 
 class ContractPage extends StatefulWidget {
-  const ContractPage({Key? key});
+  const ContractPage({super.key});
 
   @override
   State<ContractPage> createState() => _ContractPageState();
@@ -80,7 +78,7 @@ class _ContractPageState extends State<ContractPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: ((context) => AddContract())));
+                              builder: ((context) => const AddContract())));
                     },
                     color: Colors.white,
                   )
@@ -116,12 +114,12 @@ class _ContractPageState extends State<ContractPage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
+                            const Text(
                               "You don't have any contact.",
                               style:
                                   TextStyle(fontSize: 20, color: Colors.white),
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             Image.asset(
                               'assets/icons/nofriend.png',
                             ),
@@ -157,17 +155,17 @@ class _ContractPageState extends State<ContractPage> {
                                 ListTile(
                                   title: Row(
                                     children: [
-                                      Icon(
+                                      const Icon(
                                         Icons.account_circle,
                                         color: Colors.white,
                                       ),
-                                      SizedBox(width: 10),
+                                      const SizedBox(width: 10),
                                       Text(contact['name']),
                                     ],
                                   ),
                                   textColor: Colors.white,
                                 ),
-                                Divider(
+                                const Divider(
                                   height: 1,
                                   color: Colors.grey,
                                 ),
