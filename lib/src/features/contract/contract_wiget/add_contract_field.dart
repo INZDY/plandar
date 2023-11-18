@@ -11,7 +11,7 @@ class AddContractField extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AddContractFieldState createState() => _AddContractFieldState();
+  State<AddContractField> createState() => _AddContractFieldState();
 }
 
 class _AddContractFieldState extends State<AddContractField> {
@@ -33,25 +33,25 @@ class _AddContractFieldState extends State<AddContractField> {
         child: TextField(
           controller: _textController,
           obscureText: false,
-          style: TextStyle(
+          style: const TextStyle(
             color: Color(0xffA6A6A6),
           ),
           decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
+            enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: Color(0xffA6A6A6),
               ),
             ),
-            focusedBorder: OutlineInputBorder(
+            focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: Color(0xffA6A6A6),
               ),
             ),
             labelText: widget.inputBox,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               color: Color(0xffA6A6A6),
             ),
-            prefixIcon: GetIcon(widget.inputBox),
+            prefixIcon: getIcon(widget.inputBox),
           ),
           onChanged: (value) {
             widget.onValueChanged(value);
@@ -61,16 +61,16 @@ class _AddContractFieldState extends State<AddContractField> {
     );
   }
 
-  Icon GetIcon(String inputBox) {
+  Icon getIcon(String inputBox) {
     switch (inputBox) {
       case 'Name':
-        return Icon(Icons.person, color: Color(0xffA6A6A6));
+        return const Icon(Icons.person, color: Color(0xffA6A6A6));
       case 'Email':
-        return Icon(Icons.email, color: Color(0xffA6A6A6));
+        return const Icon(Icons.email, color: Color(0xffA6A6A6));
       case 'Tel':
-        return Icon(Icons.call, color: Color(0xffA6A6A6));
+        return const Icon(Icons.call, color: Color(0xffA6A6A6));
       default:
-        return Icon(Icons.person, color: Color(0xffA6A6A6));
+        return const Icon(Icons.person, color: Color(0xffA6A6A6));
     }
   }
 }

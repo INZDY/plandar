@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:fitgap/src/features/planner/models/modify_event.dart';
 import 'package:fitgap/src/utils/firestore/firestore.dart';
+import 'package:fitgap/src/utils/utility/month_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -12,10 +16,12 @@ class Planner extends StatefulWidget {
 }
 
 class _PlannerState extends State<Planner> {
-  late List<Map<String, dynamic>> _eventsData;
+  late List<EventDetails> _eventsData;
 
   List<Appointment> appointmentDetails = <Appointment>[];
   late _AppointmentDataSource dataSource;
+
+  DateTime selectedDate = DateTime.now();
 
   bool isLoading = true;
 
@@ -109,7 +115,17 @@ class _PlannerState extends State<Planner> {
                     ),
 
                     const SizedBox(
+                      height: 15,
+                    ),
+
+                    Container(
+                      alignment: Alignment.centerLeft,
                       height: 50,
+                      child: Text(
+                        '${selectedDate.day} '
+                        '${NumberToMonthMap.monthsInYear[selectedDate.month]} '
+                        '${selectedDate.year}',
+                      ),
                     ),
 
                     //Appointments
@@ -120,14 +136,13 @@ class _PlannerState extends State<Planner> {
                           itemCount: appointmentDetails.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
-                                alignment: Alignment.center,
-                                height: 55,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: appointmentDetails[index].color,
-                                ),
-                                child: ListTile(
-                                  // Alignment: ListTileTitleAlignment.center,
+                              alignment: Alignment.center,
+                              height: 55,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: appointmentDetails[index].color,
+                              ),
+                              child: ListTile(
                                   trailing: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: appointmentDetails[index].isAllDay
@@ -164,18 +179,24 @@ class _PlannerState extends State<Planner> {
                                             ),
                                           ],
                                   ),
-                                  title: Container(
-                                      child: Text(
-                                          appointmentDetails[index].title,
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white))),
-                                ));
+                                  title: Text(
+                                    appointmentDetails[index].title,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white),
+                                  ),
+                                  onTap: () async{
+                                    bool isChanged = await eventPopup(
+                                        context, appointmentDetails[index]);
+                                    
+                                    isChanged ? await loadEvents() : null;
+                                  }),
+                            );
                           },
                           separatorBuilder: (BuildContext context, int index) =>
                               const Divider(
-                            height: 5,
+                            height: 15,
                           ),
                         ),
                       ),
@@ -187,8 +208,30 @@ class _PlannerState extends State<Planner> {
     );
   }
 
+  Future<bool> eventPopup(BuildContext context, Appointment appointment) {
+    Completer<bool> completer = Completer<bool>();
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            width: double.infinity,
+            height: double.infinity,
+            alignment: Alignment.center,
+            color: const Color.fromARGB(0, 45, 45, 45),
+            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+            child: ModifyEvent(
+              eventDetail: appointment,
+            ),
+          );
+        }).then((value) => completer.complete(value));
+        
+    return completer.future;
+  }
+
   void selectionChanged(CalendarSelectionDetails calendarSelectionDetails) {
     getSelectedDateAppointments(calendarSelectionDetails.date);
+    selectedDate = calendarSelectionDetails.date!;
   }
 
   void getSelectedDateAppointments(DateTime? selectedDate) {
@@ -208,16 +251,29 @@ class _PlannerState extends State<Planner> {
         final Appointment? occurrenceAppointment =
             dataSource.getOccurrenceAppointment(appointment, selectedDate!, '')
                 as Appointment?;
-        if ((DateTime(appointment.startTime.year, appointment.startTime.month,
-                    appointment.startTime.day) ==
-                DateTime(
-                    selectedDate.year, selectedDate.month, selectedDate.day)) ||
+
+        int appStartYear = appointment.startTime.year;
+        int appStartMonth = appointment.startTime.month;
+        int appStartDay = appointment.startTime.day;
+        int appEndYear = appointment.endTime.year;
+        int appEndMonth = appointment.endTime.month;
+        int appEndDay = appointment.endTime.day;
+        int selYear = selectedDate.year;
+        int selMonth = selectedDate.month;
+        int selDay = selectedDate.day;
+
+        //Check if event is in that day
+        if ((DateTime(appStartYear, appStartMonth, appStartDay) ==
+                DateTime(selYear, selMonth, selDay)) ||
+            (DateTime(appEndYear, appEndMonth, appEndDay) ==
+                DateTime(selYear, selMonth, selDay)) ||
             occurrenceAppointment != null) {
           setState(() {
             appointmentDetails.add(appointment);
           });
         }
       }
+      // print(appointmentDetails);
     });
   }
 
@@ -226,16 +282,19 @@ class _PlannerState extends State<Planner> {
 
     for (var event in _eventsData) {
       //color from value to color
-      int colorValue = int.parse(event['tag']);
+      int colorValue = int.parse(event.tag);
       Color color = Color(colorValue).withOpacity(1);
 
       appointments.add(Appointment(
-          title: event['title'],
-          startTime: event['start_date'].toDate(),
-          endTime: event['end_date'].toDate(),
-          color: color,
-          isAllDay: event['allday'],
-          location: event['location']));
+        id: event.id,
+        title: event.title,
+        startTime: event.start_date.toDate(),
+        endTime: event.end_date.toDate(),
+        color: color,
+        isAllDay: event.allday,
+        location: event.location,
+        people: event.people,
+      ));
     }
     return _AppointmentDataSource(appointments);
   }
@@ -247,18 +306,20 @@ class Appointment {
     required this.startTime,
     required this.endTime,
     required this.title,
+    required this.id,
     this.isAllDay = false,
     this.color = Colors.transparent,
     this.location = '',
     this.people = const [],
   });
 
+  String id;
+  String title;
+  String location;
   DateTime startTime;
   DateTime endTime;
-  String title;
-  Color color;
   bool isAllDay;
-  String location;
+  Color color;
   List<String> people;
 }
 
@@ -290,5 +351,19 @@ class _AppointmentDataSource extends CalendarDataSource {
   @override
   Color getColor(int index) {
     return appointments![index].color;
+  }
+
+  @override
+  String getLocation(int index) {
+    return appointments![index].location;
+  }
+
+  List<String> getPeople(int index) {
+    return appointments![index].people;
+  }
+
+  @override
+  String getId(int index) {
+    return appointments![index].id;
   }
 }
