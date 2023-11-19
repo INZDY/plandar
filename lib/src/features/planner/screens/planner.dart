@@ -186,10 +186,10 @@ class _PlannerState extends State<Planner> {
                                         fontWeight: FontWeight.w600,
                                         color: Colors.white),
                                   ),
-                                  onTap: () async{
+                                  onTap: () async {
                                     bool isChanged = await eventPopup(
                                         context, appointmentDetails[index]);
-                                    
+
                                     isChanged ? await loadEvents() : null;
                                   }),
                             );
@@ -225,7 +225,7 @@ class _PlannerState extends State<Planner> {
             ),
           );
         }).then((value) => completer.complete(value));
-        
+
     return completer.future;
   }
 
@@ -252,21 +252,25 @@ class _PlannerState extends State<Planner> {
             dataSource.getOccurrenceAppointment(appointment, selectedDate!, '')
                 as Appointment?;
 
-        int appStartYear = appointment.startTime.year;
-        int appStartMonth = appointment.startTime.month;
-        int appStartDay = appointment.startTime.day;
-        int appEndYear = appointment.endTime.year;
-        int appEndMonth = appointment.endTime.month;
-        int appEndDay = appointment.endTime.day;
-        int selYear = selectedDate.year;
-        int selMonth = selectedDate.month;
-        int selDay = selectedDate.day;
+        DateTime appointmentStart = toDateTime(appointment.startTime.day,
+            appointment.startTime.month, appointment.startTime.year);
+
+        DateTime appointmentEnd = toDateTime(appointment.endTime.day,
+            appointment.endTime.month, appointment.endTime.year);
+
+        DateTime selected =
+            toDateTime(selectedDate.day, selectedDate.month, selectedDate.year);
 
         //Check if event is in that day
-        if ((DateTime(appStartYear, appStartMonth, appStartDay) ==
-                DateTime(selYear, selMonth, selDay)) ||
-            (DateTime(appEndYear, appEndMonth, appEndDay) ==
-                DateTime(selYear, selMonth, selDay)) ||
+        //Conditions:
+        //1. Date at start date
+        //2. Date at end date
+        //3. Date in between
+        if (
+          selected == appointmentStart ||
+            selected == appointmentEnd ||
+            (selected.isAfter(appointmentStart) &&
+                selected.isBefore(appointmentEnd)) ||
             occurrenceAppointment != null) {
           setState(() {
             appointmentDetails.add(appointment);
@@ -275,6 +279,11 @@ class _PlannerState extends State<Planner> {
       }
       // print(appointmentDetails);
     });
+  }
+
+  //int day month year to DateTime
+  DateTime toDateTime(int day, int month, int year) {
+    return DateTime(year, month, day);
   }
 
   _AppointmentDataSource _getCalendarDataSource() {
