@@ -1,3 +1,4 @@
+import 'package:fitgap/src/features/contract/contract_page/contract.dart';
 import 'package:fitgap/src/features/planner/screens/planner.dart';
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/features/addevent/addevent.dart';
@@ -24,9 +25,8 @@ class _BottomNavBarState extends State<Home> {
     AddNewEvent(), //choice 2 (middle button) 'addNewEvent'
 
     Planner(),
-    Text(
-      'Index 4: ',
-    ),
+
+    ContractPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -65,7 +65,7 @@ class _BottomNavBarState extends State<Home> {
               label: 'Planner',
               backgroundColor: Colors.pink),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
+              icon: Icon(Icons.contacts),
               label: 'Settings',
               backgroundColor: Colors.grey),
         ],
