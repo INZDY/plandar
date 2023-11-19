@@ -58,7 +58,8 @@ class _ModifyEventState extends State<ModifyEvent> {
   bool isEndDateExpanded = false;
   bool isEndTimeExpanded = false;
 
-  bool allowAdded = false;
+  //allow update from start
+  bool allowUpdate = true;
 
   //init startdate/enddate without hours and mins
   DateTime startDate = DateFormat('yyyy-MM-dd')
@@ -85,14 +86,16 @@ class _ModifyEventState extends State<ModifyEvent> {
     setState(() {
       //use controller to set/update the text
       _titleTextController.text = event.title;
+      //also set current event titletext at load
+      titleText = event.title;
       _locationTextController.text = event.location;
       isAllDay = event.isAllDay;
       startDate = event.startTime;
       endDate = event.endTime;
       startHours = event.startTime.hour.toString().padLeft(2, '0');
-      startHours = event.startTime.minute.toString().padLeft(2, '0');
+      startMins = event.startTime.minute.toString().padLeft(2, '0');
       endHours = event.endTime.hour.toString().padLeft(2, '0');
-      endHours = event.endTime.minute.toString().padLeft(2, '0');
+      endMins = event.endTime.minute.toString().padLeft(2, '0');
       finalColor = event.color.value.toString();
       peoplelist = event.people;
     });
@@ -114,12 +117,12 @@ class _ModifyEventState extends State<ModifyEvent> {
           actions: [
             TextButton(
               onPressed: () {
-                allowAdded ? updateEvent() : null;
+                allowUpdate ? updateEvent() : null;
                 Navigator.pop(context, true);
               },
               child: Text(
                 'Update',
-                style: TextStyle(color: allowAdded ? Colors.red : Colors.grey),
+                style: TextStyle(color: allowUpdate ? Colors.red : Colors.grey),
               ),
             ),
           ],
@@ -1017,58 +1020,37 @@ class _ModifyEventState extends State<ModifyEvent> {
   }
 
   void checkcondition() {
+    DateTime endDateTime = DateTime(endDate.year, endDate.month, endDate.day,
+        int.parse(endHours), int.parse(endMins));
+
+    DateTime startDateTime = DateTime(startDate.year, startDate.month,
+        startDate.day, int.parse(startHours), int.parse(startMins));
+
     if (titleText.isNotEmpty) {
-      if (isAllDay == true) {
-        // endDateTime is equal or more than startDateTime only when allDay switch is on
-        if (endDate.isAtSameMomentAs(startDate) ||
-            endDate
-                .add(Duration(
-                    hours: int.parse(endHours), minutes: int.parse(endMins)))
-                .isAfter(startDate.add(Duration(
-                    hours: int.parse(startHours),
-                    minutes: int.parse(startMins))))) {
-          setState(
-            () {
-              allowAdded = true;
-            },
-          );
-        } else {
-          setState(() {
-            allowAdded = false;
-          });
-        }
-        // endDateTime must more than startDateTime when allDay switch is off
+      //(isAllDay AND same time) OR end more than start)
+      if ((isAllDay == true && endDate.isAtSameMomentAs(startDate)) ||
+          endDateTime.isAfter(startDateTime)) {
+        setState(() {
+          allowUpdate = true;
+        });
       } else {
-        if (endDate
-            .add(Duration(
-                hours: int.parse(endHours), minutes: int.parse(endMins)))
-            .isAfter(startDate.add(Duration(
-                hours: int.parse(startHours),
-                minutes: int.parse(startMins))))) {
-          setState(
-            () {
-              allowAdded = true;
-            },
-          );
-        } else {
-          setState(() {
-            allowAdded = false;
-          });
-        }
+        setState(() {
+          allowUpdate = false;
+        });
       }
     } else {
       setState(() {
-        allowAdded = false;
+        allowUpdate = false;
       });
     }
   }
 
   void updateEvent() async {
     try {
-      DateTime startDateTime = startDate.add(Duration(
-          hours: int.parse(startHours), minutes: int.parse(startMins)));
-      DateTime endDateTime = endDate.add(
-          Duration(hours: int.parse(endHours), minutes: int.parse(endMins)));
+      DateTime endDateTime = DateTime(endDate.year, endDate.month, endDate.day,
+          int.parse(endHours), int.parse(endMins));
+      DateTime startDateTime = DateTime(startDate.year, startDate.month,
+          startDate.day, int.parse(startHours), int.parse(startMins));
 
       await FirestoreService().updateEvent(
           widget.eventDetail.id,

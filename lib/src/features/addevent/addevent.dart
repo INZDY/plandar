@@ -210,45 +210,23 @@ class _AddNewEventState extends State<AddNewEvent> {
   }
 
   void checkcondition() {
-    if (titleText.isNotEmpty) {
-      if (isAllDay == true) {
-        // endDateTime is equal or more than startDateTime only when allDay switch is on
+    DateTime endDateTime = DateTime(endDate.year, endDate.month, endDate.day,
+        int.parse(endHours), int.parse(endMins));
 
-        if (endDate.isAtSameMomentAs(startDate) ||
-            endDate
-                .add(Duration(
-                    hours: int.parse(endHours), minutes: int.parse(endMins)))
-                .isAfter(startDate.add(Duration(
-                    hours: int.parse(startHours),
-                    minutes: int.parse(startMins))))) {
-          setState(
-            () {
-              allowAdded = true;
-            },
-          );
-        } else {
-          setState(() {
-            allowAdded = false;
-          });
-        }
-        // endDateTime must more than startDateTime when allDay switch is off
+    DateTime startDateTime = DateTime(startDate.year, startDate.month,
+        startDate.day, int.parse(startHours), int.parse(startMins));
+
+    if (titleText.isNotEmpty) {
+      //(isAllDay AND same time) OR end more than start)
+      if ((isAllDay == true && endDate.isAtSameMomentAs(startDate)) ||
+          endDateTime.isAfter(startDateTime)) {
+        setState(() {
+          allowAdded = true;
+        });
       } else {
-        if (endDate
-            .add(Duration(
-                hours: int.parse(endHours), minutes: int.parse(endMins)))
-            .isAfter(startDate.add(Duration(
-                hours: int.parse(startHours),
-                minutes: int.parse(startMins))))) {
-          setState(
-            () {
-              allowAdded = true;
-            },
-          );
-        } else {
-          setState(() {
-            allowAdded = false;
-          });
-        }
+        setState(() {
+          allowAdded = false;
+        });
       }
     } else {
       setState(() {
@@ -263,10 +241,10 @@ class _AddNewEventState extends State<AddNewEvent> {
         isInprogress = true;
       });
 
-      DateTime startDateTime = startDate.add(Duration(
-          hours: int.parse(startHours), minutes: int.parse(startMins)));
-      DateTime endDateTime = endDate.add(
-          Duration(hours: int.parse(endHours), minutes: int.parse(endMins)));
+      DateTime endDateTime = DateTime(endDate.year, endDate.month, endDate.day,
+          int.parse(endHours), int.parse(endMins));
+      DateTime startDateTime = DateTime(startDate.year, startDate.month,
+          startDate.day, int.parse(startHours), int.parse(startMins));
 
       await FirestoreService().addEvent(titleText, locationText, startDateTime,
           endDateTime, isAllDay, finalColor, peoplelist);

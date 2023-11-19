@@ -289,12 +289,20 @@ class FirestoreService {
 
   //DELETE: delete events
   //**Note**
-  //Should need to loop delete subcollection before parent (does not need)
+  //Need to loop delete subcollection before parent
   Future<void> deleteEvent(String eventId) async {
     await _initializeCurrentUser();
     DocumentSnapshot userDoc = userSnapshot.docs.first;
     DocumentReference eventRef =
         userDoc.reference.collection('events').doc(eventId);
+
+    CollectionReference peopleCollection = eventRef.collection('people');
+
+    //delete people subcollection first
+    QuerySnapshot peopleData = await peopleCollection.get();
+    for (QueryDocumentSnapshot doc in peopleData.docs) {
+      await doc.reference.delete();
+    }
 
     //Delete parent
     await eventRef.delete();
