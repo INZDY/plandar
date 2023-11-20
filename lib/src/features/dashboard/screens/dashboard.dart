@@ -6,7 +6,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/utils/firestore/firestore.dart';
-import 'package:fitgap/src/features/dashboard/models/modify_event.dart';
+import 'package:fitgap/src/features/dashboard/models/PopupDashboard.dart';
 import 'package:intl/intl.dart';
 
 class DashBoard extends StatefulWidget {
@@ -522,7 +522,7 @@ class _DashBoardState extends State<DashBoard> {
             alignment: Alignment.center,
             color: const Color.fromARGB(0, 45, 45, 45),
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-            child: ModifyEvent(
+            child: PopupDashboard(
               eventDetail: event,
             ),
           );

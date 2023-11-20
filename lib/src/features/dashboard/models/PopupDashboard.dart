@@ -34,16 +34,16 @@ import 'package:fitgap/src/common_widgets/snackbar.dart';
 
 import 'package:fitgap/src/utils/firestore/firestore.dart';
 
-class ModifyEvent extends StatefulWidget {
+class PopupDashboard extends StatefulWidget {
   final EventDetails eventDetail;
 
-  const ModifyEvent({super.key, required this.eventDetail});
+  const PopupDashboard({super.key, required this.eventDetail});
 
   @override
-  State<ModifyEvent> createState() => _ModifyEventState();
+  State<PopupDashboard> createState() => _PopupDashboardState();
 }
 
-class _ModifyEventState extends State<ModifyEvent> {
+class _PopupDashboardState extends State<PopupDashboard> {
   final TextEditingController _titleTextController = TextEditingController();
   final TextEditingController _locationTextController = TextEditingController();
   String titleText = '';
