@@ -6,7 +6,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/utils/firestore/firestore.dart';
-import 'package:fitgap/src/features/dashboard/modify_event.dart';
+import 'package:fitgap/src/features/dashboard/models/modify_event.dart';
 import 'package:intl/intl.dart';
 
 class DashBoard extends StatefulWidget {
