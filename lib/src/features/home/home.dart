@@ -3,6 +3,7 @@ import 'package:fitgap/src/features/planner/screens/planner.dart';
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/features/addevent/addevent.dart';
 import 'package:fitgap/src/features/home/homepage.dart';
+import 'package:fitgap/src/features/dashboard/screens/dashboard.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -19,7 +20,7 @@ class _BottomNavBarState extends State<Home> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(), //choice 0 (most left button) 'HomePage'
 
-    Text('Index 1: Dashboard'),
+    DashBoard(),
 
     AddNewEvent(), //choice 2 (middle button) 'addNewEvent'
 
