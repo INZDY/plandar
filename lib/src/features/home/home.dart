@@ -1,3 +1,4 @@
+import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:fitgap/src/features/contract/contract_page/contract.dart';
 import 'package:fitgap/src/features/planner/screens/planner.dart';
 import 'package:flutter/material.dart';
@@ -9,69 +10,105 @@ class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
-  State<Home> createState() => _BottomNavBarState();
+  State<Home> createState() => _HomeState();
 }
 
 //widget switching
-class _BottomNavBarState extends State<Home> {
-  int _selectedIndex = 0;
+class _HomeState extends State<Home> {
+  final _pageController = PageController(initialPage: 0);
+  final _controller = NotchBottomBarController(index: 0);
 
   //widget list
-  static const List<Widget> _widgetOptions = <Widget>[
+  static const List<Widget> _pageOptions = <Widget>[
     HomePage(), //choice 0 (most left button) 'HomePage'
-
     DashBoard(),
-
     AddNewEvent(), //choice 2 (middle button) 'addNewEvent'
-
     Planner(),
-
     ContractPage(),
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: SafeArea(
-        child: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: PageView(
+          controller: _pageController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: List.generate(
+              _pageOptions.length, (index) => _pageOptions[index]),
         ),
-      ),
+        extendBody: true,
 
-      //Navbar
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-              backgroundColor: Colors.red),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard),
-              label: 'Dashboard',
-              backgroundColor: Colors.green),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.add_circle_outline),
-              label: 'Add Event',
-              backgroundColor: Colors.blue),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.event),
-              label: 'Planner',
-              backgroundColor: Colors.pink),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.contacts),
-              label: 'Settings',
-              backgroundColor: Colors.grey),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.white,
-        onTap: _onItemTapped,
+        //Navbar
+        bottomNavigationBar: AnimatedNotchBottomBar(
+          color: const Color(0xFF5936B4),
+          notchBottomBarController: _controller,
+          bottomBarItems: const [
+            //home
+            BottomBarItem(
+              inActiveItem: Icon(
+                Icons.home_filled,
+                color: Colors.white,
+              ),
+              activeItem: Icon(
+                Icons.home_filled,
+                color: Colors.black,
+              ),
+            ),
+
+            //dashboard
+            BottomBarItem(
+              inActiveItem: Icon(
+                Icons.dashboard_outlined,
+                color: Colors.white,
+              ),
+              activeItem: Icon(
+                Icons.dashboard_outlined,
+                color: Colors.black,
+              ),
+            ),
+
+            //add event
+            BottomBarItem(
+              inActiveItem: Icon(
+                Icons.add_circle_outline,
+                color: Colors.white,
+              ),
+              activeItem: Icon(
+                Icons.add_circle_outline,
+                color: Colors.black,
+              ),
+            ),
+
+            //planner
+            BottomBarItem(
+              inActiveItem: Icon(
+                Icons.calendar_month_outlined,
+                color: Colors.white,
+              ),
+              activeItem: Icon(
+                Icons.calendar_month_outlined,
+                color: Colors.black,
+              ),
+            ),
+
+            //contacts
+            BottomBarItem(
+              inActiveItem: Icon(
+                Icons.contacts_outlined,
+                color: Colors.white,
+              ),
+              activeItem: Icon(
+                Icons.contacts_outlined,
+                color: Colors.black,
+              ),
+            ),
+          ],
+          onTap: (index) {
+            _pageController.jumpToPage(index);
+          },
+        ),
       ),
     );
   }
