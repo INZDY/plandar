@@ -34,10 +34,7 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.transparent,
         body: PageView(
           controller: _pageController,
-          physics: const ScrollPhysics(),
-          onPageChanged: (index) {
-            _controller.jumpTo(index);
-          },
+          physics: const NeverScrollableScrollPhysics(),
           children: _pageOptions,
         ),
         extendBody: true,
