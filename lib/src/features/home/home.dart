@@ -19,12 +19,12 @@ class _HomeState extends State<Home> {
   final _controller = NotchBottomBarController(index: 0);
 
   //widget list
-  static const List<Widget> _pageOptions = <Widget>[
-    HomePage(), //choice 0 (most left button) 'HomePage'
-    DashBoard(),
-    AddNewEvent(), //choice 2 (middle button) 'addNewEvent'
-    Planner(),
-    ContractPage(),
+  final List<Widget> _pageOptions = <Widget>[
+    const HomePage(), //choice 0 (most left button) 'HomePage'
+    const DashBoard(),
+    const AddNewEvent(), //choice 2 (middle button) 'addNewEvent'
+    const Planner(),
+    const ContractPage(),
   ];
 
   @override
@@ -34,80 +34,89 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.transparent,
         body: PageView(
           controller: _pageController,
-          physics: const NeverScrollableScrollPhysics(),
-          children: List.generate(
-              _pageOptions.length, (index) => _pageOptions[index]),
+          physics: const ScrollPhysics(),
+          onPageChanged: (index) {
+            _controller.jumpTo(index);
+          },
+          children: _pageOptions,
         ),
         extendBody: true,
 
         //Navbar
-        bottomNavigationBar: AnimatedNotchBottomBar(
-          color: const Color(0xFF5936B4),
-          notchBottomBarController: _controller,
-          bottomBarItems: const [
-            //home
-            BottomBarItem(
-              inActiveItem: Icon(
-                Icons.home_filled,
-                color: Colors.white,
+        bottomNavigationBar: SizedBox(
+          //height is here to prevent keyboard pushing
+          height: 100,
+          child: AnimatedNotchBottomBar(
+            color: const Color(0xFF5936B4),
+            notchBottomBarController: _controller,
+            bottomBarItems: const [
+              //home
+              BottomBarItem(
+                inActiveItem: Icon(
+                  Icons.home_filled,
+                  color: Colors.white,
+                ),
+                activeItem: Icon(
+                  Icons.home_filled,
+                  color: Colors.black,
+                ),
               ),
-              activeItem: Icon(
-                Icons.home_filled,
-                color: Colors.black,
+        
+              //dashboard
+              BottomBarItem(
+                inActiveItem: Icon(
+                  Icons.dashboard_outlined,
+                  color: Colors.white,
+                ),
+                activeItem: Icon(
+                  Icons.dashboard_outlined,
+                  color: Colors.black,
+                ),
               ),
-            ),
-
-            //dashboard
-            BottomBarItem(
-              inActiveItem: Icon(
-                Icons.dashboard_outlined,
-                color: Colors.white,
+        
+              //add event
+              BottomBarItem(
+                inActiveItem: Icon(
+                  Icons.add_circle_outline,
+                  color: Colors.white,
+                ),
+                activeItem: Icon(
+                  Icons.add_circle_outline,
+                  color: Colors.black,
+                ),
               ),
-              activeItem: Icon(
-                Icons.dashboard_outlined,
-                color: Colors.black,
+        
+              //planner
+              BottomBarItem(
+                inActiveItem: Icon(
+                  Icons.calendar_month_outlined,
+                  color: Colors.white,
+                ),
+                activeItem: Icon(
+                  Icons.calendar_month_outlined,
+                  color: Colors.black,
+                ),
               ),
-            ),
-
-            //add event
-            BottomBarItem(
-              inActiveItem: Icon(
-                Icons.add_circle_outline,
-                color: Colors.white,
+        
+              //contacts
+              BottomBarItem(
+                inActiveItem: Icon(
+                  Icons.contacts_outlined,
+                  color: Colors.white,
+                ),
+                activeItem: Icon(
+                  Icons.contacts_outlined,
+                  color: Colors.black,
+                ),
               ),
-              activeItem: Icon(
-                Icons.add_circle_outline,
-                color: Colors.black,
-              ),
-            ),
-
-            //planner
-            BottomBarItem(
-              inActiveItem: Icon(
-                Icons.calendar_month_outlined,
-                color: Colors.white,
-              ),
-              activeItem: Icon(
-                Icons.calendar_month_outlined,
-                color: Colors.black,
-              ),
-            ),
-
-            //contacts
-            BottomBarItem(
-              inActiveItem: Icon(
-                Icons.contacts_outlined,
-                color: Colors.white,
-              ),
-              activeItem: Icon(
-                Icons.contacts_outlined,
-                color: Colors.black,
-              ),
-            ),
-          ],
-          onTap: (index) {
-            _pageController.jumpToPage(index);
-          },
+            ],
+            onTap: (index) {
+              _pageController.jumpToPage(index);
+            },
+            // onTap: (index) {
+            //   _pageController.jumpToPage(index);
+            // },
+          ),
         ),
       ),
     );
