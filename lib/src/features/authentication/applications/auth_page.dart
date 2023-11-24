@@ -1,7 +1,7 @@
 import 'package:fitgap/src/features/authentication/applications/login_signup_switch.dart';
+import 'package:fitgap/src/features/home/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/utils/auth/auth.dart';
-import 'package:fitgap/src/features/home/home.dart';
 // import 'package:fitgap/pages/login.dart';
 
 //Main Page : Auth/Home

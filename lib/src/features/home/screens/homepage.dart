@@ -9,8 +9,7 @@
         -Fifth column element : plain text
         -Sixth column element : tomorrow event card & see all option (if avaliable)
 */
-
-import 'package:fitgap/src/features/home/homeall.dart';
+import 'package:fitgap/src/features/home/screens/homeall.dart';
 import 'package:fitgap/src/features/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/utils/firestore/firestore.dart';

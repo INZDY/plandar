@@ -1,9 +1,9 @@
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:fitgap/src/features/contract/contract_page/contract.dart';
+import 'package:fitgap/src/features/home/screens/homepage.dart';
 import 'package:fitgap/src/features/planner/screens/planner.dart';
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/features/addevent/addevent.dart';
-import 'package:fitgap/src/features/home/homepage.dart';
 import 'package:fitgap/src/features/dashboard/screens/dashboard.dart';
 
 class Home extends StatefulWidget {
