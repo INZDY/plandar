@@ -34,13 +34,14 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = true;
 
   //weather
-  final _weatherService = WeatherService(WeatherAPI.apiKey);
+  final _weatherService = WeatherService(WeatherAPIKey.weatherAPI);
   Weather? _weather;
 
   @override
   void initState() {
     super.initState();
     loadEvents();
+    fetchWeather();
   }
 
   //get event and user's data, set to variable
@@ -78,10 +79,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   fetchWeather() async {
-    String cityName = await _weatherService.getCurrentCity();
+    String cityName = await _weatherService.getCurrentPosition();
 
     try {
-      final weather = await _weatherService.getWeather(cityName);
+      final weather = await _weatherService.getCurrentWeather(cityName);
       setState(() {
         _weather = weather;
       });
@@ -164,9 +165,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: screenWidth * 0.05),
-                    child: const Text(
-                      'Rainy 27°',
-                      style: TextStyle(
+                    child: Text(
+                      '${_weather?.condition ?? ''} '
+                      '${_weather?.temperature.round()}°C, '
+                      '${_weather?.cityName ?? ''}',
+                      style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 18,
                           color: Colors.white),

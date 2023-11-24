@@ -6,14 +6,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 class WeatherService {
-  static const baseUrl = 'http://api.openweathermap.org/data/2.5/weather';
+  static const baseUrl = 'http://api.weatherapi.com/v1';
   final String apiKey;
 
   WeatherService(this.apiKey);
 
-  Future<Weather> getWeather(String cityName) async {
+  Future<Weather> getCurrentWeather(String position) async {
     final response = await http
-        .get(Uri.parse('$baseUrl?q=$cityName&appid=$apiKey&units=metric'));
+        .get(Uri.parse('$baseUrl/current.json?key=$apiKey&q=$position'));
 
     if (response.statusCode == 200) {
       return Weather.fromJson(jsonDecode(response.body));
@@ -22,7 +22,7 @@ class WeatherService {
     }
   }
 
-  Future<String> getCurrentCity() async {
+  Future<String> getCurrentPosition() async {
     //get permission
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -38,8 +38,10 @@ class WeatherService {
         await placemarkFromCoordinates(position.latitude, position.longitude);
 
     //extract city name from first placemark
-    String? city = placemarks[0].locality;
+    String currentPosition = '${position.latitude},${position.longitude}';
+    print(placemarks.first.locality);
+    print(currentPosition);
 
-    return city ?? '';
+    return currentPosition;
   }
 }
