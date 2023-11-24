@@ -9,6 +9,9 @@
         -Fifth column element : plain text
         -Sixth column element : tomorrow event card & see all option (if avaliable)
 */
+import 'package:fitgap/src/features/home/applications/weather_service.dart';
+import 'package:fitgap/src/features/home/models/weather_api_key.dart';
+import 'package:fitgap/src/features/home/models/weather_model.dart';
 import 'package:fitgap/src/features/home/screens/homeall.dart';
 import 'package:fitgap/src/features/settings/settings.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +32,10 @@ class _HomePageState extends State<HomePage> {
   Map<String, dynamic>? firstEventToday;
   Map<String, dynamic>? firstEventTomorrow;
   bool isLoading = true;
+
+  //weather
+  final _weatherService = WeatherService(WeatherAPI.apiKey);
+  Weather? _weather;
 
   @override
   void initState() {
@@ -68,6 +75,19 @@ class _HomePageState extends State<HomePage> {
         firstEventTomorrow = null;
       }
     });
+  }
+
+  fetchWeather() async {
+    String cityName = await _weatherService.getCurrentCity();
+
+    try {
+      final weather = await _weatherService.getWeather(cityName);
+      setState(() {
+        _weather = weather;
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
