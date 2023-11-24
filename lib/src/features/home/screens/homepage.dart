@@ -29,28 +29,23 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late List<Map<String, dynamic>> eventsDataToday;
   late List<Map<String, dynamic>> eventsDataTomorrow;
-  Map<String, dynamic>? userData;
-  Map<String, dynamic>? firstEventToday;
-  Map<String, dynamic>? firstEventTomorrow;
+  late Map<String, dynamic> userData;
+  late Map<String, dynamic> firstEventToday;
+  late Map<String, dynamic> firstEventTomorrow;
   bool isLoading = true;
 
   //weather
   final _weatherService = WeatherService(WeatherAPIKey.weatherAPI);
-  Weather? _weatherCurrent;
-  List<WeatherForecast>? _weatherForecast;
+  late Weather _weatherCurrent;
+  late List<WeatherForecast> _weatherForecast;
   late WeatherForecast firstWeatherToday;
   late WeatherForecast firstWeatherTomorrow;
   bool isLoadingWeather = true;
 
-  @override
-  void initState() {
-    super.initState();
-    loadEvents();
-    fetchWeather();
-  }
-
   //get event and user's data, set to variable
   Future loadEvents() async {
+    final userDetail = await FirestoreService().getUserData();
+
     DateTime now = DateTime.now();
     final List<Map<String, dynamic>> eventsToday = await FirestoreService()
         .getEventsInDay(DateTime(now.year, now.month, now.day),
@@ -58,21 +53,20 @@ class _HomePageState extends State<HomePage> {
     final List<Map<String, dynamic>> eventsTomorrow = await FirestoreService()
         .getEventsInDay(DateTime(now.year, now.month, now.day + 1),
             DateTime(now.year, now.month, now.day + 2));
-    final userDetail = await FirestoreService().getUserData();
 
     setState(() {
       eventsDataToday = eventsToday;
       eventsDataTomorrow = eventsTomorrow;
-      userData = userDetail;
+      userData = userDetail ?? {};
       if (eventsToday.isNotEmpty) {
         firstEventToday = eventsToday[0];
       } else {
-        firstEventToday = null;
+        firstEventToday = {};
       }
       if (eventsTomorrow.isNotEmpty) {
         firstEventTomorrow = eventsTomorrow[0];
       } else {
-        firstEventTomorrow = null;
+        firstEventTomorrow = {};
       }
     });
 
@@ -97,25 +91,35 @@ class _HomePageState extends State<HomePage> {
         _weatherCurrent = weatherCurrent;
         _weatherForecast = weatherForecast;
 
+        //FIND SOLUTION FOR EMPTY MAP
         //If all day, use 12 o'clock
-        int todayEventDay = firstEventToday!['start_date'].toDate().day;
-        int todayEventHour = firstEventToday!['allday']
-            ? 12
-            : firstEventToday!['start_date'].toDate().hour;
+        // int todayEventDay = firstEventToday['start_date'].toDate().day;
+        // int todayEventHour = firstEventToday['allday']
+        //     ? 12
+        //     : firstEventToday['start_date'].toDate().hour;
 
-        int tomorrowEventDay = firstEventTomorrow!['start_date'].toDate().day;
-        int tomorrowEventHour = firstEventTomorrow!['allday']
-            ? 12
-            : firstEventTomorrow!['start_date'].toDate().hour;
+        // int tomorrowEventDay = firstEventTomorrow['start_date'].toDate().day;
+        // int tomorrowEventHour = firstEventTomorrow['allday']
+        //     ? 12
+        //     : firstEventTomorrow['start_date'].toDate().hour;
 
         for (WeatherForecast weather in weatherForecast) {
           DateTime weatherTime = DateTime.parse(weather.time);
 
-          if (weatherTime.day == todayEventDay &&
-              weatherTime.hour == todayEventHour) {
+          if (firstEventToday.isNotEmpty &&
+              weatherTime.day == firstEventToday['start_date'].toDate().day &&
+              weatherTime.hour ==
+                  (firstEventToday['allday']
+                      ? 12
+                      : firstEventToday['start_date'].toDate().hour)) {
             firstWeatherToday = weather;
-          } else if (weatherTime.day == tomorrowEventDay &&
-              weatherTime.hour == tomorrowEventHour) {
+          } else if (firstEventTomorrow.isNotEmpty &&
+              weatherTime.day ==
+                  firstEventTomorrow['start_date'].toDate().day &&
+              weatherTime.hour ==
+                  (firstEventTomorrow['allday']
+                      ? 12
+                      : firstEventTomorrow['start_date'].toDate().hour)) {
             firstWeatherTomorrow = weather;
           }
         }
@@ -125,6 +129,13 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       print(e);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadEvents();
+    fetchWeather();
   }
 
   @override
@@ -160,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                     child: isLoading
                         ? const Center(child: CircularProgressIndicator())
                         : Text(
-                            "WELCOME BACK ${userData!['username']}",
+                            "WELCOME BACK ${userData['username']}",
                             style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 16,
@@ -198,7 +209,7 @@ class _HomePageState extends State<HomePage> {
                 children: isLoadingWeather
                     ? [const CircularProgressIndicator()]
                     : [
-                        Image.network('https:${_weatherCurrent?.icon ?? ''}'),
+                        Image.network('https:${_weatherCurrent.icon}'),
                         const SizedBox(
                           width: 15,
                         ),
@@ -206,9 +217,9 @@ class _HomePageState extends State<HomePage> {
                           width: screenWidth * 0.7,
                           child: Marquee(
                             pauseAfterRound: const Duration(seconds: 1),
-                            text: '${_weatherCurrent?.condition ?? ''} '
-                                '${_weatherCurrent?.temperature.round()} °C, '
-                                '${_weatherCurrent?.cityName ?? ''}.'
+                            text: '${_weatherCurrent.condition} '
+                                '${_weatherCurrent.temperature.round()} °C, '
+                                '${_weatherCurrent.cityName}.'
                                 '   ',
                             style: const TextStyle(
                                 fontFamily: 'Poppins',
@@ -252,7 +263,7 @@ class _HomePageState extends State<HomePage> {
                                 Container(
                                   height: screenHeight * 0.04,
                                   alignment: Alignment.centerRight,
-                                  child: (firstEventToday == null)
+                                  child: (firstEventToday.isEmpty)
                                       ? null
                                       : TextButton(
                                           onPressed: () {
@@ -260,8 +271,10 @@ class _HomePageState extends State<HomePage> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => HomeAll(
-                                                    date: 'today',
-                                                    event: eventsDataToday),
+                                                  date: 'today',
+                                                  events: eventsDataToday,
+                                                  weatherList: _weatherForecast,
+                                                ),
                                               ),
                                             );
                                           },
@@ -311,13 +324,13 @@ class _HomePageState extends State<HomePage> {
                                     width: screenWidth * 0.85,
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      (firstEventToday == null)
+                                      (firstEventToday.isEmpty)
                                           ? "You don’t have any schedule today!!"
-                                          : firstEventToday?['allday'] == true
-                                              ? "${DateFormat('dd MMM').format(firstEventToday!['start_date'].toDate())} All Day\n"
-                                                  "Event: ${firstEventTomorrow!['title']}"
-                                              : "${DateFormat('dd MMM HH:mma').format(firstEventToday!['start_date'].toDate())}\n"
-                                                  "Event: ${firstEventTomorrow!['title']}",
+                                          : firstEventToday['allday'] == true
+                                              ? "${DateFormat('dd MMM').format(firstEventToday['start_date'].toDate())} All Day\n"
+                                                  "Event: ${firstEventToday['title']}"
+                                              : "${DateFormat('dd MMM HH:mma').format(firstEventToday['start_date'].toDate())}\n"
+                                                  "Event: ${firstEventToday['title']}",
                                       style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 20,
@@ -339,9 +352,9 @@ class _HomePageState extends State<HomePage> {
                                           width: screenWidth * 0.6,
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                            (firstEventToday == null)
+                                            (firstEventToday.isEmpty)
                                                 ? ''
-                                                : "${firstEventToday!['location']}",
+                                                : "${firstEventToday['location']}",
                                             style: const TextStyle(
                                               fontSize: 16,
                                               color: Colors.white,
@@ -400,7 +413,7 @@ class _HomePageState extends State<HomePage> {
                                 Container(
                                   height: screenHeight * 0.04,
                                   alignment: Alignment.centerRight,
-                                  child: (firstEventToday == null)
+                                  child: (firstEventTomorrow.isEmpty)
                                       ? null
                                       : TextButton(
                                           onPressed: () {
@@ -408,8 +421,10 @@ class _HomePageState extends State<HomePage> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => HomeAll(
-                                                    date: 'today',
-                                                    event: eventsDataToday),
+                                                  date: 'tomorrow',
+                                                  events: eventsDataTomorrow,
+                                                  weatherList: _weatherForecast,
+                                                ),
                                               ),
                                             );
                                           },
@@ -431,7 +446,8 @@ class _HomePageState extends State<HomePage> {
                                     width: screenWidth * 0.85,
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      isLoadingWeather
+                                      (isLoadingWeather ||
+                                              firstEventTomorrow.isEmpty)
                                           ? ''
                                           : '${firstWeatherTomorrow.temperature.round().toString()} °C',
                                       style: const TextStyle(
@@ -449,8 +465,10 @@ class _HomePageState extends State<HomePage> {
                                   alignment: Alignment.centerRight,
                                   child: isLoadingWeather
                                       ? const CircularProgressIndicator()
-                                      : Image.network(
-                                          'https:${firstWeatherTomorrow.icon}'),
+                                      : firstEventTomorrow.isEmpty
+                                          ? null
+                                          : Image.network(
+                                              'https:${firstWeatherTomorrow.icon}'),
                                 ),
                                 Transform.translate(
                                   offset: Offset(0, -screenHeight * 0.04),
@@ -459,14 +477,13 @@ class _HomePageState extends State<HomePage> {
                                     width: screenWidth * 0.85,
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      (firstEventToday == null)
+                                      (firstEventTomorrow.isEmpty)
                                           ? "You don’t have any schedule today!!"
-                                          : firstEventTomorrow?['allday'] ==
-                                                  true
-                                              ? "${DateFormat('dd MMM').format(firstEventTomorrow!['start_date'].toDate())} All Day\n"
-                                                  "Event: ${firstEventTomorrow!['title']}"
-                                              : "${DateFormat('dd MMM HH:mma').format(firstEventTomorrow!['start_date'].toDate())}\n"
-                                                  "Event: ${firstEventTomorrow!['title']}",
+                                          : firstEventTomorrow['allday'] == true
+                                              ? "${DateFormat('dd MMM').format(firstEventTomorrow['start_date'].toDate())} All Day\n"
+                                                  "Event: ${firstEventTomorrow['title']}"
+                                              : "${DateFormat('dd MMM HH:mma').format(firstEventTomorrow['start_date'].toDate())}\n"
+                                                  "Event: ${firstEventTomorrow['title']}",
                                       style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 20,
@@ -488,9 +505,9 @@ class _HomePageState extends State<HomePage> {
                                           width: screenWidth * 0.6,
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                            (firstEventToday == null)
+                                            (firstEventTomorrow.isEmpty)
                                                 ? ''
-                                                : "${firstEventTomorrow!['location']}",
+                                                : "${firstEventTomorrow['location']}",
                                             style: const TextStyle(
                                               fontSize: 16,
                                               color: Colors.white,
@@ -499,9 +516,10 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                         Text(
-                                          isLoadingWeather
+                                          (isLoadingWeather ||
+                                                  firstEventTomorrow.isEmpty)
                                               ? ''
-                                              : firstWeatherToday.condition,
+                                              : firstWeatherTomorrow.condition,
                                           style: const TextStyle(
                                               fontSize: 16,
                                               color: Colors.white),
