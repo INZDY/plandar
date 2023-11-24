@@ -151,7 +151,7 @@ class FirestoreService {
     return events;
   }
 
-  //READ: get events from database Tomorrow
+  //READ: get events from database on specific day
   Future<List<Map<String, dynamic>>> getEventsInDay(
       DateTime lowerBound, DateTime upperBound) async {
     await _initializeCurrentUser();
