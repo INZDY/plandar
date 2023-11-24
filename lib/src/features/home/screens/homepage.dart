@@ -47,10 +47,10 @@ class _HomePageState extends State<HomePage> {
   Future loadEvents() async {
     DateTime now = DateTime.now();
     final List<Map<String, dynamic>> eventsToday = await FirestoreService()
-        .getEventsToday(
+        .getEventsInDay(
             now, DateTime(now.year, now.month, now.day + 1, 0, 0, 0));
     final List<Map<String, dynamic>> eventsTomorrow = await FirestoreService()
-        .getEventsTomorrow(DateTime(now.year, now.month, now.day + 1, 0, 0, 0),
+        .getEventsInDay(DateTime(now.year, now.month, now.day + 1, 0, 0, 0),
             DateTime(now.year, now.month, now.day + 2, 0, 0, 0));
     final userDetail = await FirestoreService().getUserData();
 
