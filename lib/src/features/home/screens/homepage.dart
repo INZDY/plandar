@@ -314,9 +314,10 @@ class _HomePageState extends State<HomePage> {
                                       (firstEventToday == null)
                                           ? "You don’t have any schedule today!!"
                                           : firstEventToday?['allday'] == true
-                                              ? "${DateFormat('dd MMM').format(firstEventToday!['start_date'].toDate())} All Day"
+                                              ? "${DateFormat('dd MMM').format(firstEventToday!['start_date'].toDate())} All Day\n"
+                                                  "Event: ${firstEventTomorrow!['title']}"
                                               : "${DateFormat('dd MMM HH:mma').format(firstEventToday!['start_date'].toDate())}\n"
-                                                  "Event: ${firstEventToday!['title']}",
+                                                  "Event: ${firstEventTomorrow!['title']}",
                                       style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 20,
@@ -462,7 +463,8 @@ class _HomePageState extends State<HomePage> {
                                           ? "You don’t have any schedule today!!"
                                           : firstEventTomorrow?['allday'] ==
                                                   true
-                                              ? "${DateFormat('dd MMM').format(firstEventTomorrow!['start_date'].toDate())} All Day"
+                                              ? "${DateFormat('dd MMM').format(firstEventTomorrow!['start_date'].toDate())} All Day\n"
+                                                  "Event: ${firstEventTomorrow!['title']}"
                                               : "${DateFormat('dd MMM HH:mma').format(firstEventTomorrow!['start_date'].toDate())}\n"
                                                   "Event: ${firstEventTomorrow!['title']}",
                                       style: const TextStyle(
