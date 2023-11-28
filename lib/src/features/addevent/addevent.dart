@@ -93,7 +93,7 @@ class _AddNewEventState extends State<AddNewEvent> {
       startMins = DateTime.now().minute.toString().padLeft(2, '0');
       endHours = DateTime.now().hour.toString().padLeft(2, '0');
       endMins = DateTime.now().minute.toString().padLeft(2, '0');
-      finalColor = '';
+      finalColor = '4294198070'; //set to default
       peoplelist = [];
     });
   }
