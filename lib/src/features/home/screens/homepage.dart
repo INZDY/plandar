@@ -44,6 +44,8 @@ class _HomePageState extends State<HomePage> {
 
   //get event and user's data, set to variable
   Future loadEvents() async {
+    isLoading = true;
+
     final userDetail = await FirestoreService().getUserData();
 
     DateTime now = DateTime.now();
@@ -70,11 +72,7 @@ class _HomePageState extends State<HomePage> {
       }
     });
 
-    Future.delayed(const Duration(milliseconds: 300), () {
-      setState(() {
-        isLoading = false;
-      });
-    });
+    isLoading = false;
   }
 
   void fetchWeather() async {
