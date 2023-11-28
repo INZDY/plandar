@@ -6,7 +6,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/utils/firestore/firestore.dart';
-import 'package:fitgap/src/features/dashboard/models/PopupDashboard.dart';
+import 'package:fitgap/src/features/dashboard/models/popup_dashboard.dart';
 import 'package:intl/intl.dart';
 
 class DashBoard extends StatefulWidget {
