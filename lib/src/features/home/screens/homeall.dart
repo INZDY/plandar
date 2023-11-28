@@ -35,7 +35,6 @@ class _HomeAllState extends State<HomeAll> {
         }
       }
     }
-    print(events);
   }
 
   @override

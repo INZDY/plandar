@@ -92,16 +92,9 @@ class _HomePageState extends State<HomePage> {
         _weatherForecast = weatherForecast;
 
         //FIND SOLUTION FOR EMPTY MAP
-        //If all day, use 12 o'clock
-        // int todayEventDay = firstEventToday['start_date'].toDate().day;
-        // int todayEventHour = firstEventToday['allday']
-        //     ? 12
-        //     : firstEventToday['start_date'].toDate().hour;
-
-        // int tomorrowEventDay = firstEventTomorrow['start_date'].toDate().day;
-        // int tomorrowEventHour = firstEventTomorrow['allday']
-        //     ? 12
-        //     : firstEventTomorrow['start_date'].toDate().hour;
+        //This is a very confusing ifs
+        //Have to do this because we can't access objects if null
+        //Adding if conditions to check and assign before is redundant
 
         for (WeatherForecast weather in _weatherForecast) {
           DateTime weatherTime = DateTime.parse(weather.time);
@@ -127,7 +120,7 @@ class _HomePageState extends State<HomePage> {
         isLoadingWeather = false;
       });
     } catch (e) {
-      print(e);
+      //blank
     }
   }
 
