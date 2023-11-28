@@ -53,7 +53,7 @@ class _HomeAllState extends State<HomeAll> {
       child: Scaffold(
         body: Container(
           height: double.infinity,
-          width: screenWidth * 1,
+          width: screenWidth,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Colors.black, Color.fromRGBO(7, 2, 58, 1)],
@@ -129,13 +129,14 @@ class _HomeAllState extends State<HomeAll> {
                   ],
                 ),
               ),
+
+              //EVENT LIST
               SizedBox(
-                height: screenHeight * 0.715,
+                height: screenHeight * 0.7,
                 width: screenWidth * 1,
                 child: ListView.builder(
                   itemCount: events.length,
                   itemBuilder: (context, index) {
-                    //Map<String, dynamic> eventData = events[index];
                     return SizedBox(
                       height: screenHeight * 0.15,
                       child: Row(
@@ -153,15 +154,12 @@ class _HomeAllState extends State<HomeAll> {
                                   fontSize: 16),
                             ),
                           ),
-                          Align(
+                          Container(
+                            height: screenHeight * 0.15,
+                            width: 2,
                             alignment: Alignment.center,
-                            child: Container(
-                              height: screenHeight * 0.15,
-                              width: 2,
-                              color: Colors.white,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                            ),
+                            color: Colors.white,
+                            margin: const EdgeInsets.symmetric(horizontal: 8.0),
                           ),
                           Container(
                             padding: EdgeInsets.all(screenHeight * 0.01),
@@ -170,38 +168,43 @@ class _HomeAllState extends State<HomeAll> {
                                 : const Color.fromRGBO(25, 23, 133, 1),
                             width: screenWidth * 0.7,
                             height: screenHeight * 0.13,
-                            child: Column(
+                            //EVENT DETAIL BOX
+                            child: Row(
                               children: [
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      height: screenHeight * 0.075,
-                                      width: screenWidth * 0.55,
-                                      child: Text(
-                                        '${events[index]['title']}',
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'Poppins',
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      height: screenHeight * 0.1,
-                                      width: screenWidth * 0.1,
-                                      child: Image.network(
-                                        'https:${events[index]['weather']}',
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                //left side
                                 SizedBox(
-                                  height: screenHeight * 0.03,
-                                  width: screenWidth * 0.7,
-                                  child: Text(
-                                    '${events[index]['location']}',
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 16),
+                                  width: screenWidth * 0.45,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          '${events[index]['title']}',
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Poppins',
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        child: Text(
+                                          '${events[index]['location']}',
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                //right side
+                                Expanded(
+                                  child: Image.network(
+                                    'https:${events[index]['weather']}',
+                                    // width: screenWidth * 0.4,
+                                    fit: BoxFit.contain,
                                   ),
                                 ),
                               ],
