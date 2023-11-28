@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
         //     ? 12
         //     : firstEventTomorrow['start_date'].toDate().hour;
 
-        for (WeatherForecast weather in weatherForecast) {
+        for (WeatherForecast weather in _weatherForecast) {
           DateTime weatherTime = DateTime.parse(weather.time);
 
           if (firstEventToday.isNotEmpty &&
@@ -296,7 +296,8 @@ class _HomePageState extends State<HomePage> {
                                     width: screenWidth * 0.85,
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      isLoadingWeather
+                                      (isLoadingWeather ||
+                                              firstEventToday.isEmpty)
                                           ? ''
                                           : '${firstWeatherToday.temperature.round().toString()} °C',
                                       style: const TextStyle(
@@ -314,8 +315,10 @@ class _HomePageState extends State<HomePage> {
                                   alignment: Alignment.centerRight,
                                   child: isLoadingWeather
                                       ? const CircularProgressIndicator()
-                                      : Image.network(
-                                          'https:${firstWeatherToday.icon}'),
+                                      : firstEventToday.isEmpty
+                                          ? null
+                                          : Image.network(
+                                              'https:${firstWeatherToday.icon}'),
                                 ),
                                 Transform.translate(
                                   offset: Offset(0, -screenHeight * 0.04),
@@ -342,14 +345,14 @@ class _HomePageState extends State<HomePage> {
                                 Transform.translate(
                                   offset: Offset(0, -screenHeight * 0.01),
                                   child: SizedBox(
-                                    height: screenHeight * 0.035,
+                                    height: screenHeight * 0.03,
                                     width: screenWidth * 0.85,
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
-                                          width: screenWidth * 0.6,
+                                          width: screenWidth * 0.57,
                                           alignment: Alignment.centerLeft,
                                           child: Text(
                                             (firstEventToday.isEmpty)
@@ -363,7 +366,8 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                         Text(
-                                          isLoadingWeather
+                                          (isLoadingWeather ||
+                                                  firstEventToday.isEmpty)
                                               ? ''
                                               : firstWeatherToday.condition,
                                           style: const TextStyle(
@@ -495,14 +499,14 @@ class _HomePageState extends State<HomePage> {
                                 Transform.translate(
                                   offset: Offset(0, -screenHeight * 0.01),
                                   child: SizedBox(
-                                    height: screenHeight * 0.035,
+                                    height: screenHeight * 0.03,
                                     width: screenWidth * 0.85,
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
-                                          width: screenWidth * 0.6,
+                                          width: screenWidth * 0.57,
                                           alignment: Alignment.centerLeft,
                                           child: Text(
                                             (firstEventTomorrow.isEmpty)
