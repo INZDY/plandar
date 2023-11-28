@@ -1,4 +1,4 @@
-import 'package:fitgap/src/features/home/models/weather_model.dart';
+import 'package:fitgap/src/utils/weather/weather_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

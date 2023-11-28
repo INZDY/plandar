@@ -10,10 +10,10 @@
         -Sixth column element : tomorrow event card & see all option (if avaliable)
 */
 import 'package:fitgap/src/features/home/applications/weather_service.dart';
-import 'package:fitgap/src/features/home/models/weather_api_key.dart';
-import 'package:fitgap/src/features/home/models/weather_model.dart';
 import 'package:fitgap/src/features/home/screens/homeall.dart';
 import 'package:fitgap/src/features/settings/settings.dart';
+import 'package:fitgap/src/utils/weather/weather_api_key.dart';
+import 'package:fitgap/src/utils/weather/weather_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:intl/intl.dart';
