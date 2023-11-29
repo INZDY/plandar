@@ -1,6 +1,7 @@
 import 'package:fitgap/src/features/authentication/models/auth_button_withtext.dart';
 import 'package:fitgap/src/features/profile/screens/profile.dart';
 import 'package:fitgap/src/utils/auth/auth.dart';
+import 'package:fitgap/src/utils/notification/notification.dart';
 import 'package:flutter/material.dart';
 
 class Settings extends StatelessWidget {
@@ -28,7 +29,7 @@ class Settings extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 icon: const Icon(
-                  Icons.arrow_back,
+                  Icons.chevron_left,
                   color: Colors.white,
                 ),
               ),
@@ -42,10 +43,16 @@ class Settings extends StatelessWidget {
 
               //Signout button
               AuthButtonIconText(
-                  color: Colors.black,
-                  icon: Icons.logout,
-                  text: 'Logout',
-                  logMethod: AuthService().signOut)
+                color: Colors.black,
+                icon: Icons.logout,
+                text: 'Logout',
+                logMethod: AuthService().signOut,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    NotificationService().scheduleNotification();
+                  },
+                  child: Text('Press to show noti'))
             ],
           ),
         ),
