@@ -98,9 +98,8 @@ class _DashBoardState extends State<DashBoard> {
       DateTime eventTime = event.start_date.toDate();
 
       if (event.allday == true) {
-        eventTime.add(const Duration(hours: 12));
+        eventTime = eventTime.add(const Duration(hours: 12));
       }
-
       for (WeatherForecast weather in weatherForecast) {
         DateTime weatherTime = DateTime.parse(weather.time);
 
