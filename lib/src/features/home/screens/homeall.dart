@@ -187,13 +187,11 @@ class _HomeAllState extends State<HomeAll> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
-                                      SizedBox(
-                                        child: Text(
-                                          '${events[index]['location']}',
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16),
-                                        ),
+                                      Text(
+                                        '${events[index]['location']}',
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16),
                                       ),
                                     ],
                                   ),

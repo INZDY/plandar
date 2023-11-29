@@ -9,7 +9,7 @@
         -Fifth column element : plain text
         -Sixth column element : tomorrow event card & see all option (if avaliable)
 */
-import 'package:fitgap/src/features/home/applications/weather_service.dart';
+import 'package:fitgap/src/utils/weather/weather_service.dart';
 import 'package:fitgap/src/features/home/screens/homeall.dart';
 import 'package:fitgap/src/features/settings/settings.dart';
 import 'package:fitgap/src/utils/weather/weather_api_key.dart';
@@ -76,56 +76,51 @@ class _HomePageState extends State<HomePage> {
   }
 
   void fetchWeather() async {
+    //need to wait for events
+    await loadEvents();
+
     isLoadingWeather = true;
 
     String position = await _weatherService.getCurrentPosition();
 
-    try {
-      final weatherCurrent = await _weatherService.getCurrentWeather(position);
-      final weatherForecast =
-          await _weatherService.getWeatherForecast(position);
+    final weatherCurrent = await _weatherService.getCurrentWeather(position);
+    final weatherForecast = await _weatherService.getWeatherForecast(position);
 
-      setState(() {
-        _weatherCurrent = weatherCurrent;
-        _weatherForecast = weatherForecast;
+    setState(() {
+      _weatherCurrent = weatherCurrent;
+      _weatherForecast = weatherForecast;
 
-        //FIND SOLUTION FOR EMPTY MAP
-        //This is a very confusing ifs
-        //Have to do this because we can't access objects if null
-        //Adding if conditions to check and assign before is redundant
+      //FIND SOLUTION FOR EMPTY MAP
+      //This is a very confusing ifs
+      //Have to do this because we can't access objects if null
+      //Adding if conditions to check and assign before is redundant
 
-        for (WeatherForecast weather in _weatherForecast) {
-          DateTime weatherTime = DateTime.parse(weather.time);
+      for (WeatherForecast weather in _weatherForecast) {
+        DateTime weatherTime = DateTime.parse(weather.time);
 
-          if (firstEventToday.isNotEmpty &&
-              weatherTime.day == firstEventToday['start_date'].toDate().day &&
-              weatherTime.hour ==
-                  (firstEventToday['allday']
-                      ? 12
-                      : firstEventToday['start_date'].toDate().hour)) {
-            firstWeatherToday = weather;
-          } else if (firstEventTomorrow.isNotEmpty &&
-              weatherTime.day ==
-                  firstEventTomorrow['start_date'].toDate().day &&
-              weatherTime.hour ==
-                  (firstEventTomorrow['allday']
-                      ? 12
-                      : firstEventTomorrow['start_date'].toDate().hour)) {
-            firstWeatherTomorrow = weather;
-          }
+        if (firstEventToday.isNotEmpty &&
+            weatherTime.day == firstEventToday['start_date'].toDate().day &&
+            weatherTime.hour ==
+                (firstEventToday['allday']
+                    ? 12
+                    : firstEventToday['start_date'].toDate().hour)) {
+          firstWeatherToday = weather;
+        } else if (firstEventTomorrow.isNotEmpty &&
+            weatherTime.day == firstEventTomorrow['start_date'].toDate().day &&
+            weatherTime.hour ==
+                (firstEventTomorrow['allday']
+                    ? 12
+                    : firstEventTomorrow['start_date'].toDate().hour)) {
+          firstWeatherTomorrow = weather;
         }
-
-        isLoadingWeather = false;
-      });
-    } catch (e) {
-      //blank
-    }
+      }
+      isLoadingWeather = false;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    loadEvents();
     fetchWeather();
   }
 
