@@ -21,9 +21,9 @@ class WeatherService {
   }
 
   //Forecast today and tomorrow
-  Future<List<WeatherForecast>> getWeatherForecast(String position) async {
+  Future<List<WeatherForecast>> getWeatherForecast(String position, int days) async {
     final response = await http.get(Uri.parse(
-        '$baseUrl/forecast.json?key=$apiKey&q=$position&days=2&aqi=no&alerts=no'));
+        '$baseUrl/forecast.json?key=$apiKey&q=$position&days=$days&aqi=no&alerts=no'));
 
     if (response.statusCode == 200) {
       Map<String, dynamic> json = jsonDecode(response.body);

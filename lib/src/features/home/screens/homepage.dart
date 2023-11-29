@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
     String position = await _weatherService.getCurrentPosition();
 
     final weatherCurrent = await _weatherService.getCurrentWeather(position);
-    final weatherForecast = await _weatherService.getWeatherForecast(position);
+    final weatherForecast = await _weatherService.getWeatherForecast(position, 2);
 
     setState(() {
       _weatherCurrent = weatherCurrent;
