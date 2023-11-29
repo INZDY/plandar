@@ -38,12 +38,11 @@ class NotificationService {
   //test-------------------
 
   Future<void> scheduleNotification() async {
+    // tz.setLocalLocation(tz.getLocation('Asia/Bangkok'));
+
     DateTime now = DateTime.now();
     DateTime today = DateTime(now.year, now.month, now.day);
     DateTime tomorrow = today.add(const Duration(days: 1));
-
-    Duration offsetTime = DateTime.now().timeZoneOffset;
-    print(offsetTime);
 
     //weather + event setup
     final WeatherService weatherService =
@@ -73,27 +72,37 @@ class NotificationService {
     const androidChannel = AndroidNotificationDetails(
       'channelId',
       'channelName',
-      // channelDescription: 'description',
       importance: Importance.max,
-      // priority: Priority.high,
     );
 
     const platformChannel = NotificationDetails(
       android: androidChannel,
     );
 
-    print(tz.TZDateTime.now(tz.local).add(offsetTime));
-    tz.TZDateTime nowTZ = tz.TZDateTime.now(tz.local).add(offsetTime);
+    // String notificationBody() {
+    //   //Message Structure:
+    //   //1. Have event today? - You have x schedules today
+    //   //2. Your first schedule tomorrow is
+    //   //  Title
+    //   //  Period
+    //   //  Weather Condition
+    //   //
+    //   String eventCount;
+
+    //   if(todayEvents)
+    //   return '';
+    // }
+
     await localNotificationsPlugin.zonedSchedule(
       0,
-      'Events Reminder',
-      'Event Body',
-      nowTZ.add(const Duration(seconds: 5)),
+      'Event Reminder',
+      'You have 0 schedule(s) today.\nHave a nice rest!',
+      tz.TZDateTime.from(DateTime.now(), tz.local)
+          .add(const Duration(seconds: 3)),
       platformChannel,
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time,
     );
   }
 }

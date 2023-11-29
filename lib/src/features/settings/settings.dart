@@ -49,8 +49,9 @@ class Settings extends StatelessWidget {
                 logMethod: AuthService().signOut,
               ),
               ElevatedButton(
-                  onPressed: () {
-                    NotificationService().scheduleNotification();
+                  onPressed: () async{
+                    await NotificationService().scheduleNotification();
+                    // await NotificationService().showNotification();
                   },
                   child: Text('Press to show noti'))
             ],
