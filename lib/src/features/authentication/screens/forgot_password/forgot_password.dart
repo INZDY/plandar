@@ -109,6 +109,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       SnackbarUtil.showSnackBar(e.message);
     }
 
-    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    MyApp.navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 }
