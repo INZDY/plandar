@@ -25,7 +25,6 @@ class _SettingsState extends State<Settings> {
         await NotificationService().retrieveScheduledNotifications();
     setState(() {
       for (NotificationModel noti in notificationList) {
-        print(noti.content?.id);
         if (noti.content?.id == 0) {
           isDailyNoti = true;
         } else if (noti.content?.id == 1) {

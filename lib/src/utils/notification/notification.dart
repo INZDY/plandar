@@ -85,15 +85,8 @@ class NotificationService {
   //-------------------------------------
   //Scheduling Notifications-------------
   //-------------------------------------
+  //upcoming event
   Future<void> scheduleNotifcation(int hours) async {
-    debugPrint(await showEvent('event'));
-
-    // String localTimezone =
-    //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
-    // String utcTimezone =
-    //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
-
-    //upcoming event
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 1,
@@ -116,15 +109,8 @@ class NotificationService {
     );
   }
 
+  //daily reminder
   Future<void> daily() async {
-    debugPrint(await showEvent('event'));
-
-    // String localTimezone =
-    //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
-    // String utcTimezone =
-    //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
-
-    //daily reminder
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 0,
