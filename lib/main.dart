@@ -10,8 +10,6 @@ import 'package:fitgap/firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // await NotificationService().initTimeZone();
-  // await NotificationService().initNotifications();
   await NotificationService().initNotifications();
 
   await Firebase.initializeApp(
