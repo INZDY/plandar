@@ -1,108 +1,163 @@
-import 'package:fitgap/src/utils/firestore/firestore.dart';
-import 'package:fitgap/src/utils/weather/weather_api_key.dart';
-import 'package:fitgap/src/utils/weather/weather_model.dart';
-import 'package:fitgap/src/utils/weather/weather_service.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:fitgap/main.dart';
+import 'package:fitgap/src/features/authentication/applications/auth_page.dart';
+import 'package:fitgap/src/utils/notification/notification_application.dart';
+import 'package:flutter/material.dart';
 
 class NotificationService {
-  final FlutterLocalNotificationsPlugin localNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-  Future initTimeZone() async {
-    tz.initializeTimeZones();
-  }
-
+  //initialization
   Future<void> initNotifications() async {
-    AndroidInitializationSettings initSettingsAndroid =
-        const AndroidInitializationSettings('applogo');
-    InitializationSettings initSettings =
-        InitializationSettings(android: initSettingsAndroid);
-    await localNotificationsPlugin.initialize(initSettings,
-        onDidReceiveNotificationResponse:
-            (NotificationResponse notificationResponse) async {});
-  }
+    await AwesomeNotifications().initialize(
+      null,
+      [
+        NotificationChannel(
+          channelGroupKey: 'high_importance_channel',
+          // channelKey: 'high_importance_channel',
+          channelKey: 'scheduled',
+          channelName: 'Basic notifications',
+          channelDescription: 'Notification channel for basic tests',
+          // defaultColor: const Color(0xFF9D50DD),
+          // ledColor: Colors.white,
+          importance: NotificationImportance.Max,
+          channelShowBadge: true,
+          onlyAlertOnce: true,
+          playSound: true,
+          // criticalAlerts: true,
+        )
+      ],
+      channelGroups: [
+        NotificationChannelGroup(
+          channelGroupKey: 'high_importance_channel_group',
+          channelGroupName: 'Group 1',
+        )
+      ],
+      debug: true,
+    );
 
-  //test------------------
-  Future showNotification() async {
-    return localNotificationsPlugin.show(
-        0, 'Test', 'Works!', await notificationDetails());
-  }
-
-  notificationDetails() {
-    return const NotificationDetails(
-        android: AndroidNotificationDetails('channelId', 'channelName',
-            importance: Importance.max));
-  }
-  //test-------------------
-
-  Future<void> scheduleNotification() async {
-    // tz.setLocalLocation(tz.getLocation('Asia/Bangkok'));
-
-    DateTime now = DateTime.now();
-    DateTime today = DateTime(now.year, now.month, now.day);
-    DateTime tomorrow = today.add(const Duration(days: 1));
-
-    //weather + event setup
-    final WeatherService weatherService =
-        WeatherService(WeatherAPIKey.weatherAPI);
-    String position = await weatherService.getCurrentPosition();
-
-    final List<Map<String, dynamic>> todayEvents =
-        await FirestoreService().getEventsInDay(today, tomorrow);
-
-    final List<WeatherForecast> weatherList =
-        await weatherService.getWeatherForecast(position, 1);
-
-    for (Map<String, dynamic> event in todayEvents) {
-      DateTime eventTime = event['start_date'].toDate();
-
-      for (WeatherForecast weather in weatherList) {
-        DateTime weatherTime = DateTime.parse(weather.time);
-
-        if (eventTime.day == weatherTime.day &&
-            eventTime.hour == weatherTime.hour) {
-          event['weather'] = weather;
-        }
+    await AwesomeNotifications()
+        .isNotificationAllowed()
+        .then((isAllowed) async {
+      if (!isAllowed) {
+        await AwesomeNotifications().requestPermissionToSendNotifications();
       }
+    });
+
+    await AwesomeNotifications().setListeners(
+      onActionReceivedMethod: onActionReceivedMethod,
+      onNotificationCreatedMethod: onNotificationCreatedMethod,
+      onNotificationDisplayedMethod: onNotificationDisplayedMethod,
+      onDismissActionReceivedMethod: onDismissActionReceivedMethod,
+    );
+  }
+
+  /// Use this method to detect when a new notification or a schedule is created
+  static Future<void> onNotificationCreatedMethod(
+      ReceivedNotification receivedNotification) async {
+    debugPrint('onNotificationCreatedMethod');
+  }
+
+  /// Use this method to detect every time that a new notification is displayed
+  static Future<void> onNotificationDisplayedMethod(
+      ReceivedNotification receivedNotification) async {
+    debugPrint('onNotificationDisplayedMethod');
+  }
+
+  /// Use this method to detect if the user dismissed a notification
+  static Future<void> onDismissActionReceivedMethod(
+      ReceivedAction receivedAction) async {
+    debugPrint('onDismissActionReceivedMethod');
+  }
+
+  /// Use this method to detect when the user taps on a notification or action button
+  static Future<void> onActionReceivedMethod(
+      ReceivedAction receivedAction) async {
+    debugPrint('onActionReceivedMethod');
+    final payload = receivedAction.payload ?? {};
+    if (payload["navigate"] == "true") {
+      MyApp.navigatorKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (_) => const AuthPage(),
+        ),
+      );
     }
+  }
 
-    //Notification setup
-    const androidChannel = AndroidNotificationDetails(
-      'channelId',
-      'channelName',
-      importance: Importance.max,
+  //-------------------------------------
+  //Scheduling Notifications-------------
+  //-------------------------------------
+  Future<void> scheduleNotifcation() async {
+    debugPrint(await showEvent('event'));
+
+    // String localTimezone =
+    //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
+    // String utcTimezone =
+    //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
+
+    //today event
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 1,
+        channelKey: 'scheduled',
+        title: 'Today\'s Events',
+        body: await showEvent('event'),
+        notificationLayout: NotificationLayout.BigText,
+        largeIcon: await showEvent('weather'),
+        wakeUpScreen: true,
+        timeoutAfter: const Duration(hours: 12),
+        showWhen: true,
+        displayOnForeground: true,
+        displayOnBackground: true,
+      ),
+      schedule: NotificationCalendar(
+        second: 0,
+        repeats: true,
+        allowWhileIdle: true,
+      ),
     );
+  }
 
-    const platformChannel = NotificationDetails(
-      android: androidChannel,
+  Future<void> daily() async {
+    debugPrint(await showEvent('event'));
+
+    // String localTimezone =
+    //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
+    // String utcTimezone =
+    //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
+
+    //today event
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 0,
+        channelKey: 'scheduled',
+        title: await dailyReminder('title'),
+        body: await dailyReminder('body'),
+        notificationLayout: NotificationLayout.Default,
+        largeIcon: 'asset://assets/icons/applogo.png',
+        wakeUpScreen: true,
+        timeoutAfter: const Duration(hours: 12),
+        showWhen: true,
+        displayOnForeground: true,
+        displayOnBackground: true,
+      ),
+      schedule: NotificationCalendar(
+        second: 0,
+        repeats: true,
+        allowWhileIdle: true,
+      ),
     );
+  }
 
-    // String notificationBody() {
-    //   //Message Structure:
-    //   //1. Have event today? - You have x schedules today
-    //   //2. Your first schedule tomorrow is
-    //   //  Title
-    //   //  Period
-    //   //  Weather Condition
-    //   //
-    //   String eventCount;
+  //-------------------------------------
+  //Functionalities----------------------
+  //-------------------------------------
+  Future<void> cancelNotification(int id) async {
+    await AwesomeNotifications().cancel(id);
+  }
 
-    //   if(todayEvents)
-    //   return '';
-    // }
-
-    await localNotificationsPlugin.zonedSchedule(
-      0,
-      'Event Reminder',
-      'You have 0 schedule(s) today.\nHave a nice rest!',
-      tz.TZDateTime.from(DateTime.now(), tz.local)
-          .add(const Duration(seconds: 3)),
-      platformChannel,
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-    );
+  Future<void> retrieveScheduledNotifications() async {
+    final AwesomeNotifications awesomeNotifications = AwesomeNotifications();
+    List<NotificationModel> scheduledNotifications =
+        await awesomeNotifications.listScheduledNotifications();
+    print(scheduledNotifications);
   }
 }

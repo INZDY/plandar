@@ -10,7 +10,8 @@ import 'package:fitgap/firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await NotificationService().initTimeZone();
+  // await NotificationService().initTimeZone();
+  // await NotificationService().initNotifications();
   await NotificationService().initNotifications();
 
   await Firebase.initializeApp(
@@ -37,6 +38,6 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: MyApp.navigatorKey,
         debugShowCheckedModeBanner: false,
         theme: appTheme,
-        home: const AuthPage());
+        home: const AuthPage(),);
   }
 }
