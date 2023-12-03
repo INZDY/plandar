@@ -4,9 +4,12 @@
 */
 
 import 'dart:async';
+import 'package:fitgap/src/utils/weather/weather_service.dart';
+import 'package:fitgap/src/utils/weather/weather_api_key.dart';
+import 'package:fitgap/src/utils/weather/weather_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/utils/firestore/firestore.dart';
-import 'package:fitgap/src/features/dashboard/models/PopupDashboard.dart';
+import 'package:fitgap/src/features/dashboard/models/popup_dashboard.dart';
 import 'package:intl/intl.dart';
 
 class DashBoard extends StatefulWidget {
@@ -17,37 +20,55 @@ class DashBoard extends StatefulWidget {
 }
 
 class _DashBoardState extends State<DashBoard> {
+  late List<EventDetails> _allEvents;
   late List<EventDetails> eventsDataToday;
   late List<EventDetails> eventsDataTomorrow;
   late List<EventDetails> eventsDataFuture;
   bool isLoading = true;
-  DateTime now = DateTime.now();
-  late DateTime today = DateTime(now.year, now.month, now.day);
-  late DateTime tomorrow = today.add(const Duration(days: 1));
-  late DateTime afterTomorrow = tomorrow.add(const Duration(days: 1));
 
-  @override
-  void initState() {
-    super.initState();
-    loadEvents();
-  }
+  DateTime now = DateTime.now();
+  late DateTime today;
+  late DateTime tomorrow;
+  late DateTime afterTomorrow;
+
+  //weather
+  final _weatherService = WeatherService(WeatherAPIKey.weatherAPI);
+  late List<String> _todayWeather;
+  late List<String> _tomorrowWeather;
+  late List<String> _futureWeather;
+  bool isLoadingWeather = true;
 
   //get event, filter to [today,tomorrow,future] set to variable
   Future loadEvents() async {
-    final allEvents = await FirestoreService().getEvents();
+    _allEvents = await FirestoreService().getEvents();
 
     List<EventDetails> todayEvents = [];
     List<EventDetails> tomorrowEvents = [];
     List<EventDetails> futureEvents = [];
 
-    for (var event in allEvents) {
+    //set days in here
+    today = DateTime(now.year, now.month, now.day);
+    tomorrow = today.add(const Duration(days: 1));
+    afterTomorrow = tomorrow.add(const Duration(days: 1));
+
+    isLoading = true;
+
+    for (var event in _allEvents) {
       DateTime eventStartDate = event.start_date.toDate();
-      if (eventStartDate.isAfter(today) && eventStartDate.isBefore(tomorrow)) {
+      // today <= eventstartdate < tomorrow
+      if (eventStartDate.isAtSameMomentAs(today) ||
+          eventStartDate.isAfter(today) && eventStartDate.isBefore(tomorrow)) {
         todayEvents.add(event);
-      } else if (eventStartDate.isAfter(tomorrow) &&
-          eventStartDate.isBefore(afterTomorrow)) {
+      }
+      // tomorrow <= eventstartdate < aftertomorrow
+      else if (eventStartDate.isAtSameMomentAs(tomorrow) ||
+          eventStartDate.isAfter(tomorrow) &&
+              eventStartDate.isBefore(afterTomorrow)) {
         tomorrowEvents.add(event);
-      } else if (eventStartDate.isAfter(afterTomorrow)) {
+      }
+      //aftertomorrow <= eventstartdate
+      else if (eventStartDate.isAtSameMomentAs(afterTomorrow) ||
+          eventStartDate.isAfter(afterTomorrow)) {
         futureEvents.add(event);
       }
     }
@@ -55,13 +76,67 @@ class _DashBoardState extends State<DashBoard> {
       eventsDataToday = todayEvents;
       eventsDataTomorrow = tomorrowEvents;
       eventsDataFuture = futureEvents;
+      isLoading = false;
     });
+  }
 
-    Future.delayed(const Duration(milliseconds: 300), () {
-      setState(() {
-        isLoading = false;
-      });
+  void fetchWeatherMapping() async {
+    //need to wait for events
+    await loadEvents();
+
+    isLoadingWeather = true;
+
+    String position = await _weatherService.getCurrentPosition();
+    final weatherForecast = await _weatherService.getWeatherForecast(position, 3);
+
+    List<String> todayWeather = [];
+    List<String> tomorrowWeather = [];
+    List<String> futureWeather = [];
+
+    //maximum weather view for event is 3 days
+    for (EventDetails event in _allEvents) {
+      DateTime eventTime = event.start_date.toDate();
+
+      if (event.allday == true) {
+        eventTime = eventTime.add(const Duration(hours: 12));
+      }
+      for (WeatherForecast weather in weatherForecast) {
+        DateTime weatherTime = DateTime.parse(weather.time);
+
+        if (eventTime.day == weatherTime.day &&
+            eventTime.hour == weatherTime.hour) {
+          // today <= eventstartdate < tomorrow
+          if (eventTime.isAtSameMomentAs(today) ||
+              eventTime.isAfter(today) && eventTime.isBefore(tomorrow)) {
+            todayWeather.add(weather.icon);
+          }
+          // tomorrow <= eventTime < aftertomorrow
+          else if (eventTime.isAtSameMomentAs(tomorrow) ||
+              eventTime.isAfter(tomorrow) &&
+                  eventTime.isBefore(afterTomorrow)) {
+            tomorrowWeather.add(weather.icon);
+          }
+          //aftertomorrow <= eventTime
+          else if (eventTime.isAtSameMomentAs(afterTomorrow) ||
+              eventTime.isAfter(afterTomorrow)) {
+            futureWeather.add(weather.icon);
+          }
+        }
+      }
+    }
+    setState(() {
+      _todayWeather = todayWeather;
+      _tomorrowWeather = tomorrowWeather;
+      _futureWeather = futureWeather;
+      isLoadingWeather = false;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // loadEvents();
+    fetchWeatherMapping();
   }
 
   @override
@@ -91,7 +166,8 @@ class _DashBoardState extends State<DashBoard> {
                           alignment: Alignment.centerRight,
                           child: CircleAvatar()),
                     ),
-                    //Today section
+
+                    //TODAY SECTION
                     SizedBox(
                       height: screenHeight * 0.1,
                       width: screenWidth * 0.9,
@@ -128,7 +204,6 @@ class _DashBoardState extends State<DashBoard> {
                       ),
                     ),
                     Container(
-                      //height = screenHeight * 0.15 * numbers of element
                       height: screenHeight * 0.15 * eventsDataToday.length,
                       width: screenWidth * 1,
                       color: Colors.amber[60],
@@ -142,6 +217,7 @@ class _DashBoardState extends State<DashBoard> {
                           String title = event.title;
                           String location = event.location;
                           int peopleNum = event.people.length;
+
                           return SizedBox(
                             height: screenHeight * 0.15,
                             child: Row(
@@ -151,74 +227,78 @@ class _DashBoardState extends State<DashBoard> {
                                   width: screenWidth * 0.2,
                                   alignment: Alignment.topCenter,
                                   child: Text(
-                                    DateFormat('HH:mm').format(startDate),
+                                    event.allday
+                                        ? 'All Day'
+                                        : DateFormat('HH:mm').format(startDate),
                                     style: const TextStyle(
                                         color: Colors.white,
                                         fontFamily: 'Poppins',
                                         fontSize: 16),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: screenWidth * 0.7,
-                                  height: screenHeight * 0.13,
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      bool isChange =
-                                          await eventPopup(context, event);
-                                      isChange ? await loadEvents() : null;
-                                    },
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.all(screenHeight * 0.01),
-                                      color:
-                                          const Color.fromRGBO(65, 129, 225, 1),
-                                      child: Column(
-                                        children: [
-                                          Row(
+                                GestureDetector(
+                                  onTap: () async {
+                                    bool isChange =
+                                        await eventPopup(context, event);
+                                    isChange ? await loadEvents() : null;
+                                  },
+                                  child: Container(
+                                    height: screenHeight * 0.13,
+                                    width: screenWidth * 0.7,
+                                    padding:
+                                        EdgeInsets.all(screenHeight * 0.01),
+                                    color:
+                                        const Color.fromRGBO(65, 129, 225, 1),
+                                    child: Row(
+                                      children: [
+                                        //left
+                                        SizedBox(
+                                          width: screenWidth * 0.45,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              SizedBox(
-                                                height: screenHeight * 0.075,
-                                                width: screenWidth * 0.55,
+                                              //event title
+                                              Expanded(
                                                 child: Text(
                                                   title,
                                                   style: const TextStyle(
                                                       color: Colors.white,
                                                       fontFamily: 'Poppins',
-                                                      fontSize: 20,
+                                                      fontSize: 25,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
                                               ),
-                                              Container(
-                                                height: screenHeight * 0.075,
-                                                width: screenWidth * 0.075,
-                                                decoration: const BoxDecoration(
-                                                  image: DecorationImage(
-                                                      image: AssetImage(
-                                                          'assets/images/sunnyIcon.png'),
-                                                      fit: BoxFit.contain),
+
+                                              //people
+                                              Text(
+                                                peopleNum != 0
+                                                    ? location != ''
+                                                        ? '$location, $peopleNum people'
+                                                        : 'with $peopleNum people'
+                                                    : location != ''
+                                                        ? location
+                                                        : '',
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontFamily: 'Poppins',
                                                 ),
-                                              ),
+                                              )
                                             ],
                                           ),
-                                          SizedBox(
-                                            height: screenHeight * 0.03,
-                                            width: screenWidth * 0.7,
-                                            child: Text(
-                                              (peopleNum == 0)
-                                                  ? location
-                                                  : (location == '')
-                                                      ? 'with $peopleNum people'
-                                                      : '$location,$peopleNum people',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16,
-                                                fontFamily: 'Poppins',
+                                        ),
+                                        //right
+                                        isLoadingWeather
+                                            ? const CircularProgressIndicator()
+                                            : Expanded(
+                                                child: Image.network(
+                                                  'https:${_todayWeather[index]}',
+                                                  fit: BoxFit.contain,
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -228,7 +308,8 @@ class _DashBoardState extends State<DashBoard> {
                         },
                       ),
                     ),
-                    //Tomorrow section
+//------------------------------------------
+                    //TOMORROW SECTION
                     SizedBox(
                       height: screenHeight * 0.1,
                       width: screenWidth * 0.9,
@@ -265,7 +346,6 @@ class _DashBoardState extends State<DashBoard> {
                       ),
                     ),
                     Container(
-                      //height = screenHeight * 0.15 * numbers of element
                       height: screenHeight * 0.15 * eventsDataTomorrow.length,
                       width: screenWidth * 1,
                       color: Colors.amber[60],
@@ -288,74 +368,78 @@ class _DashBoardState extends State<DashBoard> {
                                   width: screenWidth * 0.2,
                                   alignment: Alignment.topCenter,
                                   child: Text(
-                                    DateFormat('HH:mm').format(startDate),
+                                    event.allday
+                                        ? 'All Day'
+                                        : DateFormat('HH:mm').format(startDate),
                                     style: const TextStyle(
                                         color: Colors.white,
                                         fontFamily: 'Poppins',
                                         fontSize: 16),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: screenWidth * 0.7,
-                                  height: screenHeight * 0.13,
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      bool isChange =
-                                          await eventPopup(context, event);
-                                      isChange ? await loadEvents() : null;
-                                    },
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.all(screenHeight * 0.01),
-                                      color:
-                                          const Color.fromRGBO(25, 23, 133, 1),
-                                      child: Column(
-                                        children: [
-                                          Row(
+                                GestureDetector(
+                                  onTap: () async {
+                                    bool isChange =
+                                        await eventPopup(context, event);
+                                    isChange ? await loadEvents() : null;
+                                  },
+                                  child: Container(
+                                    height: screenHeight * 0.13,
+                                    width: screenWidth * 0.7,
+                                    padding:
+                                        EdgeInsets.all(screenHeight * 0.01),
+                                    color:
+                                        const Color.fromRGBO(65, 129, 225, 1),
+                                    child: Row(
+                                      children: [
+                                        //left
+                                        SizedBox(
+                                          width: screenWidth * 0.45,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              SizedBox(
-                                                height: screenHeight * 0.075,
-                                                width: screenWidth * 0.55,
+                                              //event title
+                                              Expanded(
                                                 child: Text(
                                                   title,
                                                   style: const TextStyle(
                                                       color: Colors.white,
                                                       fontFamily: 'Poppins',
-                                                      fontSize: 20,
+                                                      fontSize: 25,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
                                               ),
-                                              Container(
-                                                height: screenHeight * 0.075,
-                                                width: screenWidth * 0.075,
-                                                decoration: const BoxDecoration(
-                                                  image: DecorationImage(
-                                                      image: AssetImage(
-                                                          'assets/images/sunnyIcon.png'),
-                                                      fit: BoxFit.contain),
+
+                                              //people
+                                              Text(
+                                                peopleNum != 0
+                                                    ? location != ''
+                                                        ? '$location, $peopleNum people'
+                                                        : 'with $peopleNum people'
+                                                    : location != ''
+                                                        ? location
+                                                        : '',
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontFamily: 'Poppins',
                                                 ),
-                                              ),
+                                              )
                                             ],
                                           ),
-                                          SizedBox(
-                                            height: screenHeight * 0.03,
-                                            width: screenWidth * 0.7,
-                                            child: Text(
-                                              (peopleNum == 0)
-                                                  ? location
-                                                  : (location == '')
-                                                      ? 'with $peopleNum people'
-                                                      : '$location,$peopleNum people',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16,
-                                                fontFamily: 'Poppins',
+                                        ),
+                                        //right
+                                        isLoadingWeather
+                                            ? const CircularProgressIndicator()
+                                            : Expanded(
+                                                child: Image.network(
+                                                  'https:${_tomorrowWeather[index]}',
+                                                  fit: BoxFit.contain,
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -365,6 +449,7 @@ class _DashBoardState extends State<DashBoard> {
                         },
                       ),
                     ),
+//------------------------------------------
                     //Upcoming section
                     SizedBox(
                       height: screenHeight * 0.05,
@@ -380,7 +465,6 @@ class _DashBoardState extends State<DashBoard> {
                       ),
                     ),
                     Container(
-                      //height = screenHeight * 0.15 * numbers of element
                       height: screenHeight * 0.2 * eventsDataFuture.length,
                       width: screenWidth * 1,
                       color: Colors.amber[60],
@@ -421,77 +505,81 @@ class _DashBoardState extends State<DashBoard> {
                                       width: screenWidth * 0.2,
                                       alignment: Alignment.topCenter,
                                       child: Text(
-                                        DateFormat('HH:mm').format(startDate),
+                                        event.allday
+                                            ? 'All Day'
+                                            : DateFormat('HH:mm')
+                                                .format(startDate),
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontFamily: 'Poppins',
                                             fontSize: 16),
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: screenWidth * 0.7,
-                                      height: screenHeight * 0.13,
-                                      child: GestureDetector(
-                                        onTap: () async {
-                                          bool isChange =
-                                              await eventPopup(context, event);
-                                          isChange ? await loadEvents() : null;
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.all(
-                                              screenHeight * 0.01),
-                                          color: const Color.fromRGBO(
-                                              73, 15, 194, 1),
-                                          child: Column(
-                                            children: [
-                                              Row(
+                                    GestureDetector(
+                                      onTap: () async {
+                                        bool isChange =
+                                            await eventPopup(context, event);
+                                        isChange ? await loadEvents() : null;
+                                      },
+                                      child: Container(
+                                        height: screenHeight * 0.13,
+                                        width: screenWidth * 0.7,
+                                        padding:
+                                            EdgeInsets.all(screenHeight * 0.01),
+                                        color: const Color.fromRGBO(
+                                            65, 129, 225, 1),
+                                        child: Row(
+                                          children: [
+                                            //left
+                                            SizedBox(
+                                              width: screenWidth * 0.45,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  SizedBox(
-                                                    height:
-                                                        screenHeight * 0.075,
-                                                    width: screenWidth * 0.55,
+                                                  //event title
+                                                  Expanded(
                                                     child: Text(
                                                       title,
                                                       style: const TextStyle(
                                                           color: Colors.white,
                                                           fontFamily: 'Poppins',
-                                                          fontSize: 20,
+                                                          fontSize: 25,
                                                           fontWeight:
                                                               FontWeight.bold),
                                                     ),
                                                   ),
-                                                  Container(
-                                                    height:
-                                                        screenHeight * 0.075,
-                                                    width: screenWidth * 0.075,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      image: DecorationImage(
-                                                          image: AssetImage(
-                                                              'assets/images/sunnyIcon.png'),
-                                                          fit: BoxFit.contain),
+
+                                                  //people
+                                                  Text(
+                                                    peopleNum != 0
+                                                        ? location != ''
+                                                            ? '$location, $peopleNum people'
+                                                            : 'with $peopleNum people'
+                                                        : location != ''
+                                                            ? location
+                                                            : '',
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                      fontFamily: 'Poppins',
                                                     ),
-                                                  ),
+                                                  )
                                                 ],
                                               ),
-                                              SizedBox(
-                                                height: screenHeight * 0.03,
-                                                width: screenWidth * 0.7,
-                                                child: Text(
-                                                  (peopleNum == 0)
-                                                      ? location
-                                                      : (location == '')
-                                                          ? 'with $peopleNum people'
-                                                          : '$location,$peopleNum people',
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                    fontFamily: 'Poppins',
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                            //right
+                                            isLoadingWeather
+                                                ? const CircularProgressIndicator()
+                                                : _futureWeather.isEmpty
+                                                    ? Container()
+                                                    : Expanded(
+                                                        child: Image.network(
+                                                          'https:${_futureWeather[index]}',
+                                                          fit: BoxFit.contain,
+                                                        ),
+                                                      ),
+                                          ],
                                         ),
                                       ),
                                     ),

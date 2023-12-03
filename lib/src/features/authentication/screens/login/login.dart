@@ -248,6 +248,6 @@ class _LoginPageState extends State<LoginPage> {
       SnackbarUtil.showSnackBar(e.message);
     }
 
-    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    MyApp.navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 }

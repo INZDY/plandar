@@ -1,9 +1,9 @@
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:fitgap/src/features/contract/contract_page/contract.dart';
+import 'package:fitgap/src/features/home/screens/homepage.dart';
 import 'package:fitgap/src/features/planner/screens/planner.dart';
 import 'package:flutter/material.dart';
 import 'package:fitgap/src/features/addevent/addevent.dart';
-import 'package:fitgap/src/features/home/homepage.dart';
 import 'package:fitgap/src/features/dashboard/screens/dashboard.dart';
 
 class Home extends StatefulWidget {
@@ -37,10 +37,10 @@ class _HomeState extends State<Home> {
           physics: const NeverScrollableScrollPhysics(),
           children: _pageOptions,
         ),
-        extendBody: true,
 
         //Navbar
-        bottomNavigationBar: SizedBox(
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(color: Color.fromRGBO(7, 2, 58, 1)),
           //height is here to prevent keyboard pushing
           height: 100,
           child: AnimatedNotchBottomBar(
@@ -58,7 +58,7 @@ class _HomeState extends State<Home> {
                   color: Colors.black,
                 ),
               ),
-        
+
               //dashboard
               BottomBarItem(
                 inActiveItem: Icon(
@@ -70,7 +70,7 @@ class _HomeState extends State<Home> {
                   color: Colors.black,
                 ),
               ),
-        
+
               //add event
               BottomBarItem(
                 inActiveItem: Icon(
@@ -82,7 +82,7 @@ class _HomeState extends State<Home> {
                   color: Colors.black,
                 ),
               ),
-        
+
               //planner
               BottomBarItem(
                 inActiveItem: Icon(
@@ -94,7 +94,7 @@ class _HomeState extends State<Home> {
                   color: Colors.black,
                 ),
               ),
-        
+
               //contacts
               BottomBarItem(
                 inActiveItem: Icon(
@@ -110,9 +110,6 @@ class _HomeState extends State<Home> {
             onTap: (index) {
               _pageController.jumpToPage(index);
             },
-            // onTap: (index) {
-            //   _pageController.jumpToPage(index);
-            // },
           ),
         ),
       ),

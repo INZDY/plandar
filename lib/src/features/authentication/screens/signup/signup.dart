@@ -252,7 +252,7 @@ class _SignupPageState extends State<SignupPage> {
       SnackbarUtil.showSnackBar(e.message);
     }
 
-    navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    MyApp.navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 
   bool passwordConfirmed() {

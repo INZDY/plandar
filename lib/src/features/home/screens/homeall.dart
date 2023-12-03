@@ -1,11 +1,18 @@
+import 'package:fitgap/src/utils/weather/weather_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class HomeAll extends StatefulWidget {
-  const HomeAll({super.key, required this.date, required this.event});
+  const HomeAll({
+    super.key,
+    required this.date,
+    required this.events,
+    required this.weatherList,
+  });
 
   final String date;
-  final List<Map<String, dynamic>> event;
+  final List<Map<String, dynamic>> events;
+  final List<WeatherForecast>? weatherList;
 
   @override
   State<HomeAll> createState() => _HomeAllState();
@@ -13,7 +20,28 @@ class HomeAll extends StatefulWidget {
 
 class _HomeAllState extends State<HomeAll> {
   late String date = widget.date;
-  late List<Map<String, dynamic>> event = widget.event;
+  late List<Map<String, dynamic>> events = widget.events;
+  late List<WeatherForecast>? weatherList = widget.weatherList;
+
+  void weatherMapping() {
+    for (WeatherForecast weather in weatherList!) {
+      DateTime weatherTime = DateTime.parse(weather.time);
+      for (Map<String, dynamic> event in events) {
+        DateTime eventTime = event['start_date'].toDate();
+
+        if (eventTime.day == weatherTime.day &&
+            eventTime.hour == weatherTime.hour) {
+          event['weather'] = weather.icon;
+        }
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    weatherMapping();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +52,7 @@ class _HomeAllState extends State<HomeAll> {
       child: Scaffold(
         body: Container(
           height: double.infinity,
-          width: screenWidth * 1,
+          width: screenWidth,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Colors.black, Color.fromRGBO(7, 2, 58, 1)],
@@ -45,7 +73,7 @@ class _HomeAllState extends State<HomeAll> {
                         Navigator.pop(context);
                       },
                       icon: const Icon(
-                        Icons.arrow_back,
+                        Icons.chevron_left,
                         color: Colors.white,
                       ),
                     ),
@@ -69,7 +97,8 @@ class _HomeAllState extends State<HomeAll> {
                 height: screenHeight * 0.03,
                 width: screenWidth * 0.95,
                 child: Text(
-                  DateFormat('EEEE, d MMM').format(event[0]['start_date'].toDate()),
+                  DateFormat('EEEE, d MMM')
+                      .format(events[0]['start_date'].toDate()),
                   style: const TextStyle(
                       color: Colors.white, fontFamily: 'Poppins', fontSize: 16),
                 ),
@@ -99,13 +128,14 @@ class _HomeAllState extends State<HomeAll> {
                   ],
                 ),
               ),
+
+              //EVENT LIST
               SizedBox(
-                height: screenHeight * 0.715,
+                height: screenHeight * 0.7,
                 width: screenWidth * 1,
                 child: ListView.builder(
-                  itemCount: event.length,
+                  itemCount: events.length,
                   itemBuilder: (context, index) {
-                    //Map<String, dynamic> eventData = event[index];
                     return SizedBox(
                       height: screenHeight * 0.15,
                       child: Row(
@@ -115,70 +145,66 @@ class _HomeAllState extends State<HomeAll> {
                             width: screenWidth * 0.2,
                             alignment: Alignment.topCenter,
                             child: Text(
-                              DateFormat('HH:mm').format(event[index]['start_date'].toDate()),
+                              DateFormat('HH:mm')
+                                  .format(events[index]['start_date'].toDate()),
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontFamily: 'Poppins',
                                   fontSize: 16),
                             ),
                           ),
-                          Align(
+                          Container(
+                            height: screenHeight * 0.15,
+                            width: 2,
                             alignment: Alignment.center,
-                            child: Container(
-                              height: screenHeight * 0.15,
-                              width: 2,
-                              color: Colors.white,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                            ),
+                            color: Colors.white,
+                            margin: const EdgeInsets.symmetric(horizontal: 8.0),
                           ),
-                          SizedBox(
+                          Container(
+                            padding: EdgeInsets.all(screenHeight * 0.01),
+                            color: date == 'today'
+                                ? const Color.fromRGBO(65, 129, 225, 1)
+                                : const Color.fromRGBO(25, 23, 133, 1),
                             width: screenWidth * 0.7,
                             height: screenHeight * 0.13,
-                            child: Container(
-                              padding: EdgeInsets.all(screenHeight * 0.01),
-                              color: date == 'today'
-                                  ? const Color.fromRGBO(65, 129, 225, 1)
-                                  : const Color.fromRGBO(25, 23, 133, 1),
-                              child: Column(
-                                children: [
-                                  Row(
+                            //EVENT DETAIL BOX
+                            child: Row(
+                              children: [
+                                //left side
+                                SizedBox(
+                                  width: screenWidth * 0.45,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      SizedBox(
-                                        height: screenHeight * 0.075,
-                                        width: screenWidth * 0.55,
+                                      Expanded(
                                         child: Text(
-                                          '${event[index]['title']}',
+                                          '${events[index]['title']}',
                                           style: const TextStyle(
                                               color: Colors.white,
                                               fontFamily: 'Poppins',
-                                              fontSize: 20,
+                                              fontSize: 25,
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
-                                      Container(
-                                        height: screenHeight * 0.075,
-                                        width: screenWidth * 0.075,
-                                        decoration: const BoxDecoration(
-                                          image: DecorationImage(
-                                              image: AssetImage(
-                                                  'assets/images/sunnyIcon.png'),
-                                              fit: BoxFit.contain),
-                                        ),
+                                      Text(
+                                        '${events[index]['location']}',
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
-                                    height: screenHeight * 0.03,
-                                    width: screenWidth * 0.7,
-                                    child: Text(
-                                      '${event[index]['location']}',
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 16),
-                                    ),
+                                ),
+                                //right side
+                                Expanded(
+                                  child: Image.network(
+                                    'https:${events[index]['weather']}',
+                                    // width: screenWidth * 0.4,
+                                    fit: BoxFit.contain,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
