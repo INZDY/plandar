@@ -11,7 +11,7 @@
 */
 import 'package:fitgap/src/utils/weather/weather_service.dart';
 import 'package:fitgap/src/features/home/screens/homeall.dart';
-import 'package:fitgap/src/features/settings/settings.dart';
+import 'package:fitgap/src/features/settings/screens/settings.dart';
 import 'package:fitgap/src/utils/weather/weather_api_key.dart';
 import 'package:fitgap/src/utils/weather/weather_model.dart';
 import 'package:flutter/material.dart';

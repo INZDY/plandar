@@ -2,7 +2,7 @@ import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:fitgap/src/utils/weather/weather_api_key.dart';
 import 'package:fitgap/src/utils/weather/weather_model.dart';
 import 'package:fitgap/src/utils/weather/weather_service.dart';
-import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 Future<String> dailyReminder(String element) async {
   DateTime now = DateTime.now();
@@ -55,27 +55,34 @@ Future<String> showEvent(String element) async {
   }
 
   String message = '';
-  Map<String, dynamic> event;
-  TimeOfDay startTime, endTime;
+  Map<String, dynamic> upcomingEvent;
+  String startTime, endTime;
 
-  if (element == 'event') {
-    if (todayEvents.isNotEmpty) {
-      event = todayEvents[0];
-      startTime = TimeOfDay.fromDateTime(event['start_date'].toDate());
-      endTime = TimeOfDay.fromDateTime(event['end_date'].toDate());
+  upcomingEvent = todayEvents.firstWhere(
+      (event) =>
+          event['start_date'].toDate().isAfter(now) ||
+          event['start_date'].toDate().isAtSameMomentAs(now),
+      orElse: () => {});
 
-      message = 'You have ${todayEvents.length} events today'
-          '<br>First event today:'
-          '<br>${event['title']}'
-          '<br>${event['allday'] ? 'All Day' : '$startTime : $endTime'}'
-          '<br>${event['location'].isNotEmpty ? event['location'] : null}'
-          '<br>${event['weather'].temperature} °C, ${event['weather'].condition}';
+  if (element == 'title') {
+    message =
+        upcomingEvent.isNotEmpty ? upcomingEvent['title'] : 'No upcoming event';
+  } else if (element == 'event') {
+    if (upcomingEvent.isNotEmpty) {
+      startTime =
+          DateFormat('HH:mm').format(upcomingEvent['start_date'].toDate());
+      endTime = DateFormat('HH:mm').format(upcomingEvent['end_date'].toDate());
+
+      message =
+          '${upcomingEvent['allday'] ? 'All Day' : '$startTime - $endTime'}<br>'
+          '${upcomingEvent['location'].isNotEmpty ? '${upcomingEvent['location']}<br>' : ''}'
+          '${upcomingEvent['weather'].temperature} °C, ${upcomingEvent['weather'].condition}';
     } else {
-      message = '$message\nYou are free today! Have a nice rest.';
+      message = '$message\nNo more events today! Have a nice rest.';
     }
   } else if (element == 'weather') {
-    message = todayEvents.isNotEmpty
-        ? 'https:${todayEvents[0]['weather'].icon}'
+    message = upcomingEvent.isNotEmpty
+        ? 'https:${upcomingEvent['weather'].icon}'
         : 'asset://assets/icons/applogo.png';
   }
   return message;

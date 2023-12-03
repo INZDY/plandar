@@ -85,7 +85,7 @@ class NotificationService {
   //-------------------------------------
   //Scheduling Notifications-------------
   //-------------------------------------
-  Future<void> scheduleNotifcation() async {
+  Future<void> scheduleNotifcation(int hours) async {
     debugPrint(await showEvent('event'));
 
     // String localTimezone =
@@ -93,12 +93,12 @@ class NotificationService {
     // String utcTimezone =
     //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
 
-    //today event
+    //upcoming event
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 1,
         channelKey: 'scheduled',
-        title: 'Today\'s Events',
+        title: await showEvent('title'),
         body: await showEvent('event'),
         notificationLayout: NotificationLayout.BigText,
         largeIcon: await showEvent('weather'),
@@ -108,8 +108,8 @@ class NotificationService {
         displayOnForeground: true,
         displayOnBackground: true,
       ),
-      schedule: NotificationCalendar(
-        second: 0,
+      schedule: NotificationInterval(
+        interval: 3600 * hours,
         repeats: true,
         allowWhileIdle: true,
       ),
@@ -124,7 +124,7 @@ class NotificationService {
     // String utcTimezone =
     //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
 
-    //today event
+    //daily reminder
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 0,
@@ -140,7 +140,8 @@ class NotificationService {
         displayOnBackground: true,
       ),
       schedule: NotificationCalendar(
-        second: 0,
+        hour: 0,
+        minute: 0,
         repeats: true,
         allowWhileIdle: true,
       ),
@@ -154,10 +155,10 @@ class NotificationService {
     await AwesomeNotifications().cancel(id);
   }
 
-  Future<void> retrieveScheduledNotifications() async {
+  Future<List<NotificationModel>> retrieveScheduledNotifications() async {
     final AwesomeNotifications awesomeNotifications = AwesomeNotifications();
     List<NotificationModel> scheduledNotifications =
         await awesomeNotifications.listScheduledNotifications();
-    print(scheduledNotifications);
+    return scheduledNotifications;
   }
 }
