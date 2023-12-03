@@ -21,14 +21,13 @@ class AuthButtonIconText extends StatelessWidget {
     return ElevatedButton.icon(
       icon: Icon(
         icon,
-        color: Colors.white,
+        color: Colors.red,
         size: 20,
       ),
       style: TextButton.styleFrom(
-        padding: const EdgeInsets.all(24),
         backgroundColor: color,
       ),
-      label: Text(text),
+      label: Text(text,style: const TextStyle(color: Colors.red),),
       onPressed: () => logMethod(),
     );
   }

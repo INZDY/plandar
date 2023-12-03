@@ -85,20 +85,13 @@ class NotificationService {
   //-------------------------------------
   //Scheduling Notifications-------------
   //-------------------------------------
-  Future<void> scheduleNotifcation() async {
-    debugPrint(await showEvent('event'));
-
-    // String localTimezone =
-    //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
-    // String utcTimezone =
-    //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
-
-    //today event
+  //upcoming event
+  Future<void> scheduleNotifcation(int hours) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 1,
         channelKey: 'scheduled',
-        title: 'Today\'s Events',
+        title: await showEvent('title'),
         body: await showEvent('event'),
         notificationLayout: NotificationLayout.BigText,
         largeIcon: await showEvent('weather'),
@@ -108,23 +101,16 @@ class NotificationService {
         displayOnForeground: true,
         displayOnBackground: true,
       ),
-      schedule: NotificationCalendar(
-        second: 0,
+      schedule: NotificationInterval(
+        interval: 3600 * hours,
         repeats: true,
         allowWhileIdle: true,
       ),
     );
   }
 
+  //daily reminder
   Future<void> daily() async {
-    debugPrint(await showEvent('event'));
-
-    // String localTimezone =
-    //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
-    // String utcTimezone =
-    //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
-
-    //today event
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 0,
@@ -140,7 +126,8 @@ class NotificationService {
         displayOnBackground: true,
       ),
       schedule: NotificationCalendar(
-        second: 0,
+        hour: 0,
+        minute: 0,
         repeats: true,
         allowWhileIdle: true,
       ),
@@ -154,10 +141,10 @@ class NotificationService {
     await AwesomeNotifications().cancel(id);
   }
 
-  Future<void> retrieveScheduledNotifications() async {
+  Future<List<NotificationModel>> retrieveScheduledNotifications() async {
     final AwesomeNotifications awesomeNotifications = AwesomeNotifications();
     List<NotificationModel> scheduledNotifications =
         await awesomeNotifications.listScheduledNotifications();
-    print(scheduledNotifications);
+    return scheduledNotifications;
   }
 }
