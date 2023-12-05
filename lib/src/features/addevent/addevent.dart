@@ -444,6 +444,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                             toggleStartDate();
                                           },
                                           style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
                                             backgroundColor:
                                                 const Color.fromRGBO(
                                                     217, 217, 217, 1),
@@ -464,6 +467,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                             toggleStartTime();
                                           },
                                           style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
                                             backgroundColor:
                                                 const Color.fromRGBO(
                                                     217, 217, 217, 1),
@@ -658,6 +664,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                             toggleEndDate();
                                           },
                                           style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
                                             backgroundColor:
                                                 const Color.fromRGBO(
                                                     217, 217, 217, 1),
@@ -678,6 +687,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                             toggleEndTime();
                                           },
                                           style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
                                             backgroundColor:
                                                 const Color.fromRGBO(
                                                     217, 217, 217, 1),
@@ -873,6 +885,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                   width: screenWidth * 0.3,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
                                       backgroundColor: finalColor == ''
                                           ? const Color.fromRGBO(
                                               217, 217, 217, 1)
@@ -962,9 +977,10 @@ class _AddNewEventState extends State<AddNewEvent> {
                                 SizedBox(
                                   width: peoplelist.isEmpty
                                       ? screenWidth * 0.3
-                                      : screenWidth * 0.35,
+                                      : screenWidth * 0.4,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                                       backgroundColor: const Color.fromRGBO(
                                           217, 217, 217, 1),
                                     ),
