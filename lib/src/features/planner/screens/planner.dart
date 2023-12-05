@@ -51,7 +51,7 @@ class _PlannerState extends State<Planner> {
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        // shadowColor: Colors.transparent,
+        toolbarHeight: 90,
         title: const Text(
           'Calendar',
           style: TextStyle(color: Colors.white),
@@ -74,7 +74,7 @@ class _PlannerState extends State<Planner> {
         child: isLoading
             ? const Center(child: CircularProgressIndicator())
             : Padding(
-                padding: const EdgeInsets.all(25),
+                padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Column(
                   children: [
                     //Calendar
