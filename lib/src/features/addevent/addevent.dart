@@ -980,7 +980,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                       : screenWidth * 0.4,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
                                       backgroundColor: const Color.fromRGBO(
                                           217, 217, 217, 1),
                                     ),
