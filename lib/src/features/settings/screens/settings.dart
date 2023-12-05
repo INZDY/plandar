@@ -104,7 +104,10 @@ class _SettingsState extends State<Settings> {
 
                 //profile
                 ListTile(
-                  leading: const Text('Profile'),
+                  leading: Text(
+                    'Profile',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                   trailing:
                       const Icon(Icons.chevron_right, color: Colors.white),
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -125,7 +128,10 @@ class _SettingsState extends State<Settings> {
 
                 //daily notification
                 ListTile(
-                  leading: const Text('Daily Notification'),
+                  leading: Text(
+                    'Daily Notification',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                   trailing: Switch(
                     value: isDailyNoti,
                     onChanged: (bool value) async {
@@ -136,6 +142,7 @@ class _SettingsState extends State<Settings> {
                         await NotificationService().daily();
                       } else {
                         await NotificationService().cancelNotification(0);
+                        SnackbarUtil.showSnackBar('Daily Notification off');
                       }
                     },
                   ),
@@ -143,7 +150,10 @@ class _SettingsState extends State<Settings> {
 
                 //interval notification
                 ListTile(
-                  leading: const Text('Event Notification'),
+                  leading: Text(
+                    'Event Notification',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                   trailing: Switch(
                     value: isScheduledNoti,
                     onChanged: (bool value) async {
@@ -155,6 +165,8 @@ class _SettingsState extends State<Settings> {
                             .scheduleNotifcation(notificationInterval);
                       } else {
                         await NotificationService().cancelNotification(1);
+                        SnackbarUtil.showSnackBar(
+                            'Upcoming Event Notification off');
                       }
                     },
                   ),
@@ -162,17 +174,25 @@ class _SettingsState extends State<Settings> {
 
                 //time select
                 ListTile(
-                    leading: const Text('Notify Interval'),
+                    leading: Text(
+                      'Notify Interval',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     trailing: DropdownButton<int>(
                       dropdownColor: const Color.fromRGBO(7, 2, 58, 1),
                       value: notificationInterval,
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setState(() {
                           notificationInterval = value!;
                         });
                         _saveSettings(notificationInterval);
 
-                        if (isScheduledNoti) {}
+                        if (isScheduledNoti) {
+                          //cancel and reschedule
+                          await NotificationService().cancelNotification(1);
+                          await NotificationService()
+                              .scheduleNotifcation(notificationInterval);
+                        }
                       },
                       items:
                           [1, 3, 5, 7].map<DropdownMenuItem<int>>((int value) {
@@ -209,10 +229,17 @@ class _SettingsState extends State<Settings> {
                   ),
                 ),
 
+                //noti debug, remove when finish
                 ElevatedButton(
                   onPressed: () async {
-                    await NotificationService()
-                        .retrieveScheduledNotifications();
+                    List<NotificationModel> notilist =
+                        await NotificationService()
+                            .retrieveScheduledNotifications();
+                    debugPrint('${notilist.length}');
+                    for (NotificationModel noti in notilist) {
+                      debugPrint('${noti.content?.id}');
+                      debugPrint(noti.content?.title);
+                    }
                   },
                   child: const Text('Noti List'),
                 ),
