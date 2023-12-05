@@ -41,10 +41,19 @@ class _ContractProfileState extends State<ContractProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return Scaffold(
       backgroundColor: Colors.transparent,
-      content: SingleChildScrollView(
+      //big screen
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        alignment: Alignment.center,
+        color: const Color.fromARGB(0, 45, 45, 45),
+        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+        //pop up area
         child: Container(
+          height: MediaQuery.of(context).size.height * 0.7,
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
               begin: Alignment.topCenter,
@@ -53,130 +62,126 @@ class _ContractProfileState extends State<ContractProfile> {
             ),
             borderRadius: BorderRadius.circular(30.0),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.8,
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Row(
-                          children: [
-                            //cancel | back to contacts
-                            const Icon(
-                              Icons.chevron_left,
-                              color: Colors.white,
-                            ),
-                            Text(
-                              isEditMode ? 'Cancel' : 'Contacts',
-                              style: const TextStyle(
-                                fontSize: 16.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      //done| edit
-                      TextButton(
-                        onPressed: () {
-                          if (isEditMode) {
-                            widget.onSaveChanges({
-                              'email': emailController.text,
-                              'tel': telController.text,
-                              'note': noteController.text,
-                            });
-                          }
-                          setState(() {
-                            isEditMode = !isEditMode;
-                          });
-                        },
-                        child: Text(
-                          isEditMode ? 'Done' : 'Edit',
-                          style: TextStyle(
-                            fontSize: isEditMode ? 14.0 : 16.0,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Row(
+                        children: [
+                          //cancel | back to contacts
+                          const Icon(
+                            Icons.chevron_left,
                             color: Colors.white,
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  //Profile image section
-                  const Icon(
-                    Icons.account_circle,
-                    size: 75,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    widget.name,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  //call contact profile field
-                  //email
-                  CustomTextField(
-                    label: 'Email',
-                    controller: emailController,
-                    isEditMode: isEditMode,
-                  ),
-                  const SizedBox(height: 20),
-
-                  //tel
-                  CustomTextField(
-                    label: 'Tel',
-                    controller: telController,
-                    isEditMode: isEditMode,
-                  ),
-                  const SizedBox(height: 20),
-
-                  //Note
-                  CustomTextField(
-                    label: 'Note',
-                    controller: noteController,
-                    isEditMode: isEditMode,
-                  ),
-                  const SizedBox(height: 20),
-
-                  //delete button
-                  Visibility(
-                    visible: isEditMode,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xff2B1A6D),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: TextButton(
-                        onPressed: () {
-                          FirestoreService().deleteContact(widget.contactId);
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text(
-                          'Delete',
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Color.fromARGB(255, 255, 0, 0),
+                          Text(
+                            isEditMode ? 'Cancel' : 'Contacts',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            ),
                           ),
+                        ],
+                      ),
+                    ),
+
+                    //done| edit
+                    TextButton(
+                      onPressed: () {
+                        if (isEditMode) {
+                          widget.onSaveChanges({
+                            'email': emailController.text,
+                            'tel': telController.text,
+                            'note': noteController.text,
+                          });
+                        }
+                        setState(() {
+                          isEditMode = !isEditMode;
+                        });
+                      },
+                      child: Text(
+                        isEditMode ? 'Done' : 'Edit',
+                        style: TextStyle(
+                          fontSize: isEditMode ? 14.0 : 16.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                //Profile image section
+                const Icon(
+                  Icons.account_circle,
+                  size: 75,
+                  color: Colors.white,
+                ),
+                Text(
+                  widget.name,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                //call contact profile field
+                //email
+                CustomTextField(
+                  label: 'Email',
+                  controller: emailController,
+                  isEditMode: isEditMode,
+                ),
+                const SizedBox(height: 20),
+
+                //tel
+                CustomTextField(
+                  label: 'Tel',
+                  controller: telController,
+                  isEditMode: isEditMode,
+                ),
+                const SizedBox(height: 20),
+
+                //Note
+                CustomTextField(
+                  label: 'Note',
+                  controller: noteController,
+                  isEditMode: isEditMode,
+                ),
+                const SizedBox(height: 20),
+
+                //delete button
+                Visibility(
+                  visible: isEditMode,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xff2B1A6D),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        FirestoreService().deleteContact(widget.contactId);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        'Delete',
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          color: Color.fromARGB(255, 255, 0, 0),
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
