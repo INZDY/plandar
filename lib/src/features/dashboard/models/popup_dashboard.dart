@@ -107,7 +107,15 @@ class _PopupDashboardState extends State<PopupDashboard> {
       child: Scaffold(
         backgroundColor: const Color.fromRGBO(12, 7, 67, 1),
         appBar: AppBar(
-          title: const Text('Event Details'),
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.chevron_left),
+            color: Colors.white,
+          ),
+          title: const Text(
+            'Event Details',
+            style: TextStyle(color: Colors.white),
+          ),
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
           actions: [

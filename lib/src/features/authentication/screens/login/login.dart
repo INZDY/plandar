@@ -130,6 +130,8 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(5)),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
                               backgroundColor: Colors.transparent,
                               minimumSize: const Size.fromHeight(50)),
                           onPressed: signIn,

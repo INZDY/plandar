@@ -59,6 +59,11 @@ class _EditProfileState extends State<EditProfile> {
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.chevron_left),
+          color: Colors.white,
+        ),
         title: const Text(
           'Edit Profile',
           style: TextStyle(color: Colors.red, fontSize: 20),

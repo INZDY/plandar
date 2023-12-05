@@ -26,8 +26,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.chevron_left),
+            color: Colors.white,
+          ),
           title: const Text(
             'Reset Password',
+            style: TextStyle(color: Colors.white),
           ),
           backgroundColor: Colors.transparent,
         ),
@@ -72,6 +78,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         borderRadius: BorderRadius.circular(5)),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
                           backgroundColor: Colors.transparent,
                           minimumSize: const Size.fromHeight(50)),
                       onPressed: forgotPassword,

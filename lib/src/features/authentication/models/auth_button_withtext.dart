@@ -25,9 +25,13 @@ class AuthButtonIconText extends StatelessWidget {
         size: 20,
       ),
       style: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         backgroundColor: color,
       ),
-      label: Text(text,style: const TextStyle(color: Colors.red),),
+      label: Text(
+        text,
+        style: const TextStyle(color: Colors.red),
+      ),
       onPressed: () => logMethod(),
     );
   }
