@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:fitgap/main.dart';
+import 'package:fitgap/src/common_widgets/snackbar.dart';
 import 'package:fitgap/src/features/authentication/applications/auth_page.dart';
 import 'package:fitgap/src/utils/notification/notification_application.dart';
 import 'package:flutter/material.dart';
@@ -8,21 +9,20 @@ class NotificationService {
   //initialization
   Future<void> initNotifications() async {
     await AwesomeNotifications().initialize(
-      null,
+      // 'asset://assets/icons/applogo.png',
+      'resource://drawable/applogo',
+      // null,
       [
         NotificationChannel(
           channelGroupKey: 'high_importance_channel',
-          // channelKey: 'high_importance_channel',
           channelKey: 'scheduled',
           channelName: 'Basic notifications',
           channelDescription: 'Notification channel for basic tests',
-          // defaultColor: const Color(0xFF9D50DD),
-          // ledColor: Colors.white,
           importance: NotificationImportance.Max,
           channelShowBadge: true,
           onlyAlertOnce: true,
           playSound: true,
-          // criticalAlerts: true,
+          enableVibration: true,
         )
       ],
       channelGroups: [
@@ -68,7 +68,8 @@ class NotificationService {
     debugPrint('onDismissActionReceivedMethod');
   }
 
-  /// Use this method to detect when the user taps on a notification or action button
+  /// Use this method to detect when the user taps on a notification or action butto
+  /// tap noti -> authentication -> if logged in will redirect to home automatically
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
     debugPrint('onActionReceivedMethod');
@@ -107,6 +108,7 @@ class NotificationService {
         allowWhileIdle: true,
       ),
     );
+    SnackbarUtil.showSnackBar('Upcoming Event Notification on');
   }
 
   //daily reminder
@@ -128,10 +130,12 @@ class NotificationService {
       schedule: NotificationCalendar(
         hour: 0,
         minute: 0,
+        second: 0,
         repeats: true,
         allowWhileIdle: true,
       ),
     );
+    SnackbarUtil.showSnackBar('Daily Notification on');
   }
 
   //-------------------------------------
