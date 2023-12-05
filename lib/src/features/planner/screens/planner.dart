@@ -54,7 +54,11 @@ class _PlannerState extends State<Planner> {
         toolbarHeight: 90,
         title: const Text(
           'Calendar',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
       ),

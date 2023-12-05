@@ -70,6 +70,7 @@ class _ContractPageState extends State<ContractPage> {
                       style: TextStyle(
                         fontSize: 25,
                         color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     const Spacer(),

@@ -275,6 +275,8 @@ class _AddNewEventState extends State<AddNewEvent> {
             'Create New Event',
             style: TextStyle(
               color: Colors.white,
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
             ),
           ),
           actions: [

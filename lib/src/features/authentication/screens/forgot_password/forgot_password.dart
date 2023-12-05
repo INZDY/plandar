@@ -33,7 +33,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           ),
           title: const Text(
             'Reset Password',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           backgroundColor: Colors.transparent,
         ),

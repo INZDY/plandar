@@ -58,6 +58,7 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        toolbarHeight: 90,
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
@@ -66,7 +67,8 @@ class _EditProfileState extends State<EditProfile> {
         ),
         title: const Text(
           'Edit Profile',
-          style: TextStyle(color: Colors.red, fontSize: 20),
+          style: TextStyle(
+              color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         actions: [
           TextButton(
