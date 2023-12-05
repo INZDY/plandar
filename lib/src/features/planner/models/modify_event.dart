@@ -536,7 +536,9 @@ class _ModifyEventState extends State<ModifyEvent> {
                                               toggleEndTime();
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
                                               backgroundColor:
                                                   const Color.fromRGBO(
                                                       217, 217, 217, 1),
@@ -734,7 +736,9 @@ class _ModifyEventState extends State<ModifyEvent> {
                                     width: screenWidth * 0.3,
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
                                         backgroundColor: finalColor == ''
                                             ? const Color.fromRGBO(
                                                 217, 217, 217, 1)
@@ -829,7 +833,9 @@ class _ModifyEventState extends State<ModifyEvent> {
                                         : screenWidth * 0.4,
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
                                         backgroundColor: const Color.fromRGBO(
                                             217, 217, 217, 1),
                                       ),
