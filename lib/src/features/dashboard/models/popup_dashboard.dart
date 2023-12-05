@@ -289,6 +289,9 @@ class _PopupDashboardState extends State<PopupDashboard> {
                                               toggleStartDate();
                                             },
                                             style: ElevatedButton.styleFrom(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
                                               backgroundColor:
                                                   const Color.fromRGBO(
                                                       217, 217, 217, 1),
@@ -309,6 +312,9 @@ class _PopupDashboardState extends State<PopupDashboard> {
                                               toggleStartTime();
                                             },
                                             style: ElevatedButton.styleFrom(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
                                               backgroundColor:
                                                   const Color.fromRGBO(
                                                       217, 217, 217, 1),
@@ -503,6 +509,9 @@ class _PopupDashboardState extends State<PopupDashboard> {
                                               toggleEndDate();
                                             },
                                             style: ElevatedButton.styleFrom(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
                                               backgroundColor:
                                                   const Color.fromRGBO(
                                                       217, 217, 217, 1),
@@ -523,6 +532,9 @@ class _PopupDashboardState extends State<PopupDashboard> {
                                               toggleEndTime();
                                             },
                                             style: ElevatedButton.styleFrom(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
                                               backgroundColor:
                                                   const Color.fromRGBO(
                                                       217, 217, 217, 1),
@@ -720,6 +732,9 @@ class _PopupDashboardState extends State<PopupDashboard> {
                                     width: screenWidth * 0.3,
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
                                         backgroundColor: finalColor == ''
                                             ? const Color.fromRGBO(
                                                 217, 217, 217, 1)
@@ -811,9 +826,12 @@ class _PopupDashboardState extends State<PopupDashboard> {
                                   SizedBox(
                                     width: peoplelist.isEmpty
                                         ? screenWidth * 0.3
-                                        : screenWidth * 0.35,
+                                        : screenWidth * 0.4,
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
                                         backgroundColor: const Color.fromRGBO(
                                             217, 217, 217, 1),
                                       ),
@@ -868,7 +886,7 @@ class _PopupDashboardState extends State<PopupDashboard> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
-                      width: screenWidth * 0.3,
+                      width: screenWidth * 0.35,
                       height: screenHeight * 0.05,
                       decoration: const BoxDecoration(
                         gradient: LinearGradient(
