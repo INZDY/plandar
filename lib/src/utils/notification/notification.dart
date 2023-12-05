@@ -9,9 +9,7 @@ class NotificationService {
   //initialization
   Future<void> initNotifications() async {
     await AwesomeNotifications().initialize(
-      // 'asset://assets/icons/applogo.png',
       'resource://drawable/applogo',
-      // null,
       [
         NotificationChannel(
           channelGroupKey: 'high_importance_channel',

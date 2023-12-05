@@ -27,8 +27,7 @@ class _SettingsState extends State<Settings> {
       for (NotificationModel noti in notificationList) {
         if (noti.content?.id == 0) {
           isDailyNoti = true;
-        }
-        else if (noti.content?.id == 1) {
+        } else if (noti.content?.id == 1) {
           isScheduledNoti = true;
         }
       }
