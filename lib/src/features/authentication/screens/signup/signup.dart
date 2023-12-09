@@ -123,6 +123,8 @@ class _SignupPageState extends State<SignupPage> {
                             borderRadius: BorderRadius.circular(5)),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
                               backgroundColor: Colors.transparent,
                               minimumSize: const Size.fromHeight(50)),
                           onPressed: signUp,

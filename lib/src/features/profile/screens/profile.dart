@@ -44,10 +44,16 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
+          toolbarHeight: 90,
           backgroundColor: Colors.transparent,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.chevron_left),
+            color: Colors.white,
+          ),
           title: const Text(
             'Profile',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           actions: [
             TextButton(

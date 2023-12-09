@@ -84,7 +84,8 @@ class _HomePageState extends State<HomePage> {
     String position = await _weatherService.getCurrentPosition();
 
     final weatherCurrent = await _weatherService.getCurrentWeather(position);
-    final weatherForecast = await _weatherService.getWeatherForecast(position, 2);
+    final weatherForecast =
+        await _weatherService.getWeatherForecast(position, 2);
 
     setState(() {
       _weatherCurrent = weatherCurrent;
@@ -208,9 +209,7 @@ class _HomePageState extends State<HomePage> {
                                 '${_weatherCurrent.cityName}.'
                                 '   ',
                             style: const TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 18,
-                                color: Colors.white),
+                                fontSize: 18, color: Colors.white),
                           ),
                         )
                       ],
@@ -230,144 +229,147 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: SizedBox(
-                  height: screenHeight * 0.25,
-                  width: screenWidth * 0.95,
-                  child: Stack(
-                    children: isLoading
-                        ? [const Center(child: CircularProgressIndicator())]
-                        : [
+                height: screenHeight * 0.25,
+                width: screenWidth * 0.95,
+                child: isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image:
+                                  AssetImage('assets/images/homeElement.png'),
+                              fit: BoxFit.contain),
+                        ),
+
+                        //Data in card
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            //left side
                             Container(
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/images/homeElement.png'),
-                                    fit: BoxFit.cover),
+                              constraints:
+                                  BoxConstraints(maxWidth: screenWidth * 0.55),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Temperature
+                                  Text(
+                                    (isLoadingWeather ||
+                                            firstEventToday.isEmpty)
+                                        ? ''
+                                        : '${firstWeatherToday.temperature.round().toString()} °C',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+
+                                  //Event title
+                                  //Event time
+                                  Text(
+                                    (firstEventToday.isEmpty)
+                                        ? "You don’t have any schedule today!!"
+                                        : firstEventToday['allday'] == true
+                                            ? "${DateFormat('dd MMM').format(firstEventToday['start_date'].toDate())} All Day\n"
+                                                "Event: ${firstEventToday['title']}"
+                                            : "${DateFormat('dd MMM HH:mma').format(firstEventToday['start_date'].toDate())}\n"
+                                                "Event: ${firstEventToday['title']}",
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+
+                                  //Location
+                                  Text(
+                                    (firstEventToday.isEmpty)
+                                        ? ''
+                                        : "${firstEventToday['location']}",
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Column(
-                              children: [
-                                Container(
-                                  height: screenHeight * 0.04,
-                                  alignment: Alignment.centerRight,
-                                  child: (firstEventToday.isEmpty)
-                                      ? null
-                                      : TextButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => HomeAll(
-                                                  date: 'today',
-                                                  events: eventsDataToday,
-                                                  weatherList: _weatherForecast,
+
+                            //right side
+                            Container(
+                              constraints:
+                                  BoxConstraints(maxWidth: screenWidth * 0.3),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  //see all
+                                  Container(
+                                    child: (firstEventToday.isEmpty)
+                                        ? null
+                                        : TextButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => HomeAll(
+                                                    date: 'today',
+                                                    events: eventsDataToday,
+                                                    weatherList:
+                                                        _weatherForecast,
+                                                  ),
                                                 ),
+                                              );
+                                            },
+                                            child: const Text(
+                                              'See all >>',
+                                              style: TextStyle(
+                                                color: Color.fromRGBO(
+                                                    184, 184, 184, 1),
+                                                fontSize: 14,
+                                                fontFamily: 'Poppins',
                                               ),
-                                            );
-                                          },
-                                          child: const Text(
-                                            'See all >>',
-                                            style: TextStyle(
-                                              color: Color.fromRGBO(
-                                                  184, 184, 184, 1),
-                                              fontSize: 14,
-                                              fontFamily: 'Poppins',
                                             ),
                                           ),
-                                        ),
-                                ),
-                                Transform.translate(
-                                  offset: Offset(0, -screenHeight * 0.01),
-                                  child: Container(
-                                    height: screenHeight * 0.04,
-                                    width: screenWidth * 0.85,
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      (isLoadingWeather ||
-                                              firstEventToday.isEmpty)
-                                          ? ''
-                                          : '${firstWeatherToday.temperature.round().toString()} °C',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Poppins',
-                                      ),
-                                    ),
                                   ),
-                                ),
-                                Container(
-                                  height: screenHeight * 0.065,
-                                  width: screenWidth,
-                                  alignment: Alignment.centerRight,
-                                  child: isLoadingWeather
-                                      ? const CircularProgressIndicator()
-                                      : firstEventToday.isEmpty
-                                          ? null
-                                          : Image.network(
-                                              'https:${firstWeatherToday.icon}'),
-                                ),
-                                Transform.translate(
-                                  offset: Offset(0, -screenHeight * 0.04),
-                                  child: Container(
-                                    height: screenHeight * 0.07,
-                                    width: screenWidth * 0.85,
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      (firstEventToday.isEmpty)
-                                          ? "You don’t have any schedule today!!"
-                                          : firstEventToday['allday'] == true
-                                              ? "${DateFormat('dd MMM').format(firstEventToday['start_date'].toDate())} All Day\n"
-                                                  "Event: ${firstEventToday['title']}"
-                                              : "${DateFormat('dd MMM HH:mma').format(firstEventToday['start_date'].toDate())}\n"
-                                                  "Event: ${firstEventToday['title']}",
-                                      style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 20,
-                                        color: Colors.white,
-                                      ),
-                                    ),
+
+                                  //weather icon
+                                  Container(
+                                    child: isLoadingWeather
+                                        ? const CircularProgressIndicator()
+                                        : firstEventToday.isEmpty
+                                            ? null
+                                            : Image.network(
+                                                'https:${firstWeatherToday.icon}'),
                                   ),
-                                ),
-                                Transform.translate(
-                                  offset: Offset(0, -screenHeight * 0.01),
-                                  child: SizedBox(
-                                    height: screenHeight * 0.03,
-                                    width: screenWidth * 0.85,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                          width: screenWidth * 0.57,
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            (firstEventToday.isEmpty)
-                                                ? ''
-                                                : "${firstEventToday['location']}",
+
+                                  //weather condition
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: (isLoadingWeather ||
+                                            firstEventToday.isEmpty)
+                                        ? null
+                                        : Text(
+                                            firstWeatherToday.condition,
                                             style: const TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
-                                              fontFamily: 'Poppins',
-                                            ),
+                                                fontSize: 16,
+                                                color: Colors.white),
                                           ),
-                                        ),
-                                        Text(
-                                          (isLoadingWeather ||
-                                                  firstEventToday.isEmpty)
-                                              ? ''
-                                              : firstWeatherToday.condition,
-                                          style: const TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
                                   ),
-                                )
-                              ],
+                                ],
+                              ),
                             ),
                           ],
-                  )),
+                        ),
+                      ),
+              ),
             ),
             //Fifth column element : plain text
             Padding(
@@ -384,144 +386,147 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: SizedBox(
-                  height: screenHeight * 0.25,
-                  width: screenWidth * 0.95,
-                  child: Stack(
-                    children: isLoading
-                        ? [const Center(child: CircularProgressIndicator())]
-                        : [
+                height: screenHeight * 0.25,
+                width: screenWidth * 0.95,
+                child: isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image:
+                                  AssetImage('assets/images/homeElement.png'),
+                              fit: BoxFit.contain),
+                        ),
+
+                        //Data in card
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            //left side
                             Container(
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/images/homeElement.png'),
-                                    fit: BoxFit.cover),
+                              constraints:
+                                  BoxConstraints(maxWidth: screenWidth * 0.55),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Temperature
+                                  Text(
+                                    (isLoadingWeather ||
+                                            firstEventTomorrow.isEmpty)
+                                        ? ''
+                                        : '${firstWeatherTomorrow.temperature.round().toString()} °C',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+
+                                  //Event title
+                                  //Event time
+                                  Text(
+                                    (firstEventTomorrow.isEmpty)
+                                        ? "You don’t have any schedule today!!"
+                                        : firstEventTomorrow['allday'] == true
+                                            ? "${DateFormat('dd MMM').format(firstEventTomorrow['start_date'].toDate())} All Day\n"
+                                                "Event: ${firstEventTomorrow['title']}"
+                                            : "${DateFormat('dd MMM HH:mma').format(firstEventTomorrow['start_date'].toDate())}\n"
+                                                "Event: ${firstEventTomorrow['title']}",
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+
+                                  //Location
+                                  Text(
+                                    (firstEventTomorrow.isEmpty)
+                                        ? ''
+                                        : "${firstEventTomorrow['location']}",
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Column(
-                              children: [
-                                Container(
-                                  height: screenHeight * 0.04,
-                                  alignment: Alignment.centerRight,
-                                  child: (firstEventTomorrow.isEmpty)
-                                      ? null
-                                      : TextButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => HomeAll(
-                                                  date: 'tomorrow',
-                                                  events: eventsDataTomorrow,
-                                                  weatherList: _weatherForecast,
+
+                            //right side
+                            Container(
+                              constraints:
+                                  BoxConstraints(maxWidth: screenWidth * 0.3),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  //see all
+                                  Container(
+                                    child: (firstEventTomorrow.isEmpty)
+                                        ? null
+                                        : TextButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => HomeAll(
+                                                    date: 'today',
+                                                    events: eventsDataToday,
+                                                    weatherList:
+                                                        _weatherForecast,
+                                                  ),
                                                 ),
+                                              );
+                                            },
+                                            child: const Text(
+                                              'See all >>',
+                                              style: TextStyle(
+                                                color: Color.fromRGBO(
+                                                    184, 184, 184, 1),
+                                                fontSize: 14,
+                                                fontFamily: 'Poppins',
                                               ),
-                                            );
-                                          },
-                                          child: const Text(
-                                            'See all >>',
-                                            style: TextStyle(
-                                              color: Color.fromRGBO(
-                                                  184, 184, 184, 1),
-                                              fontSize: 14,
-                                              fontFamily: 'Poppins',
                                             ),
                                           ),
-                                        ),
-                                ),
-                                Transform.translate(
-                                  offset: Offset(0, -screenHeight * 0.01),
-                                  child: Container(
-                                    height: screenHeight * 0.04,
-                                    width: screenWidth * 0.85,
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      (isLoadingWeather ||
-                                              firstEventTomorrow.isEmpty)
-                                          ? ''
-                                          : '${firstWeatherTomorrow.temperature.round().toString()} °C',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Poppins',
-                                      ),
-                                    ),
                                   ),
-                                ),
-                                Container(
-                                  height: screenHeight * 0.065,
-                                  width: screenWidth,
-                                  alignment: Alignment.centerRight,
-                                  child: isLoadingWeather
-                                      ? const CircularProgressIndicator()
-                                      : firstEventTomorrow.isEmpty
-                                          ? null
-                                          : Image.network(
-                                              'https:${firstWeatherTomorrow.icon}'),
-                                ),
-                                Transform.translate(
-                                  offset: Offset(0, -screenHeight * 0.04),
-                                  child: Container(
-                                    height: screenHeight * 0.07,
-                                    width: screenWidth * 0.85,
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      (firstEventTomorrow.isEmpty)
-                                          ? "You don’t have any schedule today!!"
-                                          : firstEventTomorrow['allday'] == true
-                                              ? "${DateFormat('dd MMM').format(firstEventTomorrow['start_date'].toDate())} All Day\n"
-                                                  "Event: ${firstEventTomorrow['title']}"
-                                              : "${DateFormat('dd MMM HH:mma').format(firstEventTomorrow['start_date'].toDate())}\n"
-                                                  "Event: ${firstEventTomorrow['title']}",
-                                      style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 20,
-                                        color: Colors.white,
-                                      ),
-                                    ),
+
+                                  //weather icon
+                                  Container(
+                                    child: isLoadingWeather
+                                        ? const CircularProgressIndicator()
+                                        : firstEventTomorrow.isEmpty
+                                            ? null
+                                            : Image.network(
+                                                'https:${firstWeatherTomorrow.icon}'),
                                   ),
-                                ),
-                                Transform.translate(
-                                  offset: Offset(0, -screenHeight * 0.01),
-                                  child: SizedBox(
-                                    height: screenHeight * 0.03,
-                                    width: screenWidth * 0.85,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                          width: screenWidth * 0.57,
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            (firstEventTomorrow.isEmpty)
-                                                ? ''
-                                                : "${firstEventTomorrow['location']}",
+
+                                  //weather condition
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: (isLoadingWeather ||
+                                            firstEventTomorrow.isEmpty)
+                                        ? null
+                                        : Text(
+                                            firstWeatherTomorrow.condition,
                                             style: const TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
-                                              fontFamily: 'Poppins',
-                                            ),
+                                                fontSize: 16,
+                                                color: Colors.white),
                                           ),
-                                        ),
-                                        Text(
-                                          (isLoadingWeather ||
-                                                  firstEventTomorrow.isEmpty)
-                                              ? ''
-                                              : firstWeatherTomorrow.condition,
-                                          style: const TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
                                   ),
-                                )
-                              ],
+                                ],
+                              ),
                             ),
                           ],
-                  )),
+                        ),
+                      ),
+              ),
             ),
           ],
         ),

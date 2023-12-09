@@ -143,12 +143,15 @@ class _AddContractState extends State<AddContract> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(Icons.add),
+                          Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
                           SizedBox(width: 1.25),
                           Text(
                             'Add',
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 15),
+                            style: TextStyle(fontSize: 15, color: Colors.white),
                           ),
                         ],
                       ),

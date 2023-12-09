@@ -62,7 +62,7 @@ class _SettingsState extends State<Settings> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        // toolbarHeight: 75,
+        toolbarHeight: 90,
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
@@ -71,7 +71,7 @@ class _SettingsState extends State<Settings> {
         ),
         title: const Text(
           'Settings',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),

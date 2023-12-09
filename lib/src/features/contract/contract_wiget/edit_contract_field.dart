@@ -15,8 +15,6 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
-      height: 80,
       decoration: BoxDecoration(
         color: const Color(0xff2B1A6D),
         borderRadius: BorderRadius.circular(10),
@@ -40,9 +38,17 @@ class CustomTextField extends StatelessWidget {
                       border: InputBorder.none,
                     ),
                   )
-                : Text(
-                    '    ${_truncateText(controller.text)}',
-                    style: const TextStyle(color: Colors.white, fontSize: 15),
+                : Column(
+                    children: [
+                      Text(
+                        '    ${_truncateText(controller.text)}',
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      )
+                    ],
                   ),
           ],
         ),

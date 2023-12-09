@@ -51,10 +51,14 @@ class _PlannerState extends State<Planner> {
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        // shadowColor: Colors.transparent,
+        toolbarHeight: 90,
         title: const Text(
           'Calendar',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
       ),
@@ -74,13 +78,14 @@ class _PlannerState extends State<Planner> {
         child: isLoading
             ? const Center(child: CircularProgressIndicator())
             : Padding(
-                padding: const EdgeInsets.all(25),
+                padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Column(
                   children: [
                     //Calendar
                     Container(
                       height: 400,
-                      padding: const EdgeInsets.all(30),
+                      padding: const EdgeInsets.only(
+                          top: 20, bottom: 30, left: 30, right: 30),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
                         color: const Color(0xFF99AFFF),
@@ -88,13 +93,17 @@ class _PlannerState extends State<Planner> {
                       child: SfCalendar(
                         //settings
                         view: CalendarView.month,
+                        todayTextStyle: const TextStyle(fontSize: 16),
                         monthViewSettings: const MonthViewSettings(
-                          navigationDirection:
-                              MonthNavigationDirection.vertical,
-                        ),
+                            navigationDirection:
+                                MonthNavigationDirection.vertical,
+                            dayFormat: 'EEE',
+                            monthCellStyle: MonthCellStyle(
+                              textStyle: TextStyle(fontSize: 14),
+                            )),
                         firstDayOfWeek: 1, //Monday
-                        initialDisplayDate: DateTime.now(),
                         showCurrentTimeIndicator: true,
+                        showDatePickerButton: true,
                         dataSource: _getCalendarDataSource(),
                         initialSelectedDate: DateTime.now(),
                         onSelectionChanged: selectionChanged,
@@ -103,10 +112,10 @@ class _PlannerState extends State<Planner> {
                         headerStyle: const CalendarHeaderStyle(
                           textAlign: TextAlign.center,
                         ),
-                        viewHeaderHeight: 60,
+                        viewHeaderHeight: 50,
                         selectionDecoration: BoxDecoration(
                             color: Colors.transparent,
-                            border: Border.all(color: Colors.black, width: 2),
+                            border: Border.all(color: Colors.black, width: 1),
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(10))),
                         cellBorderColor: Colors.transparent,
@@ -195,7 +204,7 @@ class _PlannerState extends State<Planner> {
                             );
                           },
                           separatorBuilder: (BuildContext context, int index) =>
-                              const Divider(
+                              const SizedBox(
                             height: 15,
                           ),
                         ),
@@ -266,8 +275,7 @@ class _PlannerState extends State<Planner> {
         //1. Date at start date
         //2. Date at end date
         //3. Date in between
-        if (
-          selected == appointmentStart ||
+        if (selected == appointmentStart ||
             selected == appointmentEnd ||
             (selected.isAfter(appointmentStart) &&
                 selected.isBefore(appointmentEnd)) ||

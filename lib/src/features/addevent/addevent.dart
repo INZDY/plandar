@@ -263,46 +263,44 @@ class _AddNewEventState extends State<AddNewEvent> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      body: Container(
-        height: double.infinity,
-        decoration: const BoxDecoration(color: Color.fromRGBO(12, 7, 67, 1)),
-        child: SingleChildScrollView(
+    return Container(
+      height: double.infinity,
+      decoration: const BoxDecoration(color: Color.fromRGBO(12, 7, 67, 1)),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          toolbarHeight: 90,
+          backgroundColor: Colors.transparent,
+          title: const Text(
+            'Create New Event',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                allowAdded ? addEvent() : null;
+              },
+              child: Text(
+                'Add',
+                style: TextStyle(color: allowAdded ? Colors.blue : Colors.grey),
+              ),
+            ),
+            if (isInprogress) const CircularProgressIndicator(),
+          ],
+          // centerTitle: true,
+        ),
+        body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                //Top menu
-                height: screenHeight * 0.07,
-                width: screenWidth * 1,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Create New Event',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          allowAdded ? addEvent() : null;
-                        },
-                        child: Text(
-                          'Add',
-                          style: TextStyle(
-                              color: allowAdded ? Colors.blue : Colors.grey),
-                        ),
-                      ),
-                      if (isInprogress) const CircularProgressIndicator(),
-                    ],
-                  ),
-                ),
-              ),
               Padding(
                 //Title & Location group
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                padding: const EdgeInsets.only(bottom: 5),
                 child: SizedBox(
                   height: screenHeight * 0.13,
                   width: screenWidth * 1,
@@ -446,6 +444,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                             toggleStartDate();
                                           },
                                           style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
                                             backgroundColor:
                                                 const Color.fromRGBO(
                                                     217, 217, 217, 1),
@@ -466,6 +467,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                             toggleStartTime();
                                           },
                                           style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
                                             backgroundColor:
                                                 const Color.fromRGBO(
                                                     217, 217, 217, 1),
@@ -660,6 +664,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                             toggleEndDate();
                                           },
                                           style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
                                             backgroundColor:
                                                 const Color.fromRGBO(
                                                     217, 217, 217, 1),
@@ -680,6 +687,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                             toggleEndTime();
                                           },
                                           style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
                                             backgroundColor:
                                                 const Color.fromRGBO(
                                                     217, 217, 217, 1),
@@ -875,6 +885,9 @@ class _AddNewEventState extends State<AddNewEvent> {
                                   width: screenWidth * 0.3,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
                                       backgroundColor: finalColor == ''
                                           ? const Color.fromRGBO(
                                               217, 217, 217, 1)
@@ -964,9 +977,12 @@ class _AddNewEventState extends State<AddNewEvent> {
                                 SizedBox(
                                   width: peoplelist.isEmpty
                                       ? screenWidth * 0.3
-                                      : screenWidth * 0.35,
+                                      : screenWidth * 0.4,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
                                       backgroundColor: const Color.fromRGBO(
                                           217, 217, 217, 1),
                                     ),
