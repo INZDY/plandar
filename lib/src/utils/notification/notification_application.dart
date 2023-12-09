@@ -1,10 +1,11 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:fitgap/src/utils/firestore/firestore.dart';
 import 'package:fitgap/src/utils/weather/weather_api_key.dart';
 import 'package:fitgap/src/utils/weather/weather_model.dart';
 import 'package:fitgap/src/utils/weather/weather_service.dart';
 import 'package:intl/intl.dart';
 
-Future<String> dailyReminder(String element) async {
+Future<NotificationContent> dailyReminder() async {
   DateTime now = DateTime.now();
   DateTime today = DateTime(now.year, now.month, now.day);
   DateTime tomorrow = today.add(const Duration(days: 1));
@@ -13,19 +14,30 @@ Future<String> dailyReminder(String element) async {
   final List<Map<String, dynamic>> todayEvents =
       await FirestoreService().getEventsInDay(today, tomorrow);
 
-  String message = '';
-  if (element == 'title') {
-    message = 'You have ${todayEvents.length} events today';
-  } else if (element == 'body') {
-    message = todayEvents.isNotEmpty
-        ? 'Tap to see events'
-        : 'You are free today! Have a nice rest';
-  }
+  String title;
+  String body;
 
-  return message;
+  title = 'You have ${todayEvents.length} events today';
+  body = todayEvents.isNotEmpty
+      ? 'Tap to see events'
+      : 'You are free today! Have a nice rest';
+
+  return NotificationContent(
+    id: 0,
+    channelKey: 'scheduled',
+    title: title,
+    body: body,
+    notificationLayout: NotificationLayout.Default,
+    largeIcon: 'asset://assets/icons/applogo.png',
+    wakeUpScreen: true,
+    timeoutAfter: const Duration(hours: 12),
+    showWhen: true,
+    displayOnForeground: true,
+    displayOnBackground: true,
+  );
 }
 
-Future<String> showEvent(String element) async {
+Future<NotificationContent> showEvent(int hours) async {
   DateTime now = DateTime.now();
   DateTime today = DateTime(now.year, now.month, now.day);
   DateTime tomorrow = today.add(const Duration(days: 1));
@@ -54,36 +66,55 @@ Future<String> showEvent(String element) async {
     }
   }
 
-  String message = '';
   Map<String, dynamic> upcomingEvent;
-  String startTime, endTime;
-
   upcomingEvent = todayEvents.firstWhere(
       (event) =>
-          event['start_date'].toDate().isAfter(now) ||
-          event['start_date'].toDate().isAtSameMomentAs(now),
+          event['start_date']
+              .toDate()
+              .isAfter(now.add(Duration(hours: hours))) ||
+          event['start_date']
+              .toDate()
+              .isAtSameMomentAs(now.add(Duration(hours: hours))),
       orElse: () => {});
 
-  if (element == 'title') {
-    message =
-        upcomingEvent.isNotEmpty ? upcomingEvent['title'] : 'No upcoming event';
-  } else if (element == 'event') {
-    if (upcomingEvent.isNotEmpty) {
-      startTime =
-          DateFormat('HH:mm').format(upcomingEvent['start_date'].toDate());
-      endTime = DateFormat('HH:mm').format(upcomingEvent['end_date'].toDate());
+  print(upcomingEvent);
 
-      message =
-          '${upcomingEvent['allday'] ? 'All Day' : '$startTime - $endTime'}<br>'
-          '${upcomingEvent['location'].isNotEmpty ? '${upcomingEvent['location']}<br>' : ''}'
-          '${upcomingEvent['weather'].temperature} °C, ${upcomingEvent['weather'].condition}';
-    } else {
-      message = '$message\nNo more events today! Have a nice rest.';
-    }
-  } else if (element == 'weather') {
-    message = upcomingEvent.isNotEmpty
-        ? 'https:${upcomingEvent['weather'].icon}'
-        : 'asset://assets/icons/applogo.png';
+  String title;
+  String event;
+  String weather;
+  String startTime, endTime;
+
+  title =
+      upcomingEvent.isNotEmpty ? upcomingEvent['title'] : 'No upcoming event';
+
+  if (upcomingEvent.isNotEmpty) {
+    startTime =
+        DateFormat('HH:mm').format(upcomingEvent['start_date'].toDate());
+    endTime = DateFormat('HH:mm').format(upcomingEvent['end_date'].toDate());
+
+    event =
+        '${upcomingEvent['allday'] ? 'All Day' : '$startTime - $endTime'}<br>'
+        '${upcomingEvent['location'].isNotEmpty ? '${upcomingEvent['location']}<br>' : ''}'
+        '${upcomingEvent['weather'].temperature} °C, ${upcomingEvent['weather'].condition}';
+  } else {
+    event = 'No more events today! Have a nice rest.';
   }
-  return message;
+
+  weather = upcomingEvent.isNotEmpty
+      ? 'https:${upcomingEvent['weather'].icon}'
+      : 'asset://assets/icons/applogo.png';
+
+  return NotificationContent(
+    id: 1,
+    channelKey: 'scheduled',
+    title: title,
+    body: event,
+    notificationLayout: NotificationLayout.BigText,
+    largeIcon: weather,
+    wakeUpScreen: true,
+    timeoutAfter: const Duration(hours: 12),
+    showWhen: true,
+    displayOnForeground: true,
+    displayOnBackground: true,
+  );
 }

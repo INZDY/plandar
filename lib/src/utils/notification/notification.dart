@@ -87,19 +87,7 @@ class NotificationService {
   //upcoming event
   Future<void> scheduleNotifcation(int hours) async {
     await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: 1,
-        channelKey: 'scheduled',
-        title: await showEvent('title'),
-        body: await showEvent('event'),
-        notificationLayout: NotificationLayout.BigText,
-        largeIcon: await showEvent('weather'),
-        wakeUpScreen: true,
-        timeoutAfter: const Duration(hours: 12),
-        showWhen: true,
-        displayOnForeground: true,
-        displayOnBackground: true,
-      ),
+      content: await showEvent(hours),
       schedule: NotificationInterval(
         interval: 3600 * hours,
         repeats: true,
@@ -112,19 +100,7 @@ class NotificationService {
   //daily reminder
   Future<void> daily() async {
     await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: 0,
-        channelKey: 'scheduled',
-        title: await dailyReminder('title'),
-        body: await dailyReminder('body'),
-        notificationLayout: NotificationLayout.Default,
-        largeIcon: 'asset://assets/icons/applogo.png',
-        wakeUpScreen: true,
-        timeoutAfter: const Duration(hours: 12),
-        showWhen: true,
-        displayOnForeground: true,
-        displayOnBackground: true,
-      ),
+      content: await dailyReminder(),
       schedule: NotificationCalendar(
         hour: 0,
         minute: 0,
