@@ -212,6 +212,7 @@ class _SettingsState extends State<Settings> {
                   color: Colors.white,
                 ),
 
+                Spacer(),
                 //Logout Section
                 Container(
                   decoration: const BoxDecoration(
@@ -230,19 +231,19 @@ class _SettingsState extends State<Settings> {
                 ),
 
                 //noti debug, remove when finish
-                ElevatedButton(
-                  onPressed: () async {
-                    List<NotificationModel> notilist =
-                        await NotificationService()
-                            .retrieveScheduledNotifications();
-                    debugPrint('${notilist.length}');
-                    for (NotificationModel noti in notilist) {
-                      debugPrint('${noti.content?.id}');
-                      debugPrint(noti.content?.title);
-                    }
-                  },
-                  child: const Text('Noti List'),
-                ),
+                // ElevatedButton(
+                //   onPressed: () async {
+                //     List<NotificationModel> notilist =
+                //         await NotificationService()
+                //             .retrieveScheduledNotifications();
+                //     debugPrint('${notilist.length}');
+                //     for (NotificationModel noti in notilist) {
+                //       debugPrint('${noti.content?.id}');
+                //       debugPrint(noti.content?.title);
+                //     }
+                //   },
+                //   child: const Text('Noti List'),
+                // ),
               ],
             ),
           ),

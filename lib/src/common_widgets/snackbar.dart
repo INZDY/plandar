@@ -6,7 +6,10 @@ class SnackbarUtil {
     if (text == null) return;
 
     final snackBar = SnackBar(
-      content: Text(text, style: const TextStyle(fontSize: 14, color: Colors.white),),
+      content: Text(
+        text,
+        style: const TextStyle(fontSize: 14, color: Colors.white),
+      ),
       backgroundColor: Colors.red,
     );
 

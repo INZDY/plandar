@@ -87,7 +87,8 @@ class _DashBoardState extends State<DashBoard> {
     isLoadingWeather = true;
 
     String position = await _weatherService.getCurrentPosition();
-    final weatherForecast = await _weatherService.getWeatherForecast(position, 3);
+    final weatherForecast =
+        await _weatherService.getWeatherForecast(position, 3);
 
     List<String> todayWeather = [];
     List<String> tomorrowWeather = [];
