@@ -212,15 +212,16 @@ class _SettingsState extends State<Settings> {
                   color: Colors.white,
                 ),
 
-                Spacer(),
+                const Spacer(),
                 //Logout Section
                 Container(
                   decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      gradient: LinearGradient(
-                          colors: [Color(0xFF5936B4), Color(0xFF362A84)],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter)),
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    gradient: LinearGradient(
+                        colors: [Color(0xFF5936B4), Color(0xFF362A84)],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter),
+                  ),
                   height: 55,
                   child: AuthButtonIconText(
                     color: Colors.transparent,
