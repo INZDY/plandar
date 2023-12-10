@@ -190,8 +190,7 @@ class _HomeAllState extends State<HomeAll> {
                                       Text(
                                         '${events[index]['location']}',
                                         style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16),
+                                            color: Colors.white, fontSize: 16),
                                       ),
                                     ],
                                   ),

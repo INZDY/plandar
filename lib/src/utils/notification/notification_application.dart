@@ -77,8 +77,6 @@ Future<NotificationContent> showEvent(int hours) async {
               .isAtSameMomentAs(now.add(Duration(hours: hours))),
       orElse: () => {});
 
-  print(upcomingEvent);
-
   String title;
   String event;
   String weather;

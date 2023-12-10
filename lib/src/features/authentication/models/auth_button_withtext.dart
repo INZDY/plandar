@@ -32,7 +32,10 @@ class AuthButtonIconText extends StatelessWidget {
         text,
         style: const TextStyle(color: Colors.red),
       ),
-      onPressed: () => logMethod(),
+      onPressed: () {
+        Navigator.of(context).pop();
+        logMethod();
+      },
     );
   }
 }

@@ -248,6 +248,7 @@ class FirestoreService {
       });
     }
   }
+
   //UPDATE: update contacts
   Future<void> updateContact(
       String contactId, Map<String, dynamic> updatedData) async {
@@ -281,6 +282,7 @@ class FirestoreService {
     //Delete parent
     await eventRef.delete();
   }
+
   //DELETE: delete contacts
   Future<void> deleteContact(String contactId) async {
     await _initializeCurrentUser();

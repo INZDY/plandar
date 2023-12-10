@@ -1,5 +1,5 @@
 class NumberToMonthMap {
-  static const  Map<int, String> monthsInYear = {
+  static const Map<int, String> monthsInYear = {
     1: "January",
     2: "Febuary",
     3: "March",

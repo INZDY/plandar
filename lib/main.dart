@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitgap/firebase_options.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -28,14 +27,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        scaffoldMessengerKey: SnackbarUtil.messengerKey,
-        navigatorKey: MyApp.navigatorKey,
-        debugShowCheckedModeBanner: false,
-        theme: appTheme,
-        home: const AuthPage(),);
+      scaffoldMessengerKey: SnackbarUtil.messengerKey,
+      navigatorKey: MyApp.navigatorKey,
+      debugShowCheckedModeBanner: false,
+      theme: appTheme,
+      home: const AuthPage(),
+    );
   }
 }

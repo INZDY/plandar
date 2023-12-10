@@ -63,7 +63,7 @@ class _ProfileState extends State<Profile> {
                         ))),
                 child: const Text(
                   'EDIT',
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 20, color: Colors.blue),
                 ))
           ],
           // backgroundColor: Colors.transparent,
@@ -97,10 +97,15 @@ class _ProfileState extends State<Profile> {
                           padding: const EdgeInsets.all(15),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               //image
                               const SizedBox(
-                                width: 100,
+                                child: Icon(
+                                  Icons.account_circle,
+                                  size: 90,
+                                  color: Colors.white,
+                                ),
                               ),
 
                               //username, email, tel.
