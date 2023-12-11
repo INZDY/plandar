@@ -1,3 +1,2 @@
 # PlanDar Event Planner App
-<img src="/assets/icons/applogo.png" width="200" height="200"> This is the repository of PlanDar app.
-<!-- ![PlanDar logo](/assets/icons/applogo.png) -->
+<img src="/assets/icons/applogo.png" width="150" height="150">
