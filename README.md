@@ -1,3 +1,1 @@
-# PlanDar Event Planner App
-
-![PlanDar logo](/assets/icons/applogo.png)
+![PlanDar logo](/assets/icons/applogo.png) # PlanDar Event Planner App
